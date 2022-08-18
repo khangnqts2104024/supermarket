@@ -18,7 +18,7 @@ namespace SuperMarket_Models.Models
         [ForeignKey("OrderId")]
         public Order Order { get; set; }
 
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         [ValidateNever]
         public Customer Customer { get; set; }

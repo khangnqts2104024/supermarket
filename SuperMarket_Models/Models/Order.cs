@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SuperMarket_Models.Models
@@ -37,9 +38,9 @@ namespace SuperMarket_Models.Models
 
         public Coupon Coupon { get; set; }
 
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         [ForeignKey("CustomerId")]
-
+        [ValidateNever]
         public Customer Customer { get; set; }
     }
 }
