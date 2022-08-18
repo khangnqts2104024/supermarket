@@ -12,8 +12,8 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220818130708_Supermarket")]
-    partial class Supermarket
+    [Migration("20220818134756_SuperMarket")]
+    partial class SuperMarket
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -26,11 +26,11 @@ namespace SuperMarket_DataAccess.Migrations
 
             modelBuilder.Entity("SuperMarket_Models.Models.Bill", b =>
                 {
-                    b.Property<int>("BillID")
+                    b.Property<int>("BillId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BillId"), 1L, 1);
 
                     b.Property<decimal>("BillAmount")
                         .HasColumnType("decimal(18,2)");
@@ -38,12 +38,17 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderID")
+                    b.Property<int>("CustomerId")
                         .HasColumnType("int");
 
-                    b.HasKey("BillID");
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
 
-                    b.HasIndex("OrderID");
+                    b.HasKey("BillId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("OrderId");
 
                     b.ToTable("Bills");
                 });
@@ -76,7 +81,7 @@ namespace SuperMarket_DataAccess.Migrations
 
                     b.HasKey("BranchId");
 
-                    b.ToTable("tbBranch");
+                    b.ToTable("Branches");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.Brand", b =>
@@ -109,7 +114,7 @@ namespace SuperMarket_DataAccess.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("tbBrands");
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.Brand_Category", b =>
@@ -142,7 +147,7 @@ namespace SuperMarket_DataAccess.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("tbCategories");
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.Coupon", b =>
@@ -161,6 +166,7 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("DiscountPercent")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ExpiredDate")
@@ -196,7 +202,7 @@ namespace SuperMarket_DataAccess.Migrations
 
                     b.HasKey("CustomerId");
 
-                    b.ToTable("tbCustomers");
+                    b.ToTable("Customers");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.ImageProduct", b =>
@@ -218,16 +224,16 @@ namespace SuperMarket_DataAccess.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("tbImageProduct");
+                    b.ToTable("ImageProducts");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.Order", b =>
                 {
-                    b.Property<int>("OrderID")
+                    b.Property<int>("OrderId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"), 1L, 1);
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -235,6 +241,12 @@ namespace SuperMarket_DataAccess.Migrations
 
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("CouponId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -265,7 +277,11 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("OrderID");
+                    b.HasKey("OrderId");
+
+                    b.HasIndex("CouponId");
+
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Orders");
                 });
@@ -281,15 +297,20 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.Property<int>("OrderID")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("OrderID");
+                    b.HasIndex("OrderId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("OrderDetails");
                 });
@@ -302,7 +323,10 @@ namespace SuperMarket_DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"), 1L, 1);
 
-                    b.Property<int>("CategoriesId")
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CouponId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedDate")
@@ -338,23 +362,35 @@ namespace SuperMarket_DataAccess.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("CategoriesId");
+                    b.HasIndex("CategoryId");
 
-                    b.ToTable("tbProducts");
+                    b.HasIndex("CouponId");
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.ShoppingCart", b =>
                 {
-                    b.Property<int>("CartID")
+                    b.Property<int>("CartId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartID"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"), 1L, 1);
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
 
-                    b.HasKey("CartID");
+                    b.Property<int>("CustomerId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CartId");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProductId");
 
                     b.ToTable("ShoppingCarts");
                 });
@@ -368,72 +404,149 @@ namespace SuperMarket_DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StockId"), 1L, 1);
 
                     b.Property<int?>("BranchId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("Count")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProductId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("StockId");
 
                     b.HasIndex("BranchId");
 
-                    b.ToTable("tbStock");
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Stocks");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.Bill", b =>
                 {
-                    b.HasOne("SuperMarket_Models.Models.Order", "Order")
+                    b.HasOne("SuperMarket_Models.Models.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("OrderID")
+                        .HasForeignKey("CustomerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("SuperMarket_Models.Models.Order", "Order")
+                        .WithMany()
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
 
                     b.Navigation("Order");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.ImageProduct", b =>
                 {
-                    b.HasOne("SuperMarket_Models.Models.Product", "product")
+                    b.HasOne("SuperMarket_Models.Models.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("product");
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SuperMarket_Models.Models.Order", b =>
+                {
+                    b.HasOne("SuperMarket_Models.Models.Coupon", "Coupon")
+                        .WithMany()
+                        .HasForeignKey("CouponId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SuperMarket_Models.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Coupon");
+
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.OrderDetail", b =>
                 {
                     b.HasOne("SuperMarket_Models.Models.Order", "Order")
                         .WithMany()
-                        .HasForeignKey("OrderID")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SuperMarket_Models.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.Product", b =>
                 {
-                    b.HasOne("SuperMarket_Models.Models.Category", "category")
+                    b.HasOne("SuperMarket_Models.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoriesId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("category");
+                    b.HasOne("SuperMarket_Models.Models.Coupon", null)
+                        .WithMany("Products")
+                        .HasForeignKey("CouponId");
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("SuperMarket_Models.Models.ShoppingCart", b =>
+                {
+                    b.HasOne("SuperMarket_Models.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SuperMarket_Models.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.Stock", b =>
                 {
                     b.HasOne("SuperMarket_Models.Models.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId");
+                        .HasForeignKey("BranchId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SuperMarket_Models.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Branch");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SuperMarket_Models.Models.Coupon", b =>
+                {
+                    b.Navigation("Products");
                 });
 #pragma warning restore 612, 618
         }

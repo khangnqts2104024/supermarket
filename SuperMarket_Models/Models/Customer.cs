@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SuperMarket_Models.Models
 {
-    [Table("tbCustomers")]
+
     public class Customer
     {
         [Key]

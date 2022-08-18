@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -12,17 +13,17 @@ namespace SuperMarket_Models.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CartID { get; set; }
+        public int CartId { get; set; }
         [Required]
         public int Count { get; set; }
-        //public int ProductID { get; set; }
-        //[ForeignKey("ProductID")]
-        //[ValidateNever]
-        //public Product Product { get; set; }
+        public int ProductId { get; set; }
+        [ForeignKey("ProductId")]
+        [ValidateNever]
+        public Product Product { get; set; }
 
-        //public int CustomerID { get; set; }
-        //[ForeignKey("CustomerID")]
-        //[ValidateNever]
-        //public Customer Customer { get; set; }
+        public int CustomerId { get; set; }
+        [ForeignKey("CustomerId")]
+        [ValidateNever]
+        public Customer Customer { get; set; }
     }
 }

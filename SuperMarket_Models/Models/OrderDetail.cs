@@ -17,15 +17,18 @@ namespace SuperMarket_Models.Models
         public int Id { get; set; }
         [Required]
         public int Count { get; set; }
+        [Required]
+        [Range(0, 9999999999999.99)]
+
         public decimal Price { get; set; }
-        public int OrderID { get; set; }
-        [ForeignKey("OrderID")]
+        public int OrderId { get; set; }
+        [ForeignKey("OrderId")]
         [ValidateNever]
         public Order Order { get; set; }
 
-        //public int ProductID { get; set; }
-        //[ForeignKey("ProductID")]
-       //[ValidateNever]
-        //public Product Product { get; set; }
+        public int ProductId { get; set; }
+        [ForeignKey("ProductId")]
+        [ValidateNever]
+        public Product Product { get; set; }
     }
 }
