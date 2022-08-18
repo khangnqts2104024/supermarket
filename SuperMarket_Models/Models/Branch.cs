@@ -17,13 +17,15 @@ namespace SuperMarket_Models.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 
         public int BranchId { get; set; }
-
+        [MaxLength(150)]
         public string? BranchName { get; set; }
-        public string? StreetAddress { get; set; }
-        public string? City { get; set; }
-        public string? District { get; set; }
-        public string? Ward { get; set; }
+        [MaxLength(250)]
+        public string? Address { get; set; }
+        [MaxLength(20)]
         public string? Phone { get; set; }
+        public string Latitude { get; set; }
+        public string Longitude { get; set; }
+        
 
 
 
