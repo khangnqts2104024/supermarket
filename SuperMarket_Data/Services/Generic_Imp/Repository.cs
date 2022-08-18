@@ -13,7 +13,7 @@ namespace SuperMarket_DataAccess.Services.Generic_Imp
     public class Repository<T> : IRepository<T> where T : class
     {
         private readonly ApplicationDbContext _db;
-        internal DbSet<T>? dbSet;
+        internal DbSet<T> dbSet;
         public Repository(ApplicationDbContext db)
         {
             _db = db;
