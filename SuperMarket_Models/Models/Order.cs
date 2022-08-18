@@ -27,6 +27,9 @@ namespace SuperMarket_Models.Models
         [Required]
         public string? SessionId { get; set; }
         [Required]
+        public string? PaymentIntentId { get; set; }
+        
+        [Required]
         public string? Name { get; set; }
         [Required]
         public string? Address { get; set; }

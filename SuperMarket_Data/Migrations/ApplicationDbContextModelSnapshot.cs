@@ -248,14 +248,9 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("OrderId")
-                        .HasColumnType("int");
-
                     b.HasKey("BillId");
 
                     b.HasIndex("CustomerId");
-
-                    b.HasIndex("OrderId");
 
                     b.ToTable("Bills");
                 });
@@ -444,6 +439,10 @@ namespace SuperMarket_DataAccess.Migrations
 
                     b.Property<DateTime>("PaymentDate")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentIntentId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
                         .IsRequired()
@@ -685,15 +684,7 @@ namespace SuperMarket_DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SuperMarket_Models.Models.Order", "Order")
-                        .WithMany()
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Customer");
-
-                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.ImageProduct", b =>

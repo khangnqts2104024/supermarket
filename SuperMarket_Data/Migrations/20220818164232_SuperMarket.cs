@@ -79,6 +79,7 @@ namespace SuperMarket_DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Brand_Categories", x => new { x.BrandId, x.CategoryId });
+               
                 });
 
             migrationBuilder.CreateTable(
@@ -234,6 +235,27 @@ namespace SuperMarket_DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Bills",
+                columns: table => new
+                {
+                    BillId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BillAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Bills", x => x.BillId);
+                    table.ForeignKey(
+                        name: "FK_Bills_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orders",
                 columns: table => new
                 {
@@ -246,6 +268,7 @@ namespace SuperMarket_DataAccess.Migrations
                     PaymentStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PaymentDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     SessionId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PaymentIntentId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -301,34 +324,6 @@ namespace SuperMarket_DataAccess.Migrations
                         column: x => x.CouponId,
                         principalTable: "Coupons",
                         principalColumn: "CouponId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Bills",
-                columns: table => new
-                {
-                    BillId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OrderId = table.Column<int>(type: "int", nullable: false),
-                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BillAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bills", x => x.BillId);
-                    table.ForeignKey(
-                        name: "FK_Bills_AspNetUsers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_Bills_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
-                        principalColumn: "OrderId",
-                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -476,11 +471,6 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "IX_Bills_CustomerId",
                 table: "Bills",
                 column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Bills_OrderId",
-                table: "Bills",
-                column: "OrderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ImageProducts_ProductId",
