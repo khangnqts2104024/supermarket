@@ -23,8 +23,8 @@ namespace SuperMarket_Models.Models
         public string? Address { get; set; }
         [MaxLength(20)]
         public string? Phone { get; set; }
-        public string Latitude { get; set; }
-        public string Longitude { get; set; }
+        public string? Latitude { get; set; }
+        public string? Longitude { get; set; }
         
 
 
