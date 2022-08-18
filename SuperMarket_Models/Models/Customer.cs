@@ -16,6 +16,7 @@ namespace SuperMarket_Models.Models
 
 
         [Required]
+        [StringLength(150)]
         public string Address { get; set; }
 
 
