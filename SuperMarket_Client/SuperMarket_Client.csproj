@@ -21,4 +21,10 @@
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SuperMarket_Data\SuperMarket_DataAccess.csproj" />
+    <ProjectReference Include="..\SuperMarket_Models\SuperMarket_Models.csproj" />
+    <ProjectReference Include="..\SuperMarket_Utility\SuperMarket_Utility.csproj" />
+  </ItemGroup>
+
 </Project>

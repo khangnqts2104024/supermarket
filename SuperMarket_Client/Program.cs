@@ -1,8 +1,11 @@
+using Microsoft.EntityFrameworkCore;
+using SuperMarket_DataAccess.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("sqlconnect")));
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
