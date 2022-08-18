@@ -16,7 +16,6 @@ namespace SuperMarket_Models.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ImageId { get; set; }
         [Required]
-        [StringLength(100)]
         public string Url { get; set; }
         public string ProductId { get; set; }
         [ForeignKey("ProductId")]

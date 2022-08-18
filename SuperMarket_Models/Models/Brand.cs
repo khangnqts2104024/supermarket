@@ -15,19 +15,19 @@ namespace SuperMarket_Models.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BrandId { get; set; }
         [Required]
-        [StringLength(50)]
+
         public string BrandName { get; set; }
         [Required]
-        [StringLength(50)]
+
         public string Origin { get; set; }
         [Required]
-        [StringLength(50)]
+
         public string Address { get; set; }
         [Required]
-        [StringLength(50)]
+
         public string Phone { get; set; }
         [Required]
-        [StringLength(50)]
+
         public string Country { get; set; }
     }
 }

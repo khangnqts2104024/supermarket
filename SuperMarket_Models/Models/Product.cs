@@ -16,20 +16,20 @@ namespace SuperMarket_Models.Models
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string ProductId { get; set; }
         [Required]
-        [StringLength(50)]
+
         public string ProductName { get; set; }
         [Required]
         public float Price { get; set; }
         [Required]
         public double TotalAmount { get; set; }
         [Required]
-        [StringLength(50)]
+
         public string Origin { get; set; }
         [Required]
-        [StringLength(50)]
+
         public string Title { get; set; }
         [Required]
-        [StringLength(50)]
+
         public string Description { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
@@ -40,7 +40,7 @@ namespace SuperMarket_Models.Models
         [Required]
         public int Quantity { get; set; }
         [Required]
-        public float Weight { get; set; }
+        public double Weight { get; set; }
         public int CategoriesId { get; set; }
         [ForeignKey("CategoriesId")]
         [ValidateNever]

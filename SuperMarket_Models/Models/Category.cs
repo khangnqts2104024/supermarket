@@ -15,7 +15,6 @@ namespace SuperMarket_Models.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryId { get; set; }
         [Required]
-        [StringLength(50)]
         public string CategoryName { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; }
