@@ -15,9 +15,9 @@ namespace SuperMarket_Models.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CouponId { get; set; }
         [Required]
-        public string? Code { get; set; }
+        public string? CouponCode { get; set; }
 
-        public double? DiscountPercent { get; set; }
+        public int? DiscountPercent { get; set; }
         public DateTime CreatedDate { get; } = DateTime.Now;
         public DateTime ExpiredDate { get; set; }
         public int Count { get; set; }
