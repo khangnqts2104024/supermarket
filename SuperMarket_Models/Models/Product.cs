@@ -19,7 +19,8 @@ namespace SuperMarket_Models.Models
 
         public string ProductName { get; set; }
         [Required]
-        public float Price { get; set; }
+        [Range(0,9999999999999.99)]
+        public decimal Price { get; set; }
         [Required]
         public double TotalAmount { get; set; }
         [Required]
