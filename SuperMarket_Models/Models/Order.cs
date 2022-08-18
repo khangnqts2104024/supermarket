@@ -44,7 +44,6 @@ namespace SuperMarket_Models.Models
         public string CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         [ValidateNever]
-
         public Customer Customer { get; set; }
     }
 }

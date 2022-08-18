@@ -1,9 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using SuperMarket_Models.Models;
 
 namespace SuperMarket_DataAccess.Data
 {
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext:IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions options):base(options)
         {
@@ -12,6 +13,7 @@ namespace SuperMarket_DataAccess.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Brand_Category>().HasKey(nameof(Brand_Category.BrandId), nameof(Brand_Category.CategoryId));
+            base.OnModelCreating(modelBuilder);
         }
         public DbSet<Bill> Bills { get; set; }
         public DbSet<Branch> Branches { get; set; }
