@@ -18,10 +18,10 @@ namespace SuperMarket_Models.Models
         public int StockId { get; set; }
 
 
+        
+        public int? Count { get; set; }
 
-        public double? Count { get; set; }
-
-        public string StockType { get; set; }
+      
 
         //FK
         public int? ProductId { get; set; }
