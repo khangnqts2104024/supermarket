@@ -14,11 +14,8 @@ namespace SuperMarket_Models.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BillId { get; set; }
-        public int OrderId { get; set; }
-        [ForeignKey("OrderId")]
-        public Order Order { get; set; }
 
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         [ValidateNever]
         public Customer Customer { get; set; }

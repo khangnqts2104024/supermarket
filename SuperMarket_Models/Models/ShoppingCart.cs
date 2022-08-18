@@ -21,7 +21,7 @@ namespace SuperMarket_Models.Models
         [ValidateNever]
         public Product Product { get; set; }
 
-        public int CustomerId { get; set; }
+        public string CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         [ValidateNever]
         public Customer Customer { get; set; }
