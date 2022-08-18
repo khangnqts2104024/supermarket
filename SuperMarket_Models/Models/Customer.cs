@@ -7,15 +7,12 @@ namespace SuperMarket_Models.Models
     public class Customer
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string CustomerId { get; set; }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int CustomerId { get; set; }
+        
         [Required]
-        public string FirstName { get; set; }
-
-
-        [Required]
-        public string LastName { get; set; }
+        [StringLength(100)]
+        public string FullName { get; set; }
 
 
         [Required]
@@ -23,26 +20,7 @@ namespace SuperMarket_Models.Models
 
 
         [Required]
-        public string Street { get; set; }
-
-
-        [Required]
-        public string City { get; set; }
-
-
-        [Required]
-        public string Country { get; set; }
-
-
-        [Required]
+        [StringLength(50)]
         public string Phone { get; set; }
-
-
-        [Required]
-        public string CreditCardNumber { get; set; }
-
-
-        [Required]
-        public DateTime CreditCardExpires { get; set; }
     }
 }

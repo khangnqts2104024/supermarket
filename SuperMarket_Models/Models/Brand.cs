@@ -14,20 +14,21 @@ namespace SuperMarket_Models.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int BrandId { get; set; }
-        [Required]
 
+        [Required]
+        [StringLength(50)]
         public string BrandName { get; set; }
-        [Required]
 
+        [Required]
+        [StringLength(50)]
         public string Origin { get; set; }
-        [Required]
 
+        [Required]
+        [StringLength(150)]
         public string Address { get; set; }
-        [Required]
 
+        [Required]
+        [StringLength(40)]
         public string Phone { get; set; }
-        [Required]
-
-        public string Country { get; set; }
     }
 }

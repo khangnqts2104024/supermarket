@@ -13,35 +13,38 @@ namespace SuperMarket_Models.Models
     public class Product
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string ProductId { get; set; }
-        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int ProductId { get; set; }
 
+        [Required]
         public string ProductName { get; set; }
+
         [Required]
         [Range(0,9999999999999.99)]
         public decimal Price { get; set; }
-        [Required]
-        public double TotalAmount { get; set; }
-        [Required]
 
-        public string Origin { get; set; }
-        [Required]
 
+        [Required]
         public string Title { get; set; }
-        [Required]
 
+        [StringLength(150)]
         public string Description { get; set; }
+
         [Required]
         public DateTime CreatedDate { get; set; }
+
         [Required]
         public DateTime ManufactureDate { get; set; }
+
         [Required]
         public DateTime ExpiryDate { get; set; }
-        [Required]
+
+        
         public int Quantity { get; set; }
-        [Required]
+
+        
         public double Weight { get; set; }
+
         public int CategoriesId { get; set; }
         [ForeignKey("CategoriesId")]
         [ValidateNever]
