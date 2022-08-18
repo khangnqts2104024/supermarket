@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_Models.Models
 {
-    [Table("tbImageProduct")]
     public class ImageProduct
     {
         [Key]
@@ -20,6 +19,6 @@ namespace SuperMarket_Models.Models
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
         [ValidateNever]
-        public Product product { get; set; }
+        public Product Product { get; set; }
     }
 }

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_Models.Models
 {
-    [Table("tbProducts")]
     public class Product
     {
         [Key]
@@ -31,7 +30,7 @@ namespace SuperMarket_Models.Models
         public string Description { get; set; }
 
         [Required]
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         [Required]
         public DateTime ManufactureDate { get; set; }
@@ -45,9 +44,9 @@ namespace SuperMarket_Models.Models
         
         public double Weight { get; set; }
 
-        public int CategoriesId { get; set; }
-        [ForeignKey("CategoriesId")]
+        public int CategoryId { get; set; }
+        [ForeignKey("CategoryId")]
         [ValidateNever]
-        public Category category { get; set; }
+        public Category Category { get; set; }
     }
 }

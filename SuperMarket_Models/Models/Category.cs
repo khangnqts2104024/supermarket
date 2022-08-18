@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_Models.Models
 {
-    [Table("tbCategories")]
+
     public class Category
     {
         [Key]
@@ -17,7 +17,7 @@ namespace SuperMarket_Models.Models
         [Required]
         public string CategoryName { get; set; }
         [Required]
-        public DateTime CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     }
 }

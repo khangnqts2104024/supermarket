@@ -7,7 +7,7 @@ namespace SuperMarket_Models.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int OrderID { get; set; }
+        public int OrderId { get; set; }
         [Required]
         public DateTime OrderDate { get; set; }
         [Required]
@@ -15,6 +15,8 @@ namespace SuperMarket_Models.Models
         [Required]
         public string? OrderStatus { get; set; }
         [Required]
+        [Range(0, 9999999999999.99)]
+
         public decimal Amount { get; set; }
   
         [Required]
@@ -30,14 +32,14 @@ namespace SuperMarket_Models.Models
         [Required]
         public string? Phone { get; set; }
 
-        //public int CouponID { get; set; }
-        //[ForeignKey("CouponID")]
+        public int CouponId { get; set; }
+        [ForeignKey("CouponId")]
 
-        //public Coupon Coupon { get; set; }
+        public Coupon Coupon { get; set; }
 
-        //public int CustomerID { get; set; }
-        //[ForeignKey("CustomerID")]
+        public int CustomerId { get; set; }
+        [ForeignKey("CustomerId")]
 
-        //public Customer Customer { get; set; }
+        public Customer Customer { get; set; }
     }
 }

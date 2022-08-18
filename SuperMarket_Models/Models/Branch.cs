@@ -8,11 +8,9 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_Models.Models
 {
-    [Table("tbBranch")]
+
     public class Branch
     {
-
-
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 

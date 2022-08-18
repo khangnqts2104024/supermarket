@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_Models.Models
 {
-    [Table("tbBrands")]
+
     public class Brand
     {
         [Key]
