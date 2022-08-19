@@ -96,29 +96,9 @@
         </div>
         <div class="col-lg-4 col-xl-4">
           <div class="ht_language_widget text-end">
-            <ul class="m0">
-              <li class="list-inline-item">
-                <div class="htlw_form_select">
-                  <span class="stts">Language</span>
-                  <select class="custom_select_dd" id="selectbox_language">
-                    <option value="english">English</option>
-                    <option value="turkish">Turkish</option>
-                    <option value="turkish">للغة العربية </option>
-                    <option value="español">Español</option>
-                    <option value="italiano">Italiano</option>
-                  </select>
-                </div>
-              </li>
-              <li class="list-inline-item">
-                <div class="htcw_form_select">
-                  <span class="stts">Currency</span>
-                  <select class="custom_select_dd" id="selectbox_currency">
-                    <option value="usd ($)">USD ($)</option>
-                    <option value="euro (€)">EURO (€)</option>
-                    <option value="pound (£)">Pound (£)</option>
-                  </select>
-                </div>
-              </li>
+              <ul class="m0">
+                  <partial name="_LoginPartial"/>
+                
             </ul>
           </div>
         </div>
@@ -212,7 +192,6 @@
           <div class="log_fav_cart_widget">
             <div class="wrapper">
               <ul class="mb0 cart">
-                <li class="list-inline-item"><a href="#" data-bs-toggle="modal" data-bs-target="#logInModal"><span class="flaticon-user icon"></span></a></li>
                 <li class="list-inline-item"><a href="#"><span class="flaticon-heart icon"><span class="badge bgc-thm">2</span></span></a></li>
                 <li class="list-inline-item">
                   <a class="cart_btn" href="#"><span class="flaticon-shopping-cart icon"><span class="badge bgc-thm">3</span></span> <span class="price">$240.93</span></a>
@@ -573,76 +552,6 @@
       </div>
     </nav>
   </header>
-  <!-- Modal -->
-  <div class="sign_up_modal modal fade" id="logInModal" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body container p60">
-          <div class="row">
-            <div class="col-lg-12">
-              <ul class="sign_up_tab nav nav-tabs" id="myTab" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link active" id="home-tab" data-bs-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Login</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="profile-tab" data-bs-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Register</a>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="tab-content container p0" id="myTabContent">
-            <div class="row mt30 tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-              <div class="col-lg-12">
-                <div class="login_form">
-                  <form action="#">
-                    <div class="mb-2 mr-sm-2">
-                      <label class="form-label">Username or email address  *</label>
-                      <input type="text" class="form-control">
-                    </div>
-                    <div class="form-group mb5">
-                      <label class="form-label">Password  *</label>
-                      <input type="password" class="form-control" placeholder="Password">
-                    </div>
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" class="custom-control-input" id="exampleCheck2">
-                      <label class="custom-control-label" for="exampleCheck2">Remember me</label>
-                      <a class="btn-fpswd float-end" href="#">Lost your password?</a>
-                    </div>
-                    <button type="submit" class="btn btn-log btn-thm mt20">LOGIN</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-            <div class="row mt30 tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-              <div class="col-lg-12">
-                <div class="sign_up_form">
-                  <form action="#">
-                    <div class="form-group">
-                      <label class="form-label">Username *</label>
-                      <input type="text" class="form-control">
-                    </div>
-                    <div class="form-group">
-                      <label class="form-label">Email address *</label>
-                      <input type="email" class="form-control">
-                    </div>
-                    <div class="form-group mb20">
-                      <label class="form-label">Password *</label>
-                      <input type="password" class="form-control">
-                    </div>
-                    <p class="mb30">Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our privacy policy.</p>
-                    <button type="submit" class="btn btn-signup btn-thm mb0">REGISTER</button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
   
   <!-- Main Header Nav For Mobile -->
   <div id="page" class="stylehome1 h0">
@@ -805,7 +714,7 @@
   </div>
 
   <!-- ==================================================================================================================== -->
-    <section>
+    <section class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
@@ -949,4 +858,5 @@
 <script src="~/Asset/js/script.js"></script>
 </body>
 </html>
+@await RenderSectionAsync("Scripts",required:false)
 
