@@ -20,9 +20,5 @@ namespace SuperMarket_Models.Models
         [StringLength(150)]
         public string Address { get; set; }
 
-
-        [Required]
-        [StringLength(50)]
-        public string Phone { get; set; }
     }
 }

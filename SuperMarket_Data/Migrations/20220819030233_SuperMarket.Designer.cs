@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SuperMarket_DataAccess.Data;
 
@@ -11,9 +12,10 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220819030233_SuperMarket")]
+    partial class SuperMarket
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -318,16 +320,12 @@ namespace SuperMarket_DataAccess.Migrations
             modelBuilder.Entity("SuperMarket_Models.Models.Brand_Category", b =>
                 {
                     b.Property<int>("BrandId")
-                        .HasColumnType("int")
-                        .HasColumnOrder(0);
+                        .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
+                        .HasColumnType("int");
 
                     b.HasKey("BrandId", "CategoryId");
-
-                    b.HasIndex("CategoryId");
 
                     b.ToTable("Brand_Categories");
                 });
@@ -680,25 +678,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
-                });
-
-            modelBuilder.Entity("SuperMarket_Models.Models.Brand_Category", b =>
-                {
-                    b.HasOne("SuperMarket_Models.Models.Brand", "Brand")
-                        .WithMany()
-                        .HasForeignKey("BrandId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SuperMarket_Models.Models.Category", "Category")
-                        .WithMany()
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Brand");
-
-                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.ImageProduct", b =>

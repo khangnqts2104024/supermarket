@@ -3,6 +3,8 @@ using SuperMarket_DataAccess.Data;
 using Microsoft.AspNetCore.Identity;
 using SuperMarket_DataAccess.Repository.IRepository;
 using SuperMarket_DataAccess.Services;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using SuperMarket_Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +12,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("sqlconnect")));
 
-builder.Services.AddDefaultIdentity<IdentityUser>()
+builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProviders()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 var app = builder.Build();
 
