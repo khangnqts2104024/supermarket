@@ -856,6 +856,7 @@
 <script src="~/Asset/js/wow.min.js"></script> 
 <!-- Custom script for all pages --> 
 <script src="~/Asset/js/script.js"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
 @await RenderSectionAsync("Scripts",required:false)

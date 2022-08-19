@@ -22,7 +22,7 @@ namespace SuperMarket_Models.Models
         [MaxLength(20)]
         public string? Phone { get; set; }
         public string? Latitude { get; set; }
-        public string? Longitude { get; set; }
+        public string? Longtitude { get; set; }
         
 
 
