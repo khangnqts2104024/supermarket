@@ -16,6 +16,7 @@ namespace SuperMarket_Models.Models
         public int ImageId { get; set; }
         [Required]
         public string Url { get; set; }
+        public bool IsMainImage { get; set; }
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
         [ValidateNever]
