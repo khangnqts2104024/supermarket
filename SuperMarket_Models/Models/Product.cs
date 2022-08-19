@@ -22,7 +22,6 @@ namespace SuperMarket_Models.Models
         [Range(0,9999999999999.99)]
         public decimal Price { get; set; }
 
-
         [Required]
         public string Title { get; set; }
 
@@ -37,16 +36,10 @@ namespace SuperMarket_Models.Models
 
         [Required]
         public DateTime ExpiryDate { get; set; }
-
-        
-        public int Quantity { get; set; }
-
-        
         public double Weight { get; set; }
-
-        public int CategoryId { get; set; }
-        [ForeignKey("CategoryId")]
+        public int BrandCateId { get; set; }
+        [ForeignKey("BrandCateId")]
         [ValidateNever]
-        public Category Category { get; set; }
+        public Brand_Category Brand_Category { get; set; }
     }
 }

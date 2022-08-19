@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SuperMarket_DataAccess.Migrations
 {
-    public partial class spm : Migration
+    public partial class spm1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,7 +31,6 @@ namespace SuperMarket_DataAccess.Migrations
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -62,7 +61,7 @@ namespace SuperMarket_DataAccess.Migrations
                     Address = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Latitude = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Longitude = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Longtitude = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -161,8 +160,8 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -206,8 +205,8 @@ namespace SuperMarket_DataAccess.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -246,12 +245,14 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "Brand_Categories",
                 columns: table => new
                 {
+                    BrandCateId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     BrandId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Brand_Categories", x => new { x.BrandId, x.CategoryId });
+                    table.PrimaryKey("PK_Brand_Categories", x => x.BrandCateId);
                     table.ForeignKey(
                         name: "FK_Brand_Categories_Brands_BrandId",
                         column: x => x.BrandId,
@@ -316,19 +317,18 @@ namespace SuperMarket_DataAccess.Migrations
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ManufactureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
                     Weight = table.Column<double>(type: "float", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false),
+                    BrandCateId = table.Column<int>(type: "int", nullable: false),
                     CouponId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.ProductId);
                     table.ForeignKey(
-                        name: "FK_Products_Categories_CategoryId",
-                        column: x => x.CategoryId,
-                        principalTable: "Categories",
-                        principalColumn: "CategoryId",
+                        name: "FK_Products_Brand_Categories_BrandCateId",
+                        column: x => x.BrandCateId,
+                        principalTable: "Brand_Categories",
+                        principalColumn: "BrandCateId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Products_Coupons_CouponId",
@@ -344,6 +344,7 @@ namespace SuperMarket_DataAccess.Migrations
                     ImageId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsMainImage = table.Column<bool>(type: "bit", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -484,6 +485,11 @@ namespace SuperMarket_DataAccess.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Brand_Categories_BrandId",
+                table: "Brand_Categories",
+                column: "BrandId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Brand_Categories_CategoryId",
                 table: "Brand_Categories",
                 column: "CategoryId");
@@ -514,9 +520,9 @@ namespace SuperMarket_DataAccess.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_CategoryId",
+                name: "IX_Products_BrandCateId",
                 table: "Products",
-                column: "CategoryId");
+                column: "BrandCateId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CouponId",
@@ -565,9 +571,6 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "Bills");
 
             migrationBuilder.DropTable(
-                name: "Brand_Categories");
-
-            migrationBuilder.DropTable(
                 name: "ImageProducts");
 
             migrationBuilder.DropTable(
@@ -583,9 +586,6 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Brands");
-
-            migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
@@ -598,10 +598,16 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Categories");
+                name: "Brand_Categories");
 
             migrationBuilder.DropTable(
                 name: "Coupons");
+
+            migrationBuilder.DropTable(
+                name: "Brands");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

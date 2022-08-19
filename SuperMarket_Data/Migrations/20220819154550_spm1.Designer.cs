@@ -12,8 +12,8 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220819015921_spm")]
-    partial class spm
+    [Migration("20220819154550_spm1")]
+    partial class spm1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -175,12 +175,10 @@ namespace SuperMarket_DataAccess.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderKey")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -217,12 +215,10 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .HasMaxLength(128)
-                        .HasColumnType("nvarchar(128)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -276,7 +272,7 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Property<string>("Latitude")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Longitude")
+                    b.Property<string>("Longtitude")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
@@ -323,15 +319,21 @@ namespace SuperMarket_DataAccess.Migrations
 
             modelBuilder.Entity("SuperMarket_Models.Models.Brand_Category", b =>
                 {
+                    b.Property<int>("BrandCateId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrandCateId"), 1L, 1);
+
                     b.Property<int>("BrandId")
-                        .HasColumnType("int")
-                        .HasColumnOrder(0);
+                        .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("int")
-                        .HasColumnOrder(1);
+                        .HasColumnType("int");
 
-                    b.HasKey("BrandId", "CategoryId");
+                    b.HasKey("BrandCateId");
+
+                    b.HasIndex("BrandId");
 
                     b.HasIndex("CategoryId");
 
@@ -392,6 +394,9 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ImageId"), 1L, 1);
+
+                    b.Property<bool>("IsMainImage")
+                        .HasColumnType("bit");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -508,7 +513,7 @@ namespace SuperMarket_DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductId"), 1L, 1);
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int>("BrandCateId")
                         .HasColumnType("int");
 
                     b.Property<int?>("CouponId")
@@ -535,9 +540,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -547,7 +549,7 @@ namespace SuperMarket_DataAccess.Migrations
 
                     b.HasKey("ProductId");
 
-                    b.HasIndex("CategoryId");
+                    b.HasIndex("BrandCateId");
 
                     b.HasIndex("CouponId");
 
@@ -622,11 +624,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
 
                     b.HasDiscriminator().HasValue("Customer");
                 });
@@ -763,9 +760,9 @@ namespace SuperMarket_DataAccess.Migrations
 
             modelBuilder.Entity("SuperMarket_Models.Models.Product", b =>
                 {
-                    b.HasOne("SuperMarket_Models.Models.Category", "Category")
+                    b.HasOne("SuperMarket_Models.Models.Brand_Category", "Brand_Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId")
+                        .HasForeignKey("BrandCateId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -773,7 +770,7 @@ namespace SuperMarket_DataAccess.Migrations
                         .WithMany("Products")
                         .HasForeignKey("CouponId");
 
-                    b.Navigation("Category");
+                    b.Navigation("Brand_Category");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.ShoppingCart", b =>
