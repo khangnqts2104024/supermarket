@@ -34,6 +34,7 @@
   <ItemGroup>
     <Folder Include="Areas\Admin\Controllers\" />
     <Folder Include="Areas\Admin\Views\Admin\" />
+    <Folder Include="wwwroot\Asset\" />
   </ItemGroup>
 
 </Project>
