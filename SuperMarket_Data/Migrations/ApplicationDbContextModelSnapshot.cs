@@ -322,12 +322,16 @@ namespace SuperMarket_DataAccess.Migrations
             modelBuilder.Entity("SuperMarket_Models.Models.Brand_Category", b =>
                 {
                     b.Property<int>("BrandId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnOrder(0);
 
                     b.Property<int>("CategoryId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnOrder(1);
 
                     b.HasKey("BrandId", "CategoryId");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Brand_Categories");
                 });
@@ -685,6 +689,25 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("Customer");
+                });
+
+            modelBuilder.Entity("SuperMarket_Models.Models.Brand_Category", b =>
+                {
+                    b.HasOne("SuperMarket_Models.Models.Brand", "Brand")
+                        .WithMany()
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SuperMarket_Models.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.ImageProduct", b =>

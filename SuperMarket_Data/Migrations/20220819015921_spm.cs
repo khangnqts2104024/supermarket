@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SuperMarket_DataAccess.Migrations
 {
-    public partial class SuperMarket : Migration
+    public partial class spm : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -67,19 +67,6 @@ namespace SuperMarket_DataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Branches", x => x.BranchId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Brand_Categories",
-                columns: table => new
-                {
-                    BrandId = table.Column<int>(type: "int", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Brand_Categories", x => new { x.BrandId, x.CategoryId });
-               
                 });
 
             migrationBuilder.CreateTable(
@@ -252,6 +239,30 @@ namespace SuperMarket_DataAccess.Migrations
                         column: x => x.CustomerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Brand_Categories",
+                columns: table => new
+                {
+                    BrandId = table.Column<int>(type: "int", nullable: false),
+                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Brand_Categories", x => new { x.BrandId, x.CategoryId });
+                    table.ForeignKey(
+                        name: "FK_Brand_Categories_Brands_BrandId",
+                        column: x => x.BrandId,
+                        principalTable: "Brands",
+                        principalColumn: "BrandId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Brand_Categories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -473,6 +484,11 @@ namespace SuperMarket_DataAccess.Migrations
                 column: "CustomerId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Brand_Categories_CategoryId",
+                table: "Brand_Categories",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ImageProducts_ProductId",
                 table: "ImageProducts",
                 column: "ProductId");
@@ -552,9 +568,6 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "Brand_Categories");
 
             migrationBuilder.DropTable(
-                name: "Brands");
-
-            migrationBuilder.DropTable(
                 name: "ImageProducts");
 
             migrationBuilder.DropTable(
@@ -568,6 +581,9 @@ namespace SuperMarket_DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Brands");
 
             migrationBuilder.DropTable(
                 name: "Orders");
