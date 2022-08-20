@@ -20,12 +20,22 @@ namespace SuperMarket_DataAccess.Services.Generic_Imp
             dbSet = _db.Set<T>();
         }
 
-        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null)
+        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>>? filter = null, string? includeProperties = null, string? thenIncludeProperties = null)
         {
             IQueryable<T> query = dbSet;
             if (filter != null)
             {
                 query = query.Where(filter).AsNoTracking();
+            }
+            if (includeProperties != null && thenIncludeProperties != null)
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    foreach (var thenInclude in thenIncludeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        query = query.Include(includeProp + "." + thenInclude).AsNoTracking();
+                    }
+                }
             }
             if (includeProperties != null)
             {
@@ -37,10 +47,23 @@ namespace SuperMarket_DataAccess.Services.Generic_Imp
             return await query.ToListAsync();
         }
 
-        public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null)
+        public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null, string? thenIncludeProperties = null)
         {
             IQueryable<T> query = dbSet;
             query = query.Where(filter).AsNoTracking();
+
+            
+           
+            if (includeProperties != null && thenIncludeProperties != null)
+            {
+                foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                {
+                    foreach (var thenInclude in thenIncludeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        query = query.Include(includeProp + "." + thenInclude).AsNoTracking();
+                    }
+                }
+            }
             if (includeProperties != null)
             {
                 foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
