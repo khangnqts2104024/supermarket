@@ -1,4 +1,9 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html dir="ltr" lang="en">
 <head>
 <meta charset="utf-8">
@@ -194,9 +199,15 @@
               <ul class="mb0 cart">
                 <li class="list-inline-item"><a href="#"><span class="flaticon-heart icon"><span class="badge bgc-thm">2</span></span></a></li>
                 <li class="list-inline-item">
-                  <a class="cart_btn" href="#"><span class="flaticon-shopping-cart icon"><span class="badge bgc-thm">3</span></span> <span class="price">$240.93</span></a>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <a class="cart_btn" href="#"><span class="flaticon-shopping-cart icon"><span class="badge bgc-thm">3</span></span> <span class="price">$240.93</span></a>
+                }else{
+                    <a class="cart_btn1" href="#"><span class="flaticon-shopping-cart icon"></span> </a>
+                }
                   <ul class="dropdown_content">
-                    <li class="list_content">
+
+                   @* <li class="list_content">
                       <a href="#">
                         <img class="float-start" src="~/Asset/images/shop/s1.png" alt="50x50">
                         <p>Silver Heinz Ketchup 350 ml</p>
@@ -219,7 +230,7 @@
                         <small>3 x $7.63</small>
                         <span class="close_icon float-end"><i class="fa fa-plus"></i></span>
                       </a>
-                    </li>
+                    </li>*@
                     <li class="list_content">
                       <h5>Subtotal: <span class="text-thm fw400 float-end">$907.00</span></h5>
                       <a href="#" class="btn btn-thm cart_btns">VIEW CART</a>
