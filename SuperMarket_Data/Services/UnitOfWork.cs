@@ -27,16 +27,16 @@ namespace SuperMarket_DataAccess.Services
             ImageProduct = new ImageProductService(_db);
 
         }
-
-        public void Save()
+        public async virtual Task<int> Save()
         {
-            _db.SaveChanges();
+            return await _db.SaveChangesAsync();
         }
-
-
+      
         public void ClearTracking()
         {
             _db.ChangeTracker.Clear();
         }
+
+       
     }
 }

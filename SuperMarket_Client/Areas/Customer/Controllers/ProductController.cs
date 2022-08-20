@@ -15,20 +15,24 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
         }
 
-        public IActionResult Details(int productId)
+        [HttpGet]
+        public async Task<IActionResult> Details(int productId)
         {
+            productId = 2;
             ShoppingCart cartObj = new ShoppingCart()
             {
                 Count = 1,
                 ProductId = productId,
-                //Product = unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == productId, includeProperties: "Brand_Category");
+
+                Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == productId, includeProperties: "Brand_Category", thenIncludeProperties: "Brand,Category"),
+
             };
-            return View();
+            return View(cartObj);
         }
 
         [HttpPost]
@@ -54,7 +58,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         {
                            await unitOfWork.ShoppingCart.Add(shoppingCart);
                         }
-                        unitOfWork.Save();
+                       await unitOfWork.Save();
                     }
                 }
             }

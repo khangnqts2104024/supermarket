@@ -25,5 +25,6 @@ namespace SuperMarket_Models.Models
         [ForeignKey("CustomerId")]
         [ValidateNever]
         public Customer Customer { get; set; }
+    
     }
 }

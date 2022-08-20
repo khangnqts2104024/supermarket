@@ -23,6 +23,7 @@ namespace SuperMarket_DataAccess.Services
             var objFromDb = _db.Products.FirstOrDefault(x => x.ProductId == obj.ProductId);
             if(objFromDb != null)
             {
+
                 objFromDb.ProductName = obj.ProductName;
                 objFromDb.Price = obj.Price;
                 objFromDb.Title = obj.Title;
@@ -35,5 +36,7 @@ namespace SuperMarket_DataAccess.Services
                 _db.Products.Update(objFromDb);
             }
         }
+
+       
     }
 }
