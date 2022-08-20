@@ -23,8 +23,16 @@ namespace SuperMarket_DataAccess.Services
             var objFromDb = _db.Products.FirstOrDefault(x => x.ProductId == obj.ProductId);
             if(objFromDb != null)
             {
-                //update product field anh tu ghi nha anh.
 
+                objFromDb.ProductName = obj.ProductName;
+                objFromDb.Price = obj.Price;
+                objFromDb.Title = obj.Title;
+                objFromDb.Description = obj.Description;
+                objFromDb.CreatedDate = obj.CreatedDate;
+                objFromDb.ManufactureDate = obj.ManufactureDate;
+                objFromDb.ExpiryDate = obj.ExpiryDate;
+                objFromDb.Weight = obj.Weight;
+                obj.Brand_Category = obj.Brand_Category;
                 _db.Products.Update(objFromDb);
             }
         }

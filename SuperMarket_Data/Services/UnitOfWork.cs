@@ -15,6 +15,7 @@ namespace SuperMarket_DataAccess.Services
         public IOrder Order { get;private set; }
         public IOrderDetail OrderDetail { get;private set; }
         public IProduct Product { get; private set; }
+        public IImageProduct ImageProduct { get; private set; }
 
         public UnitOfWork(ApplicationDbContext db)
         {
@@ -23,6 +24,8 @@ namespace SuperMarket_DataAccess.Services
             Order = new OrderService(_db);
             OrderDetail = new OrderDetailService(_db);
             Product = new ProductService(_db);
+            ImageProduct = new ImageProductService(_db);
+
         }
         public async virtual Task<int> Save()
         {
