@@ -12,7 +12,9 @@ namespace SuperMarket_DataAccess.Repository.IRepository
         IOrder Order { get; }
         IOrderDetail OrderDetail { get; }
         IProduct Product { get; }
+
         Task<int> Save();
+
         void ClearTracking();
     }
 }

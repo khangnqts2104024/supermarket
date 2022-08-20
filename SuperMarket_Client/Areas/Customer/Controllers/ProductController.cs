@@ -28,7 +28,9 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             {
                 Count = 1,
                 ProductId = productId,
+
                 Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == productId, includeProperties: "Brand_Category", thenIncludeProperties: "Brand,Category"),
+
             };
             return View(cartObj);
         }
