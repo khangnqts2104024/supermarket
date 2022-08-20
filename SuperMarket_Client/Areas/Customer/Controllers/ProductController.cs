@@ -25,7 +25,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             if(id == 0)
             {
-                return RedirectToAction("Index", "Home", new {Area="Home"});
+                return RedirectToAction("Index", "Home", new {Area="Customer"});
             }
             
             //productId = 2;
