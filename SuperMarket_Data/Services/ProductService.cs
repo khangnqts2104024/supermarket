@@ -28,5 +28,7 @@ namespace SuperMarket_DataAccess.Services
                 _db.Products.Update(objFromDb);
             }
         }
+
+       
     }
 }
