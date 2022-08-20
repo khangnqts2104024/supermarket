@@ -13,7 +13,6 @@ namespace SuperMarket_DataAccess.Repository.IRepository
         IShoppingCart ShoppingCart { get; }
         IOrder Order { get; }
         IOrderDetail OrderDetail { get; }
-        IProduct Product { get; }
 
         Task<int> Save();
 
