@@ -57,10 +57,13 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         if(cartFromDb != null)
                         {
                             unitOfWork.ShoppingCart.Update(cartFromDb,shoppingCart.Count, "Increment");
+                            TempData["success"] = "Updated Cart Successfully";
                         }
                         else
                         {
                            await unitOfWork.ShoppingCart.Add(shoppingCart);
+                            TempData["success"] = "Added To Cart Successfully";
+
                         }
                         unitOfWork.Save();
 
