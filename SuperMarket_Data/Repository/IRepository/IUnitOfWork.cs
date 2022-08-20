@@ -14,6 +14,12 @@ namespace SuperMarket_DataAccess.Repository.IRepository
         IOrder Order { get; }
         IOrderDetail OrderDetail { get; }
 
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+        void Save();
+=======
+>>>>>>> Stashed changes
         ICategory Category { get; }
         IBranch Branch { get; }
         IBrand Brand { get; }
@@ -21,6 +27,7 @@ namespace SuperMarket_DataAccess.Repository.IRepository
         ICoupon Coupon { get; }
         ICustomer Customer { get; }
         Task<int> Save();
+>>>>>>> 84651e2edcd6f53514780a71ae09b5877b145205
 
         void ClearTracking();
     }

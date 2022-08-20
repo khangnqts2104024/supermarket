@@ -37,6 +37,15 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
+<<<<<<< Updated upstream
     pattern: "{area=Home}/{controller=Home}/{action=Index}/{id?}");
+=======
+<<<<<<< HEAD
+    //pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
+    pattern: "{area=Customer}/{controller=Product}/{action=Details}/{id?}");
+=======
+    pattern: "{area=Home}/{controller=Home}/{action=Index}/{id?}");
+>>>>>>> 84651e2edcd6f53514780a71ae09b5877b145205
+>>>>>>> Stashed changes
 
 app.Run();
