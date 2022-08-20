@@ -1,15 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SuperMarket_DataAccess.Repository.IRepository;
-using SuperMarket_Models.Models;
-using SuperMarket_Models.ViewModels;
-using System.Diagnostics;
 
-namespace SuperMarket_Client.Areas.Customer.Controllers
+namespace SuperMarket_Client.Areas.Home.Controllers
 {
-    [Area("Customer")]
+    [Area("Home")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IUnitOfWork unitOfWork;
 
 
@@ -18,7 +14,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult>  Index()
+        public async Task<IActionResult> Index()
         {
             try
             {
@@ -32,12 +28,12 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
                 return View();
             }
-            
+
         }
 
         public IActionResult Privacy()
         {
             return View();
-        }   
+        }
     }
 }
