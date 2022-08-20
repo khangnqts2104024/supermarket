@@ -8,6 +8,8 @@ namespace SuperMarket_DataAccess.Repository.IRepository
 {
     public interface IUnitOfWork
     {
+        IImageProduct ImageProduct { get; }
+        IProduct Product { get; }
         IShoppingCart ShoppingCart { get; }
         IOrder Order { get; }
         IOrderDetail OrderDetail { get; }

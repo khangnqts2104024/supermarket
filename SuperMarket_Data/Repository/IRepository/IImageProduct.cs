@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_DataAccess.Repository.IRepository
 {
-    public interface IProduct :IRepository<Product>
+    public interface IImageProduct: IRepository<ImageProduct>
     {
-        void Update(Product obj);
-
+        void Update(ImageProduct obj);
     }
 }

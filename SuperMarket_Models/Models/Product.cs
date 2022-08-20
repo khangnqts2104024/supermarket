@@ -41,5 +41,6 @@ namespace SuperMarket_Models.Models
         [ForeignKey("BrandCateId")]
         [ValidateNever]
         public Brand_Category Brand_Category { get; set; }
+        public List<ImageProduct> ImageProduct { get; set; }
     }
 }
