@@ -23,6 +23,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int productId)
         {
+           
             productId = 2;
             ShoppingCart cartObj = new ShoppingCart()
             {
@@ -52,18 +53,23 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CustomerId == claim.Value && x.ProductId == shoppingCart.ProductId);
                         if(cartFromDb != null)
                         {
-                            unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
+                            var a = unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
                         }
                         else
                         {
                            await unitOfWork.ShoppingCart.Add(shoppingCart);
                         }
-                       await unitOfWork.Save();
+                        unitOfWork.Save();
+
+
                     }
+
                 }
             }
+                return RedirectToAction("Details", new { productId = shoppingCart.ProductId });
 
-            return RedirectToAction("Index");
+
+
         }
     }
 }

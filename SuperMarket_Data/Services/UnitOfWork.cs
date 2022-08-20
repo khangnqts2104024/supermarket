@@ -49,9 +49,9 @@ namespace SuperMarket_DataAccess.Services
 
 
         }
-        public async virtual Task<int> Save()
+        public void Save()
         {
-            return await _db.SaveChangesAsync();
+            _db.SaveChanges();
         }
       
         public void ClearTracking()
