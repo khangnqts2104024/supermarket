@@ -10,23 +10,22 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_DataAccess.Services
 {
-    public class BillService : Repository<Bill>, IBill
+    public class ProductService : Repository<Product>, IProduct
     {
         private readonly ApplicationDbContext _db;
-        public BillService(ApplicationDbContext db):base(db)
+        public ProductService(ApplicationDbContext db):base(db)
         {
             _db = db;
         }
 
-        public void Update(Bill obj)
+        public void Update(Product obj)
         {
-            var objFromDb = _db.Bills.FirstOrDefault(x => x.BillId == obj.BillId);
+            var objFromDb = _db.Products.FirstOrDefault(x => x.ProductId == obj.ProductId);
             if(objFromDb != null)
             {
-                objFromDb.BillAmount = obj.BillAmount;
-                objFromDb.CreatedDate = obj.CreatedDate;
+                //update product field anh tu ghi nha anh.
 
-                _db.Bills.Update(objFromDb);
+                _db.Products.Update(objFromDb);
             }
         }
     }

@@ -23,6 +23,11 @@ namespace SuperMarket_Models.Models
         public decimal Price { get; set; }
 
         [Required]
+        [Range(0, 9999999999999.99)]
+        [NotMapped]
+        public decimal FinalPrice { get; set; }
+
+        [Required]
         public string Title { get; set; }
 
         [StringLength(150)]
@@ -33,7 +38,6 @@ namespace SuperMarket_Models.Models
 
         [Required]
         public DateTime ManufactureDate { get; set; }
-
         [Required]
         public DateTime ExpiryDate { get; set; }
         public double Weight { get; set; }
