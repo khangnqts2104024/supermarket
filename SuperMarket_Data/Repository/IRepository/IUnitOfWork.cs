@@ -13,6 +13,12 @@ namespace SuperMarket_DataAccess.Repository.IRepository
         IOrderDetail OrderDetail { get; }
         IProduct Product { get; }
 
+        ICategory Category { get; }
+        IBranch Branch { get; }
+        IBrand Brand { get; }
+        IStock Stock { get; }
+        ICoupon Coupon { get; }
+        ICustomer Customer { get; }
         Task<int> Save();
 
         void ClearTracking();
