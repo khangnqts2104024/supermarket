@@ -58,7 +58,5 @@ namespace SuperMarket_DataAccess.Services
         {
             _db.ChangeTracker.Clear();
         }
-
-       
     }
 }
