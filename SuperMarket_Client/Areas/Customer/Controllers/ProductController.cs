@@ -21,16 +21,19 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int productId)
+        public async Task<IActionResult> Details(int id)
         {
-           
-            productId = 2;
+            if(id == 0)
+            {
+                return RedirectToAction("Index", "Home", new {Area="Home"});
+            }
+            
+            //productId = 2;
             ShoppingCart cartObj = new ShoppingCart()
             {
                 Count = 1,
-                ProductId = productId,
-
-                Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == productId, includeProperties: "Brand_Category", thenIncludeProperties: "Brand,Category"),
+                ProductId = id,
+                Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category", thenIncludeProperties: "Brand,Category"),
 
             };
             return View(cartObj);
@@ -39,7 +42,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> AddToCart(ShoppingCart shoppingCart)
+        public async Task<IActionResult> Details(ShoppingCart shoppingCart)
         {
             if (User.Identity != null)
             {
@@ -53,7 +56,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CustomerId == claim.Value && x.ProductId == shoppingCart.ProductId);
                         if(cartFromDb != null)
                         {
-                            var a = unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
+                            unitOfWork.ShoppingCart.Update(cartFromDb,shoppingCart.Count, "Increment");
                         }
                         else
                         {
@@ -66,7 +69,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
                 }
             }
-                return RedirectToAction("Details", new { productId = shoppingCart.ProductId });
+                return RedirectToAction("Details", new { id = shoppingCart.ProductId });
 
 
 
