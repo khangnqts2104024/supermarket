@@ -117,7 +117,7 @@
 
 	        <div class="sspd_price mb35"><small><del>$79.49</del></small> $27.63</div>
                 <p class="mb25">@Model.Product.Description</p>
-                 <form asp-area="Customer" asp-controller="Product" asp-action="AddToCart" method="post">
+                 <form asp-area="Customer" asp-controller="Product" asp-action="Details" method="post">
 
                      <input type="hidden" asp-for="@Model.ProductId" value="@Model.ProductId" />
                      <ul class="cart_btns ui_kit_button mb30">
