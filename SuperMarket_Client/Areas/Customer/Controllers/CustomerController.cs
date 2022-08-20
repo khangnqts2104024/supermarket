@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace SuperMarket_Client.Areas.Admin.Controllers
+namespace SuperMarket_Client.Areas.Customer.Controllers
 {
-    [Area("Admin")]
-    public class AdminController : Controller
+    [Area("Customer")]
+
+    public class CustomerController : Controller
     {
         public IActionResult Index()
         {
