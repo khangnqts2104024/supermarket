@@ -1,4 +1,6 @@
-﻿ <!-- Inner Page Breadcrumb -->
+﻿@model SuperMarket_Models.Models.ShoppingCart 
+
+<!-- Inner Page Breadcrumb -->
   <section class="inner_page_breadcrumb pt50 pb50 mt70-992">
     <div class="container">
       <div class="row">
@@ -99,7 +101,7 @@
                 </nav>
               </div>
             </div>
-						<h3 class="title mb20">Pineapple (Tropical Gold) 1 lb</h3>
+						<h3 class="title mb20">@Model.Product.ProductName</h3>
             <div class="sspd_review">
               <ul class="mb15">
                 <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
@@ -116,7 +118,7 @@
                 <div class="cart_btn">
                   <div class="quantity-block">
                     <button class="quantity-arrow-minus inner_page"> - </button>
-                    <input class="quantity-num inner_page" type="number" value="2" />
+                    <input class="quantity-num inner_page" type="number" value="@Model.Count" />
                     <button class="quantity-arrow-plus inner_page"> + </button>
                   </div>
                 </div>
