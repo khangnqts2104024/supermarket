@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SuperMarket_DataAccess.Repository.IRepository;
 using SuperMarket_Models.Models;
+using SuperMarket_Models.ViewModels;
 using System.Diagnostics;
 
 namespace SuperMarket_Client.Areas.Customer.Controllers
@@ -8,15 +10,29 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IUnitOfWork unitOfWork;
 
-        public HomeController(ILogger<HomeController> logger)
+
+        public HomeController(IUnitOfWork unitOfWork)
         {
-            _logger = logger;
+            this.unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult>  Index()
         {
-            return View();
+            try
+            {
+                var data = await unitOfWork.Product.GetAll(includeProperties: "ImageProduct,Brand_Category.Category");
+
+                return View(data);
+
+            }
+            catch (Exception)
+            {
+
+                return View();
+            }
+            
         }
 
         public IActionResult Privacy()
