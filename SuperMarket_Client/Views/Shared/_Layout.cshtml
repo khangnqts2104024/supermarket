@@ -16,6 +16,10 @@
 <!-- css file -->
 <link rel="stylesheet" href="~/Asset/css/bootstrap.min.css">
 <link rel="stylesheet" href="~/Asset/css/style.css">
+
+<link rel="stylesheet" href="~/Asset/css/dashbord_navitaion.css">
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+
 <!-- Responsive stylesheet -->
     <link rel="stylesheet" href="~/Asset/css/responsive.css">
 <!-- Title -->
@@ -37,7 +41,7 @@
 <body>
 <div class="wrapper ovh">
   <div class="preloader"></div>
-  <div class="popup_onload_modal">
+  @*<div class="popup_onload_modal">
     <!-- Modal -->
     <div class="modal fade" id="mailchimp_newslatter_popup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="mailchimp_newslatter_popup" aria-hidden="true">
       <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -80,7 +84,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div>*@
   
   <!-- header top -->
   <div class="header_top bgc-thm2 dn-992">
@@ -103,7 +107,6 @@
           <div class="ht_language_widget text-end">
               <ul class="m0">
                   <partial name="_LoginPartial"/>
-                
             </ul>
           </div>
         </div>
@@ -727,6 +730,7 @@
   <!-- ==================================================================================================================== -->
     <section class="container">
         <main role="main" class="pb-3">
+            <partial name="_Notification" />
             @RenderBody()
         </main>
     </section>
@@ -847,6 +851,10 @@
   </section>
   <a class="scrollToHome" href="#"><i class="fa fa-angle-up"></i></a> </div>
 <!-- Wrapper End --> 
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="~/Asset/js/jquery-3.6.0.js"></script> 
 <script src="~/Asset/js/jquery-migrate-3.0.0.min.js"></script> 
 <script src="~/Asset/js/popper.min.js"></script> 
@@ -867,6 +875,10 @@
 <script src="~/Asset/js/wow.min.js"></script> 
 <!-- Custom script for all pages --> 
 <script src="~/Asset/js/script.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<script src="https://cdn.tiny.cloud/1/t0cc6iw0zgyf2cce0nwq9yqftiwgrw6obfqmb1b45t650dfj/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

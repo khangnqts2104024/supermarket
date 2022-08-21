@@ -21,15 +21,19 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Details(int productId)
+        public async Task<IActionResult> Details(int id)
         {
-            productId = 2;
+            if(id == 0)
+            {
+                return RedirectToAction("Index", "Home", new {Area="Customer"});
+            }
+            
+            //productId = 2;
             ShoppingCart cartObj = new ShoppingCart()
             {
                 Count = 1,
-                ProductId = productId,
-
-                Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == productId, includeProperties: "Brand_Category", thenIncludeProperties: "Brand,Category"),
+                ProductId = id,
+                Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category", thenIncludeProperties: "Brand,Category"),
 
             };
             return View(cartObj);
@@ -38,7 +42,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> AddToCart(ShoppingCart shoppingCart)
+        public async Task<IActionResult> Details(ShoppingCart shoppingCart)
         {
             if (User.Identity != null)
             {
@@ -53,17 +57,27 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         if(cartFromDb != null)
                         {
                             unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
+                            //unitOfWork.ShoppingCart.Update(cartFromDb,shoppingCart.Count, "Increment");
+
+                            TempData["success"] = "Updated Cart Successfully";
                         }
                         else
                         {
                            await unitOfWork.ShoppingCart.Add(shoppingCart);
+                            TempData["success"] = "Added To Cart Successfully";
+
                         }
-                       await unitOfWork.Save();
+                        await unitOfWork.Save();
+
+
                     }
+
                 }
             }
+                return RedirectToAction("Details", new { id = shoppingCart.ProductId });
 
-            return RedirectToAction("Index");
+
+
         }
     }
 }

@@ -92,14 +92,6 @@
 					<div class="shop_single_product_details">
             <div class="shop_item_stock mb30">
               <span class="stock">IN STOCK</span>
-              <div class="sis_pagination float-end">
-                <nav aria-label="Page navigation example">
-                  <ul class="pagination">
-                    <li class="page-item"><a class="page-link" href="#"><span class="flaticon-left-arrow vam"></span> PREV</a></li>
-                    <li class="page-item"><a class="page-link" href="#">NEXT <span class="flaticon-chevron vam"></span></a></li>
-                  </ul>
-                </nav>
-              </div>
             </div>
 
            
@@ -117,16 +109,16 @@
 
 	        <div class="sspd_price mb35"><small><del>$79.49</del></small> $27.63</div>
                 <p class="mb25">@Model.Product.Description</p>
-                 <form asp-area="Customer" asp-controller="Product" asp-action="AddToCart" method="post">
+                 <form asp-area="Customer" asp-controller="Product" asp-action="Details" method="post">
 
                      <input type="hidden" asp-for="@Model.ProductId" value="@Model.ProductId" />
                      <ul class="cart_btns ui_kit_button mb30">
                         <li class="list-inline-item">
                         <div class="cart_btn">
                             <div class="quantity-block">
-                            <button class="quantity-arrow-minus inner_page"> - </button>
+                            <button type="button" class="quantity-arrow-minus inner_page"> - </button>
                             <input asp-for="@Model.Count" class="quantity-num inner_page" type="number" value="@Model.Count" />
-                            <button class="quantity-arrow-plus inner_page"> + </button>
+                            <button type="button" class="quantity-arrow-plus inner_page"> + </button>
                             </div>
                         </div>
                         </li>
@@ -511,10 +503,12 @@
     </div>
   </section>
 
+
 @section Scripts{
     <script>
-        $(function(){
-            alert(123);
-        })
+        //$(function(){
+        //    alert(123);
+        //})
     </script>
 }
+

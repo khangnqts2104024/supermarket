@@ -12,5 +12,6 @@ namespace SuperMarket_DataAccess.Repository.IRepository
     {
         int IncrementCount(ShoppingCart shoppingCart, int count);
         int DecrementCount(ShoppingCart shoppingCart, int count);
+
     }
 }
