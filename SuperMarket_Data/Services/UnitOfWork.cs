@@ -43,15 +43,13 @@ namespace SuperMarket_DataAccess.Services
             Stock = new StockService(_db);
             Coupon = new CouponService(_db);
             Customer=new CustomerService(_db);
-
-
             ImageProduct = new ImageProductService(_db);
 
 
         }
-        public void Save()
+        public virtual async Task<int> Save()
         {
-            _db.SaveChanges();
+          return await _db.SaveChangesAsync();
         }
       
         public void ClearTracking()
