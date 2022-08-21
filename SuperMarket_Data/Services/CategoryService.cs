@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_DataAccess.Services
 {
-    public class CategoryService:Repository<Category>,ICategory
+    public class CategoryService : Repository<Category>, ICategory
     {
 
 
@@ -29,3 +29,4 @@ namespace SuperMarket_DataAccess.Services
             throw new NotImplementedException();
         }
     }
+}
