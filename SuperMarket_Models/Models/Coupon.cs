@@ -12,17 +12,18 @@ namespace SuperMarket_Models.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CouponId { get; set; }
+        public int? CouponId { get; set; }
         [Required]
         public string? CouponCode { get; set; }
         [Required]
         public int? DiscountPercent { get; set; }
-        [Required]
-        public DateTime CreatedDate { get; } = DateTime.Now;
+  
+        public DateTime? CreatedDate { get; set; } = DateTime.Now;
         [Required]
         public DateTime ExpiredDate { get; set; }
         [Required]
         public int Count { get; set; }
-        public virtual List<Product> Products { set; get; }
+        [NotMapped]
+        public virtual List<Product>? Products { set; get; }
     }
 }
