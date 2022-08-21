@@ -29,8 +29,8 @@ namespace SuperMarket_DataAccess.Services
                 objFromDb.Address = obj.Address;
                 objFromDb.Email = obj.Email;
                 objFromDb.UserName = obj.UserName;
-                //objFromDb.CustomerAvatar = obj.CustomerAvatar;
-                _db.Customers.Update(objFromDb);
+				objFromDb.CustomerAvatar = obj.CustomerAvatar;
+				_db.Customers.Update(objFromDb);
             }
 
         }

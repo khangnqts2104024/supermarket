@@ -12,8 +12,8 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220819154550_spm1")]
-    partial class spm1
+    [Migration("20220821101611_spm")]
+    partial class spm
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -427,6 +427,14 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("CouponId")
                         .HasColumnType("int");
 
@@ -524,8 +532,7 @@ namespace SuperMarket_DataAccess.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ExpiryDate")
                         .HasColumnType("datetime2");
@@ -620,6 +627,21 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("CustomerAvatar")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -712,7 +734,7 @@ namespace SuperMarket_DataAccess.Migrations
             modelBuilder.Entity("SuperMarket_Models.Models.ImageProduct", b =>
                 {
                     b.HasOne("SuperMarket_Models.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("ImageProduct")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -814,6 +836,11 @@ namespace SuperMarket_DataAccess.Migrations
             modelBuilder.Entity("SuperMarket_Models.Models.Coupon", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("SuperMarket_Models.Models.Product", b =>
+                {
+                    b.Navigation("ImageProduct");
                 });
 #pragma warning restore 612, 618
         }

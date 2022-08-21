@@ -21,8 +21,15 @@ namespace SuperMarket_Models.Models
         [Required]
         [StringLength(150)]
         public string Address { get; set; }
+		[StringLength(100)]
+		public string CustomerAvatar { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string City { get; set; }
+        [Required]
+        [StringLength(50)]
+        public string Country { get; set; }
 
-		//public string CustomerAvatar { get; set; }
 
-	}
+    }
 }
