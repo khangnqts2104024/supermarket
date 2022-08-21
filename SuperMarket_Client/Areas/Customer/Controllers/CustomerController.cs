@@ -16,7 +16,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             this.unitOfWork = unitOfWork;
         }
         
-        public IActionResult Index(string id)
+        public async Task<IActionResult> Index(string id)
         {
             if(id == null)
             {
@@ -24,10 +24,33 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             }
             else
             {
-                var data = unitOfWork.Customer.GetFirstOrDefault(x=>x.Id==id);
+                var data =await unitOfWork.Customer.GetFirstOrDefault(x=>x.Id==id);
                 return View(data);
             }
             
+        }
+		[HttpPost]
+        public async Task<IActionResult> UpdateCustomer(SuperMarket_Models.Models.Customer customer ,IFormFile? file)
+        {
+			try
+			{
+                if(file != null)
+				{
+                    string path = Path.Combine("wwwroot/Images", file.FileName);
+                    var stream = new FileStream(path, FileMode.Create);
+                    file.CopyToAsync(stream);
+                    //customer.CustomerAvatar = "Images/" + file.FileName;
+                    unitOfWork.Customer.Update(customer);
+
+                }
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+            return View();
+
         }
     }
 }

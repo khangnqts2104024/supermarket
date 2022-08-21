@@ -20,7 +20,19 @@ namespace SuperMarket_DataAccess.Services
 
         public void Update(Customer obj)
         {
-            throw new NotImplementedException();
+            var objFromDb = _db.Customers.FirstOrDefault(x => x.Id == obj.Id);
+            if (objFromDb != null)
+            {
+
+                objFromDb.FullName = obj.FullName;
+                objFromDb.PhoneNumber = obj.PhoneNumber;
+                objFromDb.Address = obj.Address;
+                objFromDb.Email = obj.Email;
+                objFromDb.UserName = obj.UserName;
+				objFromDb.CustomerAvatar = obj.CustomerAvatar;
+				_db.Customers.Update(objFromDb);
+            }
+
         }
     }
 }

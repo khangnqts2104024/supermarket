@@ -30,7 +30,6 @@ namespace SuperMarket_Models.Models
         [Required]
         public string Title { get; set; }
 
-        [StringLength(150)]
         public string Description { get; set; }
 
         [Required]
