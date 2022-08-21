@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_Models.ViewModels
 {
-    public class ShoppingCartVM
+    public class OrderVM
     {
-        public IEnumerable<ShoppingCart> ListCart { get; set; }
         public Order Order { get; set; }
+        public IEnumerable<OrderDetail> OrderDetails { get; set; }
     }
 }
