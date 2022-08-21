@@ -29,5 +29,28 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             }
             
         }
+		[HttpPost]
+        public async Task<IActionResult> UpdateCustomer(SuperMarket_Models.Models.Customer customer ,IFormFile? file)
+        {
+			try
+			{
+                if(file != null)
+				{
+                    string path = Path.Combine("wwwroot/Images", file.FileName);
+                    var stream = new FileStream(path, FileMode.Create);
+                    file.CopyToAsync(stream);
+                    //customer.CustomerAvatar = "Images/" + file.FileName;
+                    unitOfWork.Customer.Update(customer);
+
+                }
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+            return View();
+
+        }
     }
 }
