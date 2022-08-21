@@ -50,9 +50,8 @@ namespace SuperMarket_DataAccess.Services.Generic_Imp
         public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> filter, string? includeProperties = null, string? thenIncludeProperties = null)
         {
             IQueryable<T> query = dbSet;
-            query = query.Where(filter).AsNoTracking();
+            query = query.Where(filter);
 
-            
            
             if (includeProperties != null && thenIncludeProperties != null)
             {
@@ -60,7 +59,7 @@ namespace SuperMarket_DataAccess.Services.Generic_Imp
                 {
                     foreach (var thenInclude in thenIncludeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                     {
-                        query = query.Include(includeProp + "." + thenInclude).AsNoTracking();
+                        query = query.Include(includeProp + "." + thenInclude);
                     }
                 }
             }
@@ -68,7 +67,7 @@ namespace SuperMarket_DataAccess.Services.Generic_Imp
             {
                 foreach (var includeProp in includeProperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query = query.Include(includeProp).AsNoTracking();
+                    query = query.Include(includeProp);
                 }
             }
             return await query.FirstOrDefaultAsync();
