@@ -56,7 +56,9 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CustomerId == claim.Value && x.ProductId == shoppingCart.ProductId);
                         if(cartFromDb != null)
                         {
-                            unitOfWork.ShoppingCart.Update(cartFromDb,shoppingCart.Count, "Increment");
+                            unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
+                            //unitOfWork.ShoppingCart.Update(cartFromDb,shoppingCart.Count, "Increment");
+
                             TempData["success"] = "Updated Cart Successfully";
                         }
                         else
@@ -65,7 +67,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                             TempData["success"] = "Added To Cart Successfully";
 
                         }
-                        unitOfWork.Save();
+                        await unitOfWork.Save();
 
 
                     }
