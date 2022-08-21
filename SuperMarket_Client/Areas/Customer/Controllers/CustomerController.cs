@@ -16,7 +16,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             this.unitOfWork = unitOfWork;
         }
         
-        public IActionResult Index(string id)
+        public async Task<IActionResult> Index(string id)
         {
             if(id == null)
             {
@@ -24,7 +24,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             }
             else
             {
-                var data = unitOfWork.Customer.GetFirstOrDefault(x=>x.Id==id);
+                var data =await unitOfWork.Customer.GetFirstOrDefault(x=>x.Id==id);
                 return View(data);
             }
             

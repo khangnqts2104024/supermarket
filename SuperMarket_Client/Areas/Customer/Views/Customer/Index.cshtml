@@ -1,4 +1,4 @@
-﻿@model Task<SuperMarket_Models.Models.Customer>
+﻿@model SuperMarket_Models.Models.Customer
 <div>
 	<!-- Our Dashbord -->
 	<section class="our-dashbord dashbord">
@@ -42,8 +42,8 @@
 					<div class="row">
 						<div class="col-xl-8">
 							<div class="user_deails mt70">
-								<p class="fz14 mb30">Hello <span class="heading-color fwb">alitfn58</span> (not <span class="heading-color fwb">alitfn58</span> Log out)</p>
-								<p class="fz14">From your account dashboard you can view your recent orders, manage your shipping and billing addresses, and edit your password and account details.</p>
+								@Html.DisplayNameFor(model=>model.FullName)
+								@Html.DisplayFor(model=>model.FullName)
 							</div>
 						</div>
 					</div>
