@@ -1,4 +1,6 @@
-(function($) {
+var domain ="https://"+ window.location.host;
+console.log(domain);
+(function ($) {
     
     "use strict";
 
@@ -503,6 +505,41 @@
         });
     });
     // Custom DropDown Js Code End
+
+
+    $(document).on('ready', function () {
+        $("#formAddCart").on('submit', function (e) {
+            let userLogged = $("#manage").val();
+            if (userLogged != undefined) {
+                e.preventDefault();
+                var shoppingCart = {
+                    CartId: null,
+                    CustomerId: null,
+                    Count: $('#Count').val(),
+                    ProductId: $('#ProductId').val(),
+                };
+                alert("Logged in")
+                $.ajax({
+                    url: "/Customer/Product/Details",
+                    type: "POST",
+                    data: shoppingCart,
+                    success: function (response) {
+                        if (response.statusCode == 200 || response.statusCode == 201) {
+                            Swal.fire(
+                                'Good job!',
+                                response.message,
+                                'success'
+                            )
+
+                            $("#Count").val(response.count);
+                        }
+                        
+                    }
+                });
+            } 
+            
+        })
+    });
 
     // Custom Shop item add Option increase decrease home 3
     $(function() {

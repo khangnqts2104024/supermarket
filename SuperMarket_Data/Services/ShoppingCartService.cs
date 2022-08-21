@@ -30,23 +30,6 @@ namespace SuperMarket_DataAccess.Services
             return shoppingCart.Count;
         }
 
-        public void Update(ShoppingCart obj, int count, string action)
-        {
-            var cartFromDb = _db.ShoppingCarts.FirstOrDefault(x => x.CartId == obj.CartId);
-            
-           if(cartFromDb != null)
-            {
-                if (action == "Increment")
-                {
-                    cartFromDb.Count += count;
 
-                }
-                else if (action == "Decrement")
-                {
-                    cartFromDb.Count -= count;
-                }
-                _db.ShoppingCarts.Update(cartFromDb);
-            }
-        }
     }
 }

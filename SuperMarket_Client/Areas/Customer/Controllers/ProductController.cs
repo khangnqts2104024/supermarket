@@ -27,8 +27,6 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             {
                 return RedirectToAction("Index", "Home", new {Area="Customer"});
             }
-            
-            //productId = 2;
             ShoppingCart cartObj = new ShoppingCart()
             {
                 Count = 1,
@@ -40,7 +38,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> Details(ShoppingCart shoppingCart)
         {
@@ -57,27 +55,34 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         if(cartFromDb != null)
                         {
                             unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
-                            //unitOfWork.ShoppingCart.Update(cartFromDb,shoppingCart.Count, "Increment");
-
-                            TempData["success"] = "Updated Cart Successfully";
+                            await unitOfWork.Save();
+                            return Json(new {
+                                statusCode = 200,
+                                message = "Updated Cart Successfully",
+                                count = 1, 
+                            });
                         }
                         else
                         {
                            await unitOfWork.ShoppingCart.Add(shoppingCart);
-                            TempData["success"] = "Added To Cart Successfully";
-
+                            await unitOfWork.Save();
+                            return Json(new
+                            {
+                                statusCode = 201,
+                                message = "Added To Cart Successfully",
+                                count = 1,
+                            });
                         }
-                        await unitOfWork.Save();
 
 
                     }
 
                 }
             }
-                return RedirectToAction("Details", new { id = shoppingCart.ProductId });
-
-
-
+                return Json(new{
+                            statusCode = 401,
+                            message = "User Not Authenticated",
+                         });
         }
     }
 }
