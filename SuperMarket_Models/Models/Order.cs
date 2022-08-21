@@ -35,6 +35,7 @@ namespace SuperMarket_Models.Models
         public string? Address { get; set; }
         [Required]
         public string? Phone { get; set; }
+
         [Required]
         public string? Country { get; set; }
         [Required]
