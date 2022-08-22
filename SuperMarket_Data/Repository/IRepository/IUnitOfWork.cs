@@ -19,7 +19,6 @@ namespace SuperMarket_DataAccess.Repository.IRepository
         IStock Stock { get; }
         ICoupon Coupon { get; }
         ICustomer Customer { get; }
-
         Task<int> Save();
         void ClearTracking();
     }

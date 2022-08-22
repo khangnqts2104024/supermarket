@@ -26,7 +26,14 @@ namespace SuperMarket_DataAccess.Services
 
         public void Update(Category obj)
         {
-            throw new NotImplementedException();
+            var objFromDb = _db.Categories.FirstOrDefault(x => x.CategoryId == obj.CategoryId);
+            if (objFromDb != null)
+            {
+
+                objFromDb.CategoryName = obj.CategoryName;
+                objFromDb.UpdateDate=obj.UpdateDate;
+                _db.Categories.Update(objFromDb);
+            }
         }
     }
 }

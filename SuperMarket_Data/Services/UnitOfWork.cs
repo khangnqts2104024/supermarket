@@ -36,7 +36,6 @@ namespace SuperMarket_DataAccess.Services
             Order = new OrderService(_db);
             OrderDetail = new OrderDetailService(_db);
             Product = new ProductService(_db);
-
             Category = new CategoryService(_db);
             Branch=new BranchService(_db);
             Brand = new BrandService(_db);
