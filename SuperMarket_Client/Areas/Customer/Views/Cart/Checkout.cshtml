@@ -1,4 +1,4 @@
-﻿@model SuperMarket_Models.ViewModels.OrderVM
+﻿@model SuperMarket_Models.ViewModels.ShoppingCartVM
 
 <!-- Shop Checkouts Content -->
 <section class="shop-checkouts">
@@ -13,7 +13,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="form-label">Full name</label>
-                                        <input class="form-control form_control" type="text">
+                                        <input class="form-control form_control" type="text" asp-for="Order.Name">
                                     </div>
                                 </div>
                                 <div class="col-lg-12">
@@ -36,28 +36,22 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="form-label">Street address *</label>
-                                        <input class="form-control form_control mb10" type="text">
-                                        <input class="form-control form_control" type="text">
+                                        <input asp-for="Order.Address" class="form-control form_control mb10" type="text">
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="form-label">Town / City *</label>
-                                        <input class="form-control form_control" type="number">
+                                        <input class="form-control form_control" type="number"asp-for="Order.City">
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="form-label">Phone *</label>
-                                        <input name="form_phone" class="form-control form_control" type="number">
+                                        <input name="form_phone" class="form-control form_control" type="number" asp-for="Order.Phone">
                                     </div>
                                 </div>
-                                <div class="col-sm-12">
-                                    <div class="form-group">
-                                        <label class="form-label">Your Email</label>
-                                        <input name="form_email" class="form-control form_control email" type="email">
-                                    </div>
-                                </div>
+                            
                                 <div class="col-sm-12">
                                 </div>
                                 <div class="col-sm-12">
@@ -76,9 +70,10 @@
                     <h4 class="title">Your Order</h4>
                     <ul>
                         <li class="subtitle"><p>Product <span class="float-end">Subtotal</span></p> <hr></li>
-                        <li><p class="product_name_qnt">Silver Heinz Ketchup X 2 <span class="float-end">$259.00</span></p></li>
-                        <li><p class="product_name_qnt">Pineapple (Tropical Gold) x 3 <span class="float-end">$259.00</span></p></li>
-                        <li><p class="product_name_qnt">Pineapple (Tropical Gold) x 4 <span class="float-end">$259.00</span></p></li>
+                        @foreach (var item in Model.ListCart)
+                        {
+                            <li><p class="product_name_qnt">@item.Product.Title X @item.Count <span class="float-end">@((item.Product.Price * item.Count).ToString("c"))</span></p></li>
+                        }
                         <li class="subtitle"><hr></li>
                         <li>
                             <div class="ui_kit_radiobox shopping_cart_radio_box">
@@ -103,7 +98,7 @@
                             </div>
                         </li>
                         <li class="subtitle"><hr></li>
-                        <li class="subtitle"><p>Subtotal <span class="float-end totals text-thm">$907.00</span></p></li>
+                        <li class="subtitle"><p>Subtotal <span class="float-end totals text-thm">@Model.Order.OrderTotal.ToString("c")</span></p></li>
                         <li class="subtitle"><hr></li>
                     </ul>
                     <div class="ui_kit_radiobox checkout">

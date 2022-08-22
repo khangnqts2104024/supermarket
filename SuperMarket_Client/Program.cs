@@ -44,4 +44,5 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
     pattern: "{area=Admin}/{controller=Category}/{action=CreateCategory}/{id?}");
+
 app.Run();
