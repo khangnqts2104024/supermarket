@@ -1,89 +1,111 @@
 ﻿@model SuperMarket_Models.ViewModels.ShoppingCartVM
-	<!-- Shop Checkouts Content -->
-	<section class="shop-cart">
-		<div class="container">
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="shopping_cart_tabs">
-            <div class="tab-content" id="myTabContent">
-              <div class="tab-pane fade show active" id="cart" role="tabpanel" aria-labelledby="cart-tab">
-                <div class="row">
-                  <div class="col-lg-8 col-xl-9">
-                    <div class="shopping_cart_table">
-                      <table class="table table-responsive table-borderless">
-                        <thead>
-                          <tr>
-                            <th scope="col">PRODUCT</th>
-                            <th scope="col">PRICE</th>
-                            <th scope="col">QUANTITY</th>
-                            <th scope="col">SUBTOTAL</th>
-                          </tr>
-                        </thead>
-                        <tbody class="table_body">
-                            @foreach (var item in Model.ListCart)
-                            {
-                                 <tr>
-                                    <th scope="row">
-                                      <ul class="cart_list">
-                                        <li class="list-inline-item"><a class="close_img" href="#"><img src="images/shop/close.png" alt=""></a></li>
-                                        <li class="list-inline-item pr10"><a href="#"><img src="images/shop/cart1.png" alt="cart1.png"></a></li>
-                                        <li class="list-inline-item"><a class="cart_title" href="#">@item.Product.Title</a></li>
-                                      </ul>
-                                    </th>
-                                    <td>@item.Product.Price.ToString("c")</td>
-                                    <td><input class="cart_count text-center" placeholder="@item.Count" type="number"></td>
-                                    <td class="text-thm">@((item.Product.Price * @item.Count).ToString("c"))</td>
-                                </tr>                 
-                            }
-                        </tbody>
-                      </table>
-                      <div class="checkout_form mt30">
-                        <div class="checkout_coupon">
-                          <form class="df db-520">
-                            <input class="form-control coupon_input" type="search" placeholder="Coupon code" aria-label="Search">
-                            <button type="button" class="btn btn2 btn-thm">Apply Coupon</button>
-                          </form>
+<!-- Shop Checkouts Content -->
+<section class="shop-cart">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="shopping_cart_tabs">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="cart" role="tabpanel" aria-labelledby="cart-tab">
+                            <div class="row">
+                                <div class="col-lg-8 col-xl-9">
+                                    <div class="shopping_cart_table">
+                                        <table class="table table-responsive table-borderless">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">PRODUCT</th>
+                                                    <th scope="col">PRICE</th>
+                                                    <th scope="col">QUANTITY</th>
+                                                    <th scope="col">SUBTOTAL</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="table_body">
+                                                <tr>
+                                                    <td colspan="4">
+                                                        <image width="100" src="/Asset/images/cart/empty_cart.png"/> <br />
+                                                            Your Cart Is Empty
+                                                    </td>
+                                                </tr>
+                                                
+                                                @foreach (var item in Model.ListCart)
+                                                {
+                                                    <tr>
+                                                        <th scope="row">
+                                                            <ul class="cart_list">
+                                                                <li class="list-inline-item" style="height:56px;line-height:56px;" ><a class="close_img" href="#"><img src="images/shop/close.png" alt=""></a></li>
+                                                                <li class="list-inline-item pr10" style="height:56px;line-height:56px;"><a href="#"><img src="images/shop/cart1.png" alt="cart1.png"></a></li>
+                                                                <li class="list-inline-item" style="height:56px;line-height:56px;"><a class="cart_title" href="#">@item.Product.ProductName</a></li>
+                                                            </ul>
+                                                        </th>
+                                                        <td>@item.Product.Price.ToString("c")</td>
+                                                        <td>
+                                                            <div class="quantity-block">
+                                                                <button type="button" class="MinusItem_Checkout quantity-arrow-minus inner_page" data-cartid=@item.CartId > - </button>
+                                                                     <input  class="cart_count text-center" asp-for="@item.Count" name="cartCount"  type="text" readonly>
+                                                                <button type="button"  class="PlusItem_Checkout quantity-arrow-plus inner_page"  data-cartid=@item.CartId > + </button>
+                                                            </div>
+                                                           
+                                                        </td>
+                                                        <td id="subTotalItem_@(item.CartId)" class="text-thm">@((item.Product.Price * @item.Count).ToString("c"))</td>
+                                                        
+                                                        <td><i style="cursor:pointer;" class="RemoveItem_Checkout fas fa-trash-alt" data-cartid=@item.CartId></i></td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                        <div class="checkout_form mt30">
+                                            <div class="checkout_coupon">
+                                                <form class="df db-520" id="applyCoupon">
+                                                    <input class="form-control coupon_input" type="search" placeholder="Coupon code" aria-label="Search">
+                                                    <button type="button" class="btn btn2 btn-thm">Apply Coupon</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-xl-3">
+                                    <div class="order_sidebar_widget style2">
+                                        <h4 class="title">Cart Totals</h4>
+                                        <ul>
+                                            <li class="subtitle"><p>Subtotal <span id="subTotalOrder" class="float-end">@Model.Order.OrderTotal.ToString("c")</span></p> <hr></li>
+                                            <li>
+                                                <div class="ui_kit_radiobox shopping_cart_radio_box">
+                                                    <div class="radio">
+                                                        <input id="radio_one" name="radio" type="radio" checked="">
+                                                        <label for="radio_one"><span class="car_for_shipping">Shipping</span><span class="radio-label"></span>Flat rate: <span class="fwb text-thm">$20.00</span></label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <input id="radio_two" name="radio" type="radio">
+                                                        <label for="radio_two"><span class="radio-label"></span>Free shipping</label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <input id="radio_three" name="radio" type="radio">
+                                                        <label for="radio_three"><span class="radio-label"></span>Local pickup: <span class="fwb text-thm">$25.00</span></label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label for="radio_four"><span class="radio-label"></span> Shipping to AL.</label>
+                                                    </div>
+                                                    <div class="radio">
+                                                        <label for="radio_four"><span class="radio-label"></span> <span class="fz14 fwb tdu text-thm">Change address</span></label>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="subtitle"><hr></li>
+                                            <li class="subtitle"><p>Subtotal <span class="float-end totals text-thm">$907.00</span></p></li>
+                                        </ul>
+                                        <div class="ui_kit_button payment_widget_btn">
+                                           <a asp-action="Checkout"  class="btn btn-thm btn-block">PROCEED TO CHECKOUT</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
                     </div>
-                  </div>
-                  <div class="col-lg-4 col-xl-3">
-                    <div class="order_sidebar_widget style2">
-                      <h4 class="title">Cart Totals</h4>
-                      <ul>
-                        <li class="subtitle"><p>Subtotal <span class="float-end">@Model.Order.OrderTotal.ToString("c")</span></p> <hr></li>
-                        <li>
-                          <div class="ui_kit_radiobox shopping_cart_radio_box">
-                            <div class="radio">
-                              <input id="radio_one" name="radio" type="radio" checked="">
-                              <label for="radio_one"><span class="car_for_shipping">Shipping</span><span class="radio-label"></span>Flat rate: <span class="fwb text-thm">$20.00</span></label>
-                            </div>
-                            <div class="radio">
-                              <input id="radio_two" name="radio" type="radio">
-                              <label for="radio_two"><span class="radio-label"></span>Free shipping</label>
-                            </div>
-                            <div class="radio">
-                              <input id="radio_three" name="radio" type="radio">
-                              <label for="radio_three"><span class="radio-label"></span>Local pickup: <span class="fwb text-thm">$25.00</span></label>
-                            </div>
-                            <div class="radio">
-                              <label for="radio_four"><span class="radio-label"></span> Shipping to AL.</label>
-                            </div>
-                            <div class="radio">
-                              <label for="radio_four"><span class="radio-label"></span> <span class="fz14 fwb tdu text-thm">Change address</span></label>
-                            </div>
-                          </div>
-                        </li>
-                        <li class="subtitle"><hr></li>
-                        <li class="subtitle"><p>Subtotal <span class="float-end totals text-thm">$907.00</span></p></li>
-                      </ul>
-                      <div class="ui_kit_button payment_widget_btn">
-                        <button type="button" class="btn btn-thm btn-block">PROCEED TO CHECKOUT</button>
-                      </div>
-                    </div>
-                  </div>
                 </div>
-              </div>
-             
+            </div>
+        </div>
+    </div>
+</section>
+
 
 
