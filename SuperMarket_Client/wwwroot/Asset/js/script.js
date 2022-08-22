@@ -1,4 +1,6 @@
-(function($) {
+var domain ="https://"+ window.location.host;
+console.log(domain);
+(function ($) {
     
     "use strict";
 
@@ -503,6 +505,138 @@
         });
     });
     // Custom DropDown Js Code End
+
+    //CheckOut Page
+    $(function () {
+
+        if ($('.table_body tr').length == 0) {
+            alert("Empty")
+        }
+
+        $(".PlusItem_Checkout").on("click", function () {
+            var _cartId = $(this).data("cartid");
+            var otherInput = $(this).closest("div.quantity-block").find("input[name='cartCount']");
+            var subTotalItem = $("#subTotalItem_" + _cartId);
+            $.ajax({
+                url: "/Customer/Cart/Plus",
+                type: "POST",
+                data: { cartId: _cartId },
+                success: function (response) {
+                    if (response.statusCode == 200) {
+                        otherInput.val(response.count);
+                        subTotalItem.html("$" + response.subTotalItem + ".00");
+                        $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
+                    } else {
+                    }
+                }
+            });
+        });
+
+        $(".RemoveItem_Checkout").on("click", function () {
+            var _cartId = $(this).data("cartid");
+            var tr = $(this).closest("tr");
+            var subTotalItem = $("#subTotalItem_" + _cartId);
+            $.ajax({
+                url: "/Customer/Cart/RemoveItem",
+                type: "POST",
+                data: { cartId: _cartId},
+                success: function (response) {
+                    if (response.statusCode == 200 && response.actionClient == "removed") {
+                        $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
+                        tr.hide();
+                        if ($('.table_body tr').length == 0) {
+                            alert("Empty")
+                        }
+                    }
+                }
+            });
+        });
+
+        $(".MinusItem_Checkout").on("click", function () {
+            var _cartId = $(this).data("cartid");
+            var otherInput = $(this).closest("div.quantity-block").find("input[name='cartCount']");
+            var subTotalItem = $("#subTotalItem_" + _cartId);
+            var tr = $(this).closest("tr");
+            $.ajax({
+                url: "/Customer/Cart/Minus",
+                type: "POST",
+                data: { cartId: _cartId },
+                success: function (response) {
+                    if (response.statusCode == 200 && response.actionClient == "ask") {
+                        Swal.fire({
+                            title: 'Are you sure you want to remove this product?',
+                            text: "You won't be able to revert this!",
+                            icon: 'warning',
+                            showCancelButton: true,
+                            confirmButtonColor: '#3085d6',
+                            cancelButtonColor: '#d33',
+                            confirmButtonText: 'Yes, delete it!'
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                $.ajax({
+                                    url: "/Customer/Cart/Minus",
+                                    type: "POST",
+                                    data: { cartId: _cartId, actionClient: "confirmed" },
+                                    success: function (response) {
+                                        if (response.statusCode == 200 && response.actionClient == "removed") {
+                                                tr.hide("slow");
+                                            Swal.fire(
+                                                'Deleted!',
+                                                'Your item has been removed.',
+                                                'success'
+                                            )
+                                           
+                                        }
+                                    }
+                                });
+                            }
+                        })
+                    } else if (response.statusCode == 200) {
+                        otherInput.val(response.count);
+                        subTotalItem.html("$" + response.subTotalItem + ".00");
+                        $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
+                    } 
+                }
+
+            });
+        });
+    })
+
+    //Add To Cart
+    $(document).on('ready', function () {
+        $("#formAddCart").on('submit', function (e) {
+            let userLogged = $("#manage").val();
+            if (userLogged != undefined) {
+                e.preventDefault();
+                var shoppingCart = {
+                    CartId: null,
+                    CustomerId: null,
+                    Count: $('#Count').val(),
+                    ProductId: $('#ProductId').val(),
+                };
+                $.ajax({
+                    url: "/Customer/Product/Details",
+                    type: "POST",
+                    data: shoppingCart,
+                    success: function (response) {
+                        if (response.statusCode == 200 || response.statusCode == 201) {
+                            Swal.fire({
+                                position: 'top-end',
+                                icon: 'success',
+                                title: response.message,
+                                showConfirmButton: false,
+                                timer: 1500
+                            })
+
+                            $("#Count").val(response.count);
+                        }
+                        
+                    }
+                });
+            } 
+            
+        })
+    });
 
     // Custom Shop item add Option increase decrease home 3
     $(function() {

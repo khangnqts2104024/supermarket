@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SuperMarket_DataAccess.Data;
 
@@ -11,9 +12,10 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220821170032_spm1")]
+    partial class spm1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -360,11 +362,11 @@ namespace SuperMarket_DataAccess.Migrations
 
             modelBuilder.Entity("SuperMarket_Models.Models.Coupon", b =>
                 {
-                    b.Property<int?>("CouponId")
+                    b.Property<int>("CouponId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("CouponId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CouponId"), 1L, 1);
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
@@ -373,12 +375,10 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DiscountPercent")
-                        .IsRequired()
+                    b.Property<int>("DiscountPercent")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ExpiredDate")
