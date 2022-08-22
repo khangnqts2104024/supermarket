@@ -20,6 +20,8 @@ namespace SuperMarket_DataAccess.Repository.IRepository
         ICoupon Coupon { get; }
         ICustomer Customer { get; }
 
+     
+
         Task<int> Save();
         void ClearTracking();
     }

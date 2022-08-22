@@ -18,9 +18,35 @@ namespace SuperMarket_DataAccess.Services
             _db = db;
         }
 
-        public void Update(Stock obj)
+        public void IncrementStock(Stock obj,int count)
         {
-            throw new NotImplementedException();
+
+            var editStock = _db.Stocks.FirstOrDefault(s => s.StockId.Equals(obj.StockId));
+            if (editStock != null && count >=0)
+            {
+                editStock.Count += count;
+                _db.Stocks.Update(editStock);
+
+            }
+     
+
         }
+        public void DecrementStock(Stock obj, int count)
+        {
+
+            var editStock = _db.Stocks.FirstOrDefault(s => s.StockId.Equals(obj.StockId));
+            if (editStock != null && count >= 0 && editStock.Count>=count)
+            {
+
+
+                editStock.Count -= count;
+                _db.Stocks.Update(editStock);
+
+            }
+          
+
+        }
+
+  
     }
 }

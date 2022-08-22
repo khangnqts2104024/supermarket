@@ -43,5 +43,5 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-    pattern: "{area=Admin}/{controller=Coupon}/{action=CouponManage}/{id?}");
+    pattern: "{area=Admin}/{controller=Stock}/{action=Index}/{id?}");
 app.Run();

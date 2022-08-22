@@ -46,5 +46,7 @@ namespace SuperMarket_Models.Models
         [ValidateNever]
         public Brand_Category Brand_Category { get; set; }
         public List<ImageProduct> ImageProduct { get; set; }
+
+        public List<Stock>? Stock { get; set; }
     }
 }
