@@ -110,13 +110,13 @@
 	        <div class="sspd_price mb35"><small><del>$79.49</del></small> $27.63</div>
                 <p class="mb25">@Model.Product.Description</p>
                  <form id="formAddCart" asp-action="Details" asp-area="Customer" asp-controller="Product" method="Post">
-                     <input type="hidden" asp-for="@Model.ProductId" value="@Model.ProductId" />
+                     <input type="hidden" asp-for="ProductId" />
                      <ul class="cart_btns ui_kit_button mb30">
                         <li class="list-inline-item">
                         <div class="cart_btn">
                             <div class="quantity-block">
                                 <button type="button" class="quantity-arrow-minus inner_page"> - </button>
-                                <input asp-for="@Model.Count" class="quantity-num inner_page" type="number" value="@Model.Count" />
+                                <input asp-for="Count" class="quantity-num inner_page" type="number"/>
                                 <button type="button" class="quantity-arrow-plus inner_page"> + </button>
                             </div>
                         </div>
