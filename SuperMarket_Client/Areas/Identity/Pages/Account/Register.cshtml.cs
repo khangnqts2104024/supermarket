@@ -112,6 +112,10 @@ namespace SuperMarket_Client.Areas.Identity.Pages.Account
             public string Address { get; set; }
             [Required]
             public string PhoneNumber { get; set; }
+            [Required]
+            public string City { get; set; }
+            [Required]
+            public string Country { get; set; }
 
         }
 
@@ -142,7 +146,8 @@ namespace SuperMarket_Client.Areas.Identity.Pages.Account
                 user.FullName=Input.FullName;
                 user.Address=Input.Address;
                 user.PhoneNumber=Input.PhoneNumber;
-
+                user.City = Input.City;
+                user.Country = Input.Country;
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)

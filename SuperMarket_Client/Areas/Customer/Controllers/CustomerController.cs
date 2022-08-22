@@ -10,47 +10,61 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
     public class CustomerController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
+        private readonly IWebHostEnvironment env;
 
-        public CustomerController(IUnitOfWork unitOfWork)
+        public CustomerController(IUnitOfWork unitOfWork,IWebHostEnvironment env)
         {
             this.unitOfWork = unitOfWork;
+            this.env = env;
         }
-        
+
         public async Task<IActionResult> Index(string id)
         {
-            if(id == null)
+            if (id == null)
             {
-                return RedirectToAction("Index","Customer", new { Area = "Customer" });
+                return RedirectToAction("Index", "Customer", new { Area = "Customer" });
             }
             else
             {
-                var data =await unitOfWork.Customer.GetFirstOrDefault(x=>x.Id==id);
+                var data = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id == id);
                 return View(data);
             }
-            
+
         }
-		[HttpPost]
-        public async Task<IActionResult> UpdateCustomer(SuperMarket_Models.Models.Customer customer ,IFormFile? file)
+        [HttpPost]
+        public async Task<IActionResult> UpdateCustomer(SuperMarket_Models.Models.Customer customer, IFormFile? file)
         {
-			try
-			{
-                if(file != null)
-				{
-                    string path = Path.Combine("wwwroot/Images", file.FileName);
-                    var stream = new FileStream(path, FileMode.Create);
-                    file.CopyToAsync(stream);
-                    //customer.CustomerAvatar = "Images/" + file.FileName;
-                    unitOfWork.Customer.Update(customer);
+            string wwwRootPath = env.WebRootPath;
+            if (file != null)
+            {
+                string fileName = Guid.NewGuid().ToString();
+                var uploads = Path.Combine(wwwRootPath, @"Images");
+                var extension = Path.GetExtension(file.FileName);
 
+                if (customer.CustomerAvatar != null)
+                {
+                    var oldImgPath = Path.Combine(wwwRootPath, customer.CustomerAvatar.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImgPath))
+                    {
+                        System.IO.File.Delete(oldImgPath);
+                    }
                 }
-			}
-			catch (Exception)
-			{
 
-				throw;
-			}
-            return View();
-
+                using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                {
+                    file.CopyTo(fileStreams);
+                }
+                customer.CustomerAvatar = @"\Images\" + fileName + extension;
+                unitOfWork.Customer.Update(customer);
+                await unitOfWork.Save();
+                return RedirectToAction("Index", new { id = customer.Id });
+            }
+            else
+            {
+                unitOfWork.Customer.Update(customer);
+                await unitOfWork.Save();
+                return RedirectToAction("Index", new { id = customer.Id });
+            }
         }
     }
 }

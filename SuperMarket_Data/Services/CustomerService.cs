@@ -30,6 +30,9 @@ namespace SuperMarket_DataAccess.Services
                 objFromDb.Email = obj.Email;
                 objFromDb.UserName = obj.UserName;
 				objFromDb.CustomerAvatar = obj.CustomerAvatar;
+                objFromDb.City = obj.City;
+                objFromDb.Country = obj.Country;
+                objFromDb.CustomerAvatar = obj.CustomerAvatar;
 				_db.Customers.Update(objFromDb);
             }
 
