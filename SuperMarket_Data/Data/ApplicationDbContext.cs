@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SuperMarket_Models.Models;
+using SuperMarket_Models.ViewModels;
 
 namespace SuperMarket_DataAccess.Data
 {
@@ -27,5 +28,6 @@ namespace SuperMarket_DataAccess.Data
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Brand_Category> Brand_Categories { get; set; }
+
     }
 }

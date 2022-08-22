@@ -11,6 +11,7 @@ namespace SuperMarket_DataAccess.Repository.IRepository
     public interface IStock: IRepository<Stock>
     {
 
-        void Update(Stock obj);
+        void IncrementStock(Stock obj,int count);
+        void DecrementStock(Stock obj,int count);
     }
 }
