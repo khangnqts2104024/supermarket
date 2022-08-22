@@ -109,6 +109,7 @@ namespace SuperMarket_DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CouponCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DiscountPercent = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ExpiredDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false)
                 },
@@ -318,13 +319,12 @@ namespace SuperMarket_DataAccess.Migrations
                     ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ManufactureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Weight = table.Column<double>(type: "float", nullable: false),
-                    BrandCateId = table.Column<int>(type: "int", nullable: false),
-                    CouponId = table.Column<int>(type: "int", nullable: true)
+                    BrandCateId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -335,11 +335,6 @@ namespace SuperMarket_DataAccess.Migrations
                         principalTable: "Brand_Categories",
                         principalColumn: "BrandCateId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Products_Coupons_CouponId",
-                        column: x => x.CouponId,
-                        principalTable: "Coupons",
-                        principalColumn: "CouponId");
                 });
 
             migrationBuilder.CreateTable(
@@ -530,11 +525,6 @@ namespace SuperMarket_DataAccess.Migrations
                 column: "BrandCateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Products_CouponId",
-                table: "Products",
-                column: "CouponId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ShoppingCarts_CustomerId",
                 table: "ShoppingCarts",
                 column: "CustomerId");
@@ -603,10 +593,10 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "Brand_Categories");
+                name: "Coupons");
 
             migrationBuilder.DropTable(
-                name: "Coupons");
+                name: "Brand_Categories");
 
             migrationBuilder.DropTable(
                 name: "Brands");

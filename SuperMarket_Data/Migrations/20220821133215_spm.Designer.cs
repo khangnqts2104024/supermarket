@@ -12,7 +12,7 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220821101611_spm")]
+    [Migration("20220821133215_spm")]
     partial class spm
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -362,11 +362,11 @@ namespace SuperMarket_DataAccess.Migrations
 
             modelBuilder.Entity("SuperMarket_Models.Models.Coupon", b =>
                 {
-                    b.Property<int>("CouponId")
+                    b.Property<int?>("CouponId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CouponId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("CouponId"), 1L, 1);
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
@@ -374,6 +374,9 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Property<string>("CouponCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<int?>("DiscountPercent")
                         .IsRequired()
@@ -524,14 +527,10 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Property<int>("BrandCateId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("CouponId")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("ExpiryDate")
@@ -557,8 +556,6 @@ namespace SuperMarket_DataAccess.Migrations
                     b.HasKey("ProductId");
 
                     b.HasIndex("BrandCateId");
-
-                    b.HasIndex("CouponId");
 
                     b.ToTable("Products");
                 });
@@ -788,10 +785,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SuperMarket_Models.Models.Coupon", null)
-                        .WithMany("Products")
-                        .HasForeignKey("CouponId");
-
                     b.Navigation("Brand_Category");
                 });
 
@@ -831,11 +824,6 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Navigation("Branch");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("SuperMarket_Models.Models.Coupon", b =>
-                {
-                    b.Navigation("Products");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.Product", b =>

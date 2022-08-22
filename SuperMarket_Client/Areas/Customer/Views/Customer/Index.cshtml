@@ -43,19 +43,35 @@
 						<div class="col-xl-9">
 							<div class="row">
 								<form method="post" asp-action="UpdateCustomer" enctype="multipart/form-data">
-									<input type="text" asp-for="Id" value="@Model.Id" hidden>
+									<input type="text" asp-for="Id"  hidden>
+									<input type="text" asp-for="UserName"  hidden>
+									<input type="hidden" asp-for="CustomerAvatar"/>
 									<div class="col-lg-12">
 										<div class="form-group mb25">
 											<label class="mb10 fz14 heading-color">Full Name</label>
 											<input type="text" asp-for="FullName" class="form-control form_control" value="@Model.FullName">
 										</div>
 									</div>
-									<div class="col-lg-6">
-										<div class="form-group mb25">
-											<input type="file" name="file" />
-											<img class="pt-2" src="~/Images/274921743_536756477795635_5684064206547991241_n.jpg" />
+									@if (@Model.CustomerAvatar == null)
+									{
+										<div class="col-lg-6">
+											<div class="form-group mb25">
+												<input type="file" name="file"  />
+												<img class="pt-2" src="~/Images/default_avatar.jpg" />
+											</div>
 										</div>
-									</div>
+									}
+									else
+									{
+
+										<div class="col-lg-6">
+											<div class="form-group mb25">
+												<input type="file" name="file" />
+												<img class="pt-2" src="@Model.CustomerAvatar" />
+											</div>
+										</div>
+									}
+
 									<div class="col-lg-12">
 										<div class="form-group mb25">
 											<label class="mb10 fz14 heading-color">Address</label>
