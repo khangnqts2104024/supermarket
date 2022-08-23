@@ -20,13 +20,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody class="table_body">
-                                                <tr>
-                                                    <td colspan="4">
-                                                        <image width="100" src="/Asset/images/cart/empty_cart.png"/> <br />
-                                                            Your Cart Is Empty
-                                                    </td>
-                                                </tr>
-                                                
                                                 @foreach (var item in Model.ListCart)
                                                 {
                                                     <tr>
@@ -67,34 +60,24 @@
                                     <div class="order_sidebar_widget style2">
                                         <h4 class="title">Cart Totals</h4>
                                         <ul>
-                                            <li class="subtitle"><p>Subtotal <span id="subTotalOrder" class="float-end">@Model.Order.OrderTotal.ToString("c")</span></p> <hr></li>
                                             <li>
                                                 <div class="ui_kit_radiobox shopping_cart_radio_box">
                                                     <div class="radio">
                                                         <input id="radio_one" name="radio" type="radio" checked="">
-                                                        <label for="radio_one"><span class="car_for_shipping">Shipping</span><span class="radio-label"></span>Flat rate: <span class="fwb text-thm">$20.00</span></label>
+                                                        <label for="radio_one"><span class="car_for_shipping">Shipping</span><span class="radio-label"></span></label>
                                                     </div>
                                                     <div class="radio">
-                                                        <input id="radio_two" name="radio" type="radio">
+                                                        <input id="radio_two" name="radio" type="radio" checked>
                                                         <label for="radio_two"><span class="radio-label"></span>Free shipping</label>
-                                                    </div>
-                                                    <div class="radio">
-                                                        <input id="radio_three" name="radio" type="radio">
-                                                        <label for="radio_three"><span class="radio-label"></span>Local pickup: <span class="fwb text-thm">$25.00</span></label>
-                                                    </div>
-                                                    <div class="radio">
-                                                        <label for="radio_four"><span class="radio-label"></span> Shipping to AL.</label>
-                                                    </div>
-                                                    <div class="radio">
-                                                        <label for="radio_four"><span class="radio-label"></span> <span class="fz14 fwb tdu text-thm">Change address</span></label>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li class="subtitle"><hr></li>
-                                            <li class="subtitle"><p>Subtotal <span class="float-end totals text-thm">$907.00</span></p></li>
+                                            <li class="subtitle"><p>Subtotal <span id="subTotalOrder" class="float-end totals text-thm">@Model.Order.OrderTotal.ToString("c")</span></p></li>
+
                                         </ul>
                                         <div class="ui_kit_button payment_widget_btn">
-                                           <a asp-action="Checkout"  class="btn btn-thm btn-block">PROCEED TO CHECKOUT</a>
+                                           <a asp-action="Checkout"  asp-controller="Cart" asp-area="Customer" class="btn btn-thm btn-block">PROCEED TO CHECKOUT</a>
                                         </div>
                                     </div>
                                 </div>

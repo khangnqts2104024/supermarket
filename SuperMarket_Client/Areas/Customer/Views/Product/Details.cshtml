@@ -95,7 +95,7 @@
             </div>
 
            
-		        <h3 class="title mb20">@Model.Product.ProductName</h3>
+		        <h3 class="title mb20">@Model.Product.Title</h3>
 
             <div class="sspd_review">
               <ul class="mb15">
@@ -107,7 +107,7 @@
               </ul>
             </div>
 
-	        <div class="sspd_price mb35"><small><del>$79.49</del></small> $27.63</div>
+	        <div class="sspd_price mb35"><small><del>$79.49</del></small> @Model.Product.Price.ToString("c")</div>
                 <p class="mb25">@Model.Product.Description</p>
                  <form id="formAddCart" asp-action="Details" asp-area="Customer" asp-controller="Product" method="Post">
                      <input type="hidden" asp-for="ProductId" />
@@ -160,15 +160,7 @@
                     <div class="product_single_content">
                       <div class="mbp_pagination_comments">
                         <div class="mbp_first">
-                          <p class="mb25">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus.</p>
-                          <div class="ui_page_heading">
-                            <ul class="order_list list-style-type-bullet list-inline-item">
-                              <li><a href="#">Nunc nec porttitor turpis. In eu risus enim. In vitae mollis elit.</a></li>
-                              <li><a href="#">Vivamus finibus vel mauris ut vehicula.</a></li>
-                              <li><a href="#">Nullam a magna porttitor, dictum risus nec, faucibus sapien.</a></li>
-                            </ul>
-                          </div>
-                          <p class="mt10">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. Suspendisse urna viverra non, semper suscipit, posuere a, pede. Donec nec justo eget felis facilisis fermentum. Aliquam porttitor mauris sit amet orci. Aenean dignissim pellentesque felis. Phasellus ultrices nulla quis nibh. Quisque a lectus. Donec consectetuer ligula vulputate sem tristique cursus.</p>
+                          @Model.Product.Description
                         </div>
                       </div>
                     </div>
@@ -265,7 +257,7 @@
                       <form class="comments_form">
                         <div class="row">
                           <div class="col-lg-12">
-                            <h5 class="fz16 mb30">Be the first to review “Pineapple (Tropical Gold) 1 lb” </h5>
+                            <h5 class="fz16 mb30">Be the first to review “@Model.Product.Title” </h5>
                             <p class="fz14 mb30">Your email address will not be published. Required fields are marked *</p>
                             <div class="sspd_review mb30">
                               <ul>
