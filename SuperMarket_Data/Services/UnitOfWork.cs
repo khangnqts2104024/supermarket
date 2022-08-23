@@ -29,7 +29,7 @@ namespace SuperMarket_DataAccess.Services
 
         public ICustomer Customer { get; private set; }
 
-
+        public IBrand_Category Brand_Category { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
@@ -44,6 +44,7 @@ namespace SuperMarket_DataAccess.Services
             Coupon = new CouponService(_db);
             Customer=new CustomerService(_db);
             ImageProduct = new ImageProductService(_db);
+            Brand_Category = new Brand_CategoryService(_db);
             //view model
        
 
