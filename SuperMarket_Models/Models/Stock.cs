@@ -20,12 +20,12 @@ namespace SuperMarket_Models.Models
         public int? ProductId { get; set; }
         [ForeignKey("ProductId")]
         [ValidateNever]
-        public Product Product { get; set; }
+        public Product? Product { get; set; }
 
         //FK
         public int? BranchId { get; set; }
         [ForeignKey("BranchId")]
         [ValidateNever]
-        public Branch Branch { get; set; }
+        public Branch? Branch { get; set; }
     }
 }
