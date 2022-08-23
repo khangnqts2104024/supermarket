@@ -1,4 +1,4 @@
-﻿@model SuperMarket_Models.Models.Brand_Category
+﻿@model SuperMarket_Models.Models.Brand
 @{
     ViewData["Title"] = "Create Brand";
 }
@@ -7,30 +7,30 @@
 <div class="row">
     <div class="col-md-6">
         <p>@ViewBag.msg</p>
-        <form id="profile-form" method="post" asp-action="CreateCategory">
+        <form id="profile-form" method="post" asp-action="CreateBrand">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input asp-for="BrandId" type="hidden"/>
             <div class="form-floating">
-                <input asp-for="Brand.BrandName" class="form-control" />
-                <label asp-for="Brand.BrandName" class="form-label"></label>
+                <input asp-for="BrandName" class="form-control" />
+                <label asp-for="BrandName" class="form-label"></label>
             </div>
             <div class="form-floating">
-                <input asp-for="Brand.Origin" class="form-control" />
-                <label asp-for="Brand.Origin" class="form-label"></label>
+                <input asp-for="Origin" class="form-control" />
+                <label asp-for="Origin" class="form-label"></label>
             </div>
             <div class="form-floating">
-                <input asp-for="Brand.Address" class="form-control" />
-                <label asp-for="Brand.Address" class="form-label"></label>
+                <input asp-for="Address" class="form-control" />
+                <label asp-for="Address" class="form-label"></label>
             </div>
             <div class="form-floating">
-                <input asp-for="Brand.Phone" class="form-control" />
-                <label asp-for="Brand.Phone" class="form-label"></label>
+                <input asp-for="Phone" class="form-control" />
+                <label asp-for="Phone" class="form-label"></label>
             </div>
             <div class="form-floating">
-                <select class="form-control" asp-items="@ViewBag.categoryList">
-                    <option value="test">Test</option>
+                <select class="form-control" asp-items="@ViewBag.categoryList" name="CategoryId">
+                    <option>---Category---</option>
                 </select>
-                <label asp-for="Category" class="form-label"></label>
+                <label class="form-label">Category</label>
             </div>
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Create</button>
         </form>

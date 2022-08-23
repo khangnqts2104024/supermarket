@@ -23,11 +23,10 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         {
             var data =await unitOfWork.Category.GetAll();
             ViewBag.categoryList = new SelectList(data,"CategoryId","CategoryName");
-            
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateBrand(SuperMarket_Models.Models.Brand obj)
+        public async Task<IActionResult> CreateBrand(SuperMarket_Models.Models.Brand obj,int CategoryId)
         {
             if (obj != null)
             {
@@ -35,27 +34,46 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 int count = 0;
                 if (data != null)
                 {
-                    foreach (var item in data)
+                    foreach(var item in data)
                     {
-                        if (item.BrandName.Contains(obj.BrandName))
-                        {
-                            count++;
-                        }
-
+                        item.BrandName=obj.BrandName;
+                        count++;
                     }
                     if (count > 0)
                     {
                         ViewBag.msg = "This brand has been Used. Try another.";
+                        return View();
                     }
                     else
                     {
+                        Brand_Category newBrandCategory=new Brand_Category()
+                        {
+                            BrandId=obj.BrandId,
+                            CategoryId=CategoryId
+                        };
                         await unitOfWork.Brand.Add(obj);
                         await unitOfWork.Save();
-                        ViewBag.msg = "Brand has been Created.";
+                        var check = await unitOfWork.Brand.GetFirstOrDefault(x => x.BrandName == obj.BrandName);
+                        if (check!= null)
+                        {
+                            return RedirectToAction("AddBrandCategory","Brand", new Brand_Category
+                            {
+                                BrandId = obj.BrandId,
+                                CategoryId = CategoryId
+                            });
+                        }
                     }
                 }
             }
-            return View();
+            return null;
+        }
+        [HttpGet]
+        public async Task<IActionResult> AddBrandCategory(Brand_Category newBrandCategory)
+        {
+            await unitOfWork.Brand_Category.Add(newBrandCategory);
+            await unitOfWork.Save();
+            ViewBag.msg = "Brand has been Created.";
+            return RedirectToAction("CreateBrand","Brand");
         }
         [HttpGet]
         public async Task<IActionResult> UpdateBrand(int id)
