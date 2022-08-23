@@ -10,7 +10,8 @@ namespace SuperMarket_DataAccess.Repository.IRepository
 {
     public interface IOrder :IRepository<Order>
     {
-        void Update(Order obj);
+        void UpdateStatus(int id, string orderStatus, string? paymentStatus = null);
+        void UpdateStripePaymentId(int orderId, string sessionId, string paymentIntentId);
 
     }
 }

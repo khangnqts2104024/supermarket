@@ -506,12 +506,26 @@ console.log(domain);
     });
     // Custom DropDown Js Code End
 
+    function showDivWhenEmptyCart() {
+        if ($('.table_body tr').length == 0) {
+            var markup_empty_cart = `
+                    <tr>
+                        <td colspan="4">
+                            <img width="100" src="/Asset/images/cart/empty_cart.png"/> <br />
+                                Your Cart Is Empty
+                        </td>
+                    </tr>
+                `;
+            $('.table_body').append(markup_empty_cart);
+        }
+
+        
+    }
+
     //CheckOut Page
     $(function () {
 
-        if ($('.table_body tr').length == 0) {
-            alert("Empty")
-        }
+        showDivWhenEmptyCart();
 
         $(".PlusItem_Checkout").on("click", function () {
             var _cartId = $(this).data("cartid");
@@ -535,18 +549,21 @@ console.log(domain);
         $(".RemoveItem_Checkout").on("click", function () {
             var _cartId = $(this).data("cartid");
             var tr = $(this).closest("tr");
-            var subTotalItem = $("#subTotalItem_" + _cartId);
+            //var subTotalItem = $("#subTotalItem_" + _cartId);
             $.ajax({
                 url: "/Customer/Cart/RemoveItem",
                 type: "POST",
                 data: { cartId: _cartId},
                 success: function (response) {
                     if (response.statusCode == 200 && response.actionClient == "removed") {
-                        $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
-                        tr.hide();
-                        if ($('.table_body tr').length == 0) {
-                            alert("Empty")
+                        tr.remove();
+                        if (response.subTotalOrder != undefined) {
+                            $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
+                        } else {
+                            $("#subTotalOrder").html("$0.00");
                         }
+                        showDivWhenEmptyCart();
+
                     }
                 }
             });
@@ -579,13 +596,18 @@ console.log(domain);
                                     data: { cartId: _cartId, actionClient: "confirmed" },
                                     success: function (response) {
                                         if (response.statusCode == 200 && response.actionClient == "removed") {
-                                                tr.hide("slow");
+                                            tr.remove();
+                                            if (response.subTotalOrder != undefined) {
+                                                $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
+                                            } else {
+                                                $("#subTotalOrder").html("$0.00");
+                                            }
+                                            showDivWhenEmptyCart();
                                             Swal.fire(
                                                 'Deleted!',
                                                 'Your item has been removed.',
                                                 'success'
                                             )
-                                           
                                         }
                                     }
                                 });
@@ -594,7 +616,15 @@ console.log(domain);
                     } else if (response.statusCode == 200) {
                         otherInput.val(response.count);
                         subTotalItem.html("$" + response.subTotalItem + ".00");
-                        $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
+                        if (response.subTotalOrder != undefined) {
+                            console.log(response)
+                            console.log(response.subTotalOrder)
+                            $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
+                        } else {
+                            $("#subTotalOrder").html("$0.00");
+                        }
+                        showDivWhenEmptyCart();
+
                     } 
                 }
 
@@ -621,7 +651,6 @@ console.log(domain);
                     success: function (response) {
                         if (response.statusCode == 200 || response.statusCode == 201) {
                             Swal.fire({
-                                position: 'top-end',
                                 icon: 'success',
                                 title: response.message,
                                 showConfirmButton: false,

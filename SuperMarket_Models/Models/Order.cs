@@ -16,35 +16,28 @@ namespace SuperMarket_Models.Models
         [Required]
         public string? OrderStatus { get; set; }
         [Required]
-        [Range(0, 9999999999999.99)]
-
-        public decimal Amount { get; set; }
-  
-        [Required]
         public string? PaymentStatus { get; set; }
         [Required]
         public DateTime PaymentDate { get; set; }
-        [Required]
         public string? SessionId { get; set; }
-        [Required]
         public string? PaymentIntentId { get; set; }
         
         [Required]
-        public string? Name { get; set; }
+        public string Name { get; set; }
         [Required]
-        public string? Address { get; set; }
+        public string Address { get; set; }
         [Required]
-        public string? Phone { get; set; }
+        public string Phone { get; set; }
+        [Required]
+        public string Country { get; set; }
+        [Required]
+        public string City { get; set; }
+        public string? OrderNotes { get; set; }
 
-        [Required]
-        public string? Country { get; set; }
-        [Required]
-        public string? City { get; set; }
-
-        public int CouponId { get; set; }
+        public int? CouponId { get; set; }
         [ForeignKey("CouponId")]
-
-        public Coupon Coupon { get; set; }
+        [ValidateNever]
+        public Coupon? Coupon { get; set; }
 
         public string CustomerId { get; set; }
         [ForeignKey("CustomerId")]

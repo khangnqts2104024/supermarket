@@ -17,7 +17,6 @@ namespace SuperMarket_Models.Models
         [DisplayName("Customer Name")]
         public string FullName { get; set; }
 
-
         [Required]
         [StringLength(150)]
         public string Address { get; set; }
