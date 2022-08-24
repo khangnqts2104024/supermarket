@@ -19,12 +19,16 @@ namespace SuperMarket_DataAccess.Services
             _db = db;
         }
 
-        public void Update(Order obj)
+        public void UpdateStatus(int id, string orderStatus, string? paymentStatus = null)
         {
-            var objFromDb = _db.Orders.FirstOrDefault(x => x.OrderId == obj.OrderId);
+            var objFromDb = _db.Orders.FirstOrDefault(x => x.OrderId == id);
             if (objFromDb != null)
             {
-                _db.Orders.Update(obj);
+                objFromDb.OrderStatus = orderStatus;
+                if(paymentStatus != null)
+                {
+                    objFromDb.PaymentStatus = paymentStatus;
+                }
             }
         }
 
