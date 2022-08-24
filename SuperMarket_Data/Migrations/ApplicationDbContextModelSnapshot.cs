@@ -433,9 +433,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -444,7 +441,7 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CouponId")
+                    b.Property<int?>("CouponId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerId")
@@ -458,6 +455,9 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("OrderNotes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OrderStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -469,7 +469,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentIntentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
@@ -481,7 +480,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SessionId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("OrderId");
@@ -747,9 +745,7 @@ namespace SuperMarket_DataAccess.Migrations
                 {
                     b.HasOne("SuperMarket_Models.Models.Coupon", "Coupon")
                         .WithMany()
-                        .HasForeignKey("CouponId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CouponId");
 
                     b.HasOne("SuperMarket_Models.Models.Customer", "Customer")
                         .WithMany()

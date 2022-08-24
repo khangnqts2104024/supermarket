@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
 using SuperMarket_DataAccess.Repository.IRepository;
 using SuperMarket_Models.Models;
+using System.Collections.Generic;
 
 namespace SuperMarket_Client.Areas.Admin.Controllers
 {
@@ -19,24 +21,34 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> CreateBrand()
+        public async Task<IActionResult> CreateBrand(string message)
         {
-            var data =await unitOfWork.Category.GetAll();
-            ViewBag.categoryList = new SelectList(data,"CategoryId","CategoryName");
-            return View();
+            if(message == null)
+            {
+                var data = await unitOfWork.Category.GetAll();
+                ViewBag.categoryList = new SelectList(data, "CategoryId", "CategoryName");
+                return View();
+            }
+            else
+            {
+                var data = await unitOfWork.Category.GetAll();
+                ViewBag.categoryList = new SelectList(data, "CategoryId", "CategoryName");
+                ViewBag.msg=message;
+                return View();
+            }
         }
         [HttpPost]
-        public async Task<IActionResult> CreateBrand(SuperMarket_Models.Models.Brand obj,int CategoryId)
+        public async Task<IActionResult> CreateBrand(Brand obj, int[] CategoryId)
         {
             if (obj != null)
             {
-                var data = await unitOfWork.Brand.GetAll();
+                var data = await unitOfWork.Brand.GetAll(x => x.BrandName.Contains(obj.BrandName));
                 int count = 0;
                 if (data != null)
                 {
-                    foreach(var item in data)
+                    foreach (var item in data)
                     {
-                        item.BrandName=obj.BrandName;
+                        item.BrandName.Contains(obj.BrandName);
                         count++;
                     }
                     if (count > 0)
@@ -44,80 +56,77 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                         ViewBag.msg = "This brand has been Used. Try another.";
                         return View();
                     }
+
                     else
                     {
-                        Brand_Category newBrandCategory=new Brand_Category()
-                        {
-                            BrandId=obj.BrandId,
-                            CategoryId=CategoryId
-                        };
                         await unitOfWork.Brand.Add(obj);
                         await unitOfWork.Save();
-                        var check = await unitOfWork.Brand.GetFirstOrDefault(x => x.BrandName == obj.BrandName);
-                        if (check!= null)
+                        List<Brand_Category> brand_catelist = new List<Brand_Category>();
+                        var checkBrandId=await unitOfWork.Brand.GetFirstOrDefault(x=>x.BrandName==obj.BrandName);
+                        foreach (var item in CategoryId)
                         {
-                            return RedirectToAction("AddBrandCategory","Brand", new Brand_Category
-                            {
-                                BrandId = obj.BrandId,
-                                CategoryId = CategoryId
-                            });
+                            var brand_Cate = new Brand_Category();
+                            brand_Cate.BrandId = checkBrandId.BrandId;
+                            brand_Cate.CategoryId = item;
+                            brand_catelist.Add(brand_Cate);
                         }
+                        TempData["brand_catelist"] = JsonConvert.SerializeObject( brand_catelist);
+                        return RedirectToAction("AddBrandCategory", "Brand");
                     }
                 }
             }
             return null;
         }
-        [HttpGet]
-        public async Task<IActionResult> AddBrandCategory(Brand_Category newBrandCategory)
+    public async Task<IActionResult> AddBrandCategory()
+    {
+        var brand_catelist = JsonConvert.DeserializeObject<List<Brand_Category>>(TempData["brand_catelist"].ToString()) ;
+        await unitOfWork.Brand_Category.AddRange(brand_catelist);
+        await unitOfWork.Save();
+        return RedirectToAction("CreateBrand", "Brand",new {message= "Brand has been Created." });
+    }
+    [HttpGet]
+    public async Task<IActionResult> UpdateBrand(int id)
+    {
+        var data = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == id);
+        return View(data);
+    }
+    [HttpPost]
+    public async Task<IActionResult> UpdateCategory(SuperMarket_Models.Models.Category obj)
+    {
+        var data = await unitOfWork.Category.GetAll();
+        foreach (var item in data)
         {
-            await unitOfWork.Brand_Category.Add(newBrandCategory);
-            await unitOfWork.Save();
-            ViewBag.msg = "Brand has been Created.";
-            return RedirectToAction("CreateBrand","Brand");
-        }
-        [HttpGet]
-        public async Task<IActionResult> UpdateBrand(int id)
-        {
-            var data = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == id);
-            return View(data);
-        }
-        [HttpPost]
-        public async Task<IActionResult> UpdateCategory(SuperMarket_Models.Models.Category obj)
-        {
-            var data = await unitOfWork.Category.GetAll();
-            foreach (var item in data)
+            if (item.CategoryName.Contains(obj.CategoryName))
             {
-                if (item.CategoryName.Contains(obj.CategoryName))
-                {
-                    ViewBag.msg = "Categories has been Used. Try another.";
-                    return View();
-                }
-                else
-                {
-                    obj.UpdateDate = DateTime.Now;
-                    unitOfWork.Category.Update(obj);
-                    await unitOfWork.Save();
-                    ViewBag.msg = "Categories has been Updated.";
-                }
-            }
-            return View();
-        }
-        public async Task<IActionResult> DeleteCategory(int id)
-        {
-            var data = await unitOfWork.Brand_Category.GetFirstOrDefault(x => x.CategoryId == id);
-            if (data != null)
-            {
-                ViewBag.msg = "This Category has brand and product in it, can not delete unless delete all the brand and product.";
+                ViewBag.msg = "Categories has been Used. Try another.";
+                return View();
             }
             else
             {
-                var data1 = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == id);
-                unitOfWork.Category.Remove(data1);
+                obj.UpdateDate = DateTime.Now;
+                unitOfWork.Category.Update(obj);
                 await unitOfWork.Save();
-                ViewBag.msg = "Category has beed deleted";
-
+                ViewBag.msg = "Categories has been Updated.";
             }
-            return View();
         }
+        return View();
     }
+    public async Task<IActionResult> DeleteCategory(int id)
+    {
+        var data = await unitOfWork.Brand_Category.GetFirstOrDefault(x => x.CategoryId == id);
+        if (data != null)
+        {
+            ViewBag.msg = "This Category has brand and product in it, can not delete unless delete all the brand and product.";
+        }
+        else
+        {
+            var data1 = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == id);
+            unitOfWork.Category.Remove(data1);
+            await unitOfWork.Save();
+            ViewBag.msg = "Category has beed deleted";
+
+        }
+        return View();
+    }
+}
 }

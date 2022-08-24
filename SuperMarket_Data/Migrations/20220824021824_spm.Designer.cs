@@ -12,7 +12,7 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220823030009_spm")]
+    [Migration("20220824021824_spm")]
     partial class spm
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -435,9 +435,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -446,7 +443,7 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CouponId")
+                    b.Property<int?>("CouponId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerId")
@@ -460,6 +457,9 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("OrderNotes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OrderStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -471,7 +471,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentIntentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
@@ -483,7 +482,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SessionId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("OrderId");
@@ -749,9 +747,7 @@ namespace SuperMarket_DataAccess.Migrations
                 {
                     b.HasOne("SuperMarket_Models.Models.Coupon", "Coupon")
                         .WithMany()
-                        .HasForeignKey("CouponId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CouponId");
 
                     b.HasOne("SuperMarket_Models.Models.Customer", "Customer")
                         .WithMany()

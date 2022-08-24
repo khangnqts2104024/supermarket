@@ -80,19 +80,27 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             }
             return View();
         }
-        public async Task<IActionResult> DeleteCategory(int id)
+        public async Task<IActionResult> DeleteBrand_Category(int id)
         {
-            var data = await unitOfWork.Brand_Category.GetFirstOrDefault(x => x.CategoryId == id);
+            var data = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id);
             if (data != null)
             {
-                ViewBag.msg = "This Category has brand and product in it, can not delete unless delete all the brand and product.";
+                ViewBag.msg = "This Category has product in it, can not delete unless delete all product.";
             }
             else
             {
-                var data1=await unitOfWork.Category.GetFirstOrDefault(x=>x.CategoryId==id);
-                unitOfWork.Category.Remove(data1);
-                await unitOfWork.Save();
-                ViewBag.msg = "Category has beed deleted";
+                var data1=await unitOfWork.Brand_Category.GetFirstOrDefault(x=>x.CategoryId==id);
+                if(data1 != null)
+                {
+                    ViewBag.msg = "This Category has brand in it, can not delete unless delete all the brand.";
+                }
+                else
+                {
+                    var data2 = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == id);
+                    unitOfWork.Category.Remove(data2);
+                    await unitOfWork.Save();
+                    ViewBag.msg = "Category has beed deleted";
+                }
 
             }
             return View();
