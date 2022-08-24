@@ -11,6 +11,18 @@
                 <div class="checkout_form style2">
                     <h4 class="title mb40">Shipping Details</h4>
                     <div class="checkout_coupon ui_kit_button">
+
+                        <div class="checkout_form mt30">
+                            <div class="checkout_coupon">
+                                @*khang coupon*@
+                                <form class="df db-520" id="applyCoupon" asp-action="AddCoupon" asp-controller="Coupon" asp-area="Customer">
+                                    <input name="couponCode" class="form-control coupon_input" type="search" placeholder="Coupon code" aria-label="Search">
+                                    <button type="submit" class="btn btn2 btn-thm">Apply Coupon</button>
+                                </form>
+                                <p>@if(Model.Coupon == null){ @ViewBag.coupon;}</p>
+                            </div>
+                        </div>
+
                         <form class="form2" id="checkout_form" name="checkout_form" action="#" method="post">
                             <div class="row">
                                 <div class="col-sm-12">
@@ -44,7 +56,9 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="form-label">Phone *</label>
-                                        <input  style="padding-left:10px;" class="form-control form_control" type="text" asp-for="Order.Phone" required>
+                                        <input style="padding-left:10px;" class="form-control form_control" type="text" asp-for="Order.Phone" required>
+                                        @*khang*@
+                                 @if(Model.Coupon != null){<input type="text" name="cpId" value="@Model.Coupon.CouponId" readonly hidden>}
                                     </div>
                                 </div>
 
@@ -53,7 +67,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group mb0">
                                         <label class="ai_title">Order notes (optional)</label>
-                                        <textarea name="form_message" style="padding-left:10px;"  class="form-control" rows="12" placeholder=""></textarea>
+                                        <textarea name="form_message" style="padding-left:10px;" class="form-control" rows="12" placeholder=""></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -76,14 +90,28 @@
                                 <div class="radio">
                                     <label for="radio_one"><span class="car_for_shipping">Shipping</span></label>
                                 </div>
-                                <div class="radio" >
+                                <div class="radio">
                                     <label for="radio_two" style="padding-right:0;">Free shipping</label>
                                 </div>
                             </div>
                         </li>
+                          <li class="subtitle"><hr></li>
+
+                          @*khang*@
+                        <li class="subtitle"><p>Discount @if(Model.Coupon!=null){
+                                       <span class="float-end totals text-thm"> @((Model.Order.OrderTotal * Model.Coupon.DiscountPercent/100).ToString("c")) </span>
+                                        }
+                                         else{<span class="float-end totals text-thm"> 0 </span>}
+                               </p></li>
                         <li class="subtitle"><hr></li>
-                        <li class="subtitle"><p>Subtotal <span class="float-end totals text-thm">@Model.Order.OrderTotal.ToString("c")</span></p></li>
+
+                        @*khang*@
+                        <li class="subtitle"><p>Total @if(Model.Coupon!=null){
+                                       <span class="float-end totals text-thm"> @((Model.Order.OrderTotal * (100-Model.Coupon.DiscountPercent)/100).ToString("c")) </span>
+                                        }
+                                         else{<span class="float-end totals text-thm"> @Model.Order.OrderTotal </span>}</p></li>
                         <li class="subtitle"><hr></li>
+
                     </ul>
                     <div class="ui_kit_radiobox checkout">
                         <div class="radio">

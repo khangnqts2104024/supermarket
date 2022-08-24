@@ -667,6 +667,56 @@ console.log(domain);
         })
     });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //KHANG COUPON
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    //
     // Custom Shop item add Option increase decrease home 3
     $(function() {
       (function quantityProducts() {
