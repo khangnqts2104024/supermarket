@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.Checkout;
 using SuperMarket_DataAccess.Repository.IRepository;
@@ -14,10 +15,12 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
     public class CartController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
+    
 
         public CartController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
+         
         }
 
         [HttpGet]
@@ -150,7 +153,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Checkout()
+        public async Task<IActionResult> Checkout(string? cpCode)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -168,29 +171,64 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 shoppingCartVM.Order.Address = shoppingCartVM.Order.Customer.Address;
                 shoppingCartVM.Order.City = shoppingCartVM.Order.Customer.City;
                 shoppingCartVM.Order.Country = shoppingCartVM.Order.Customer.Country;
+                //khang check coupon
 
+
+                if (cpCode != "Expired")
+                {
+                    shoppingCartVM.Coupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponCode.Equals(cpCode));
+                }
+                else {
+
+                    ViewBag.coupon = "Coupon not exist or expired! Please check your coupon or contact our customer service department!";
+                }
+
+
+                //khang
                 foreach (var item in shoppingCartVM.ListCart)
                 {
                     shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
                 }
             }
+         
             return View(shoppingCartVM);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Checkout(ShoppingCartVM shoppingCartVM)
+        public async Task<IActionResult> Checkout(ShoppingCartVM shoppingCartVM,int? cpId)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
+
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             shoppingCartVM.ListCart = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId.Equals(claim.Value), includeProperties: "Product");
             shoppingCartVM.Order.OrderDate = System.DateTime.Now;
             shoppingCartVM.Order.CustomerId = claim.Value;
+            //khang
 
+            var usedCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(cpId));
+            if (usedCoupon != null)
+            {
+                shoppingCartVM.Order.Coupon = usedCoupon;
+                shoppingCartVM.Order.CouponId = usedCoupon.CouponId;
+
+            }
+            else {
+                shoppingCartVM.Order.Coupon = new Coupon();
+                shoppingCartVM.Order.Coupon.DiscountPercent = 0;
+
+              }
+
+            decimal total = 0;
+            //khang
             foreach (var item in shoppingCartVM.ListCart)
             {
-                shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
-            }
+                //shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
+                 total += item.Product.Price * item.Count;
 
+            }
+            shoppingCartVM.Order.OrderTotal = total - total * shoppingCartVM.Order.Coupon.DiscountPercent / 100;
+
+            //
             shoppingCartVM.Order.OrderStatus = SD.StatusPending;
             shoppingCartVM.Order.PaymentStatus = SD.StatusPending;
 
@@ -226,7 +264,9 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 {
                     PriceData = new SessionLineItemPriceDataOptions
                     {
-                        UnitAmount = (long)(item.Product.Price*100), //Product Price, 
+                        //khang
+
+                        UnitAmount = (long)(item.Product.Price*100*(100-shoppingCartVM.Order.Coupon.DiscountPercent)/100), //Product Price, 
                         Currency = "usd",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
@@ -244,6 +284,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             //create a session for options based on SessionService
                 Session session = service.Create(options);
                 unitOfWork.Order.UpdateStripePaymentId(shoppingCartVM.Order.OrderId, session.Id, session.PaymentIntentId);
+
+
                 await unitOfWork.Save();
 
                 Response.Headers.Add("Location", session.Url);
@@ -254,8 +296,13 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> CompleteOrder(int id)
         {
-            var order = await unitOfWork.Order.GetFirstOrDefault(x => x.OrderId == id);
+            var order = await unitOfWork.Order.GetFirstOrDefault(x => x.OrderId == id,includeProperties:"Coupon");
             var orderDetails = await unitOfWork.OrderDetail.GetAll(x => x.OrderId == id, includeProperties: "Product");
+            //
+            //var useCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(order.CouponId));
+            
+
+            //
             OrderVM orderVM = new OrderVM()
             {
                 Order = order,
@@ -270,7 +317,10 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 if (session.PaymentStatus.ToLower() == "paid")
                 {
                     unitOfWork.Order.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
-                    IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);   
+                    IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
+                    //
+                    if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }
+                    //
                     unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
                     await unitOfWork.Save();
                 }
@@ -286,6 +336,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             {
                 ListCart = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product"),
                 Order = new()
+                //khang
+                
             };
 
             foreach (var item in shoppingCartVM.ListCart)

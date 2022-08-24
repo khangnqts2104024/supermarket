@@ -360,11 +360,11 @@ namespace SuperMarket_DataAccess.Migrations
 
             modelBuilder.Entity("SuperMarket_Models.Models.Coupon", b =>
                 {
-                    b.Property<int?>("CouponId")
+                    b.Property<int>("CouponId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("CouponId"), 1L, 1);
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CouponId"), 1L, 1);
 
                     b.Property<int>("Count")
                         .HasColumnType("int");
@@ -373,12 +373,10 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-
-                    b.Property<DateTime?>("CreatedDate")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DiscountPercent")
-                        .IsRequired()
+                    b.Property<int>("DiscountPercent")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("ExpiredDate")
@@ -426,9 +424,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Amount")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("City")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -437,7 +432,7 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CouponId")
+                    b.Property<int?>("CouponId")
                         .HasColumnType("int");
 
                     b.Property<string>("CustomerId")
@@ -451,6 +446,9 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("OrderNotes")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("OrderStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -462,7 +460,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentIntentId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PaymentStatus")
@@ -474,7 +471,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SessionId")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("OrderId");
@@ -595,14 +591,12 @@ namespace SuperMarket_DataAccess.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StockId"), 1L, 1);
 
                     b.Property<int?>("BranchId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<int?>("Count")
                         .HasColumnType("int");
 
                     b.Property<int?>("ProductId")
-                        .IsRequired()
                         .HasColumnType("int");
 
                     b.HasKey("StockId");
@@ -742,9 +736,7 @@ namespace SuperMarket_DataAccess.Migrations
                 {
                     b.HasOne("SuperMarket_Models.Models.Coupon", "Coupon")
                         .WithMany()
-                        .HasForeignKey("CouponId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CouponId");
 
                     b.HasOne("SuperMarket_Models.Models.Customer", "Customer")
                         .WithMany()
@@ -810,15 +802,11 @@ namespace SuperMarket_DataAccess.Migrations
                 {
                     b.HasOne("SuperMarket_Models.Models.Branch", "Branch")
                         .WithMany()
-                        .HasForeignKey("BranchId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BranchId");
 
                     b.HasOne("SuperMarket_Models.Models.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Stock")
+                        .HasForeignKey("ProductId");
 
                     b.Navigation("Branch");
 
@@ -828,6 +816,8 @@ namespace SuperMarket_DataAccess.Migrations
             modelBuilder.Entity("SuperMarket_Models.Models.Product", b =>
                 {
                     b.Navigation("ImageProduct");
+
+                    b.Navigation("Stock");
                 });
 #pragma warning restore 612, 618
         }
