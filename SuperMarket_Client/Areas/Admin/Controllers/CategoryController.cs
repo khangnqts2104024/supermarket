@@ -82,18 +82,21 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         }
         public async Task<IActionResult> DeleteCategory(int id)
         {
-            var data = await unitOfWork.Brand_Category.GetFirstOrDefault(x => x.CategoryId == id);
-            if (data != null)
+            var data = await unitOfWork.Brand_Category.GetAll(x => x.CategoryId == id);
+
+            foreach (var item in data)
             {
-                ViewBag.msg = "This Category has product in it, can not delete unless delete all product.";
+                var temp = await unitOfWork.Product.GetFirstOrDefault(x => x.BrandCateId == item.BrandCateId);
+                if (temp != null)
+                {
+                    ViewBag.msg = "This Category has product in it, can not delete unless delete all product.";
+                    return RedirectToAction("Index");
+                }
             }
-            else
-            {
-                var data1 = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == id);
-                unitOfWork.Category.Remove(data1);
-                await unitOfWork.Save();
-                ViewBag.msg = "Category has beed deleted";
-            }
+            var data1 = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == id);
+            unitOfWork.Category.Remove(data1);
+            await unitOfWork.Save();
+            ViewBag.msg = "Category has beed deleted";
             return View();
         }
     }
