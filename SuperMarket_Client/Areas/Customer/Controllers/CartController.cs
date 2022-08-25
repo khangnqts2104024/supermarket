@@ -241,7 +241,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             }
 
                 var service = new SessionService();
-            //create a session for options based on SessionService
+                //create a session for options based on SessionService
                 Session session = service.Create(options);
                 unitOfWork.Order.UpdateStripePaymentId(shoppingCartVM.Order.OrderId, session.Id, session.PaymentIntentId);
                 await unitOfWork.Save();
