@@ -18,8 +18,9 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
         public async Task<IActionResult> AddCoupon(string couponCode)
         {
-        
-            var coupon =await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponCode.Equals(couponCode));
+        //check coupon
+
+            var coupon =await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponCode.Equals(couponCode) && c.ExpiredDate > DateTime.Now);
             if (coupon != null && coupon.Count > 0)
             {
 

@@ -315,7 +315,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 {
                     unitOfWork.Order.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
                     IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
-                    //
+                    //khang
                     if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }
                     //
                     unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
