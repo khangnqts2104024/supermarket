@@ -18,6 +18,6 @@ namespace SuperMarket_Models.Models
         public string CategoryName { get; set; }
         [Required]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public DateTime UpdateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
     }
 }
