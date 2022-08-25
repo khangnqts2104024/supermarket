@@ -204,19 +204,15 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             shoppingCartVM.Order.OrderDate = System.DateTime.Now;
             shoppingCartVM.Order.CustomerId = claim.Value;
             //khang
-
+            int dcPercent = 0;
             var usedCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(cpId));
             if (usedCoupon != null)
             {
                 shoppingCartVM.Order.Coupon = usedCoupon;
                 shoppingCartVM.Order.CouponId = usedCoupon.CouponId;
-
+                dcPercent = usedCoupon.DiscountPercent;
             }
-            else {
-                shoppingCartVM.Order.Coupon = new Coupon();
-                shoppingCartVM.Order.Coupon.DiscountPercent = 0;
-
-              }
+        
 
             decimal total = 0;
             //khang
@@ -226,7 +222,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                  total += item.Product.Price * item.Count;
 
             }
-            shoppingCartVM.Order.OrderTotal = total - total * shoppingCartVM.Order.Coupon.DiscountPercent / 100;
+
+            shoppingCartVM.Order.OrderTotal = total - total * dcPercent/ 100;
 
             //
             shoppingCartVM.Order.OrderStatus = SD.StatusPending;
@@ -266,7 +263,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     {
                         //khang
 
-                        UnitAmount = (long)(item.Product.Price*100*(100-shoppingCartVM.Order.Coupon.DiscountPercent)/100), //Product Price, 
+                        UnitAmount = (long)(item.Product.Price*100*(100-dcPercent)/100), //Product Price, 
                         Currency = "usd",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
