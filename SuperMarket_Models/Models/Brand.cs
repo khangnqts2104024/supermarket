@@ -31,6 +31,6 @@ namespace SuperMarket_Models.Models
         [StringLength(40)]
         public string Phone { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public DateTime UpdateDate { get; set; }
+        public DateTime? UpdateDate { get; set; }
     }
 }
