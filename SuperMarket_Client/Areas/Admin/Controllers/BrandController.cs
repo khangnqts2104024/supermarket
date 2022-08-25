@@ -77,37 +77,106 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             }
             return null;
         }
-        public async Task<IActionResult> AddBrandCategory()
+        public async Task<IActionResult> AddBrandCategory(int? id)
         {
-            var brand_catelist = JsonConvert.DeserializeObject<List<Brand_Category>>(TempData["brand_catelist"].ToString());
-            await unitOfWork.Brand_Category.AddRange(brand_catelist);
-            await unitOfWork.Save();
-            return RedirectToAction("CreateBrand", "Brand", new { message = "Brand has been Created." });
+            if (id==null)
+            {
+                var brand_catelist = JsonConvert.DeserializeObject<List<Brand_Category>>(TempData["brand_catelist"].ToString());
+                await unitOfWork.Brand_Category.AddRange(brand_catelist);
+                await unitOfWork.Save();
+                return RedirectToAction("CreateBrand", "Brand", new { message = "Brand has been Created." });
+            }
+            else
+            {
+                var brand_catelist = JsonConvert.DeserializeObject<List<Brand_Category>>(TempData["update_Brand"].ToString());
+                await unitOfWork.Brand_Category.AddRange(brand_catelist);
+                await unitOfWork.Save();
+                return RedirectToAction("UpdateBrand", "Brand", new { message = "Brand has been Updated.",id=id });
+            }
+            
         }
         [HttpGet]
         public async Task<IActionResult> UpdateBrand(int id)
         {
             var data = await unitOfWork.Brand.GetFirstOrDefault(x => x.BrandId == id);
-            var data1 = await unitOfWork.Brand_Category.GetFirstOrDefault(x => x.BrandId == id);
-            return View(data);
-        }
-        [HttpPost]
-        public async Task<IActionResult> UpdateBrand(Category obj)
-        {
-            var data = await unitOfWork.Category.GetAll();
-            foreach (var item in data)
+            var categoryList=await unitOfWork.Category.GetAll();
+            var categoryOfBrand=await unitOfWork.Brand_Category.GetAll(x=>x.BrandId==id,includeProperties: "Category");
+            var chosenCategory = new List<Category>();
+            var categoryLeft=new List<Category>();
+            foreach (var item in categoryList)
             {
-                if (item.CategoryName.Contains(obj.CategoryName))
+                int count = 0;
+                foreach (var chosen in categoryOfBrand)
                 {
-                    ViewBag.msg = "Categories has been Used. Try another.";
-                    return View();
+                    if (item.CategoryId == chosen.Category.CategoryId)
+                    {
+                        count++;
+                    }
+                }
+                if (count == 0)
+                {
+                    chosenCategory.Add(item);
                 }
                 else
                 {
-                    obj.UpdateDate = DateTime.Now;
-                    unitOfWork.Category.Update(obj);
-                    await unitOfWork.Save();
-                    ViewBag.msg = "Categories has been Updated.";
+                    categoryLeft.Add(item);
+                }
+            }
+
+
+            ViewBag.categoryLeft = new SelectList(chosenCategory, "CategoryId", "CategoryName");
+            ViewBag.chosenCategory = new List<Category>(categoryLeft);
+            return View(data);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateBrand(Brand obj, int[] CategoryId )
+        {
+            if (CategoryId == null)
+            {
+                var data = await unitOfWork.Brand.GetAll();
+                foreach (var item in data)
+                {
+                    if (item.BrandName.Contains(obj.BrandName))
+                    {
+                        ViewBag.msg = "Brand name has been Used. Try another.";
+                        return View();
+                    }
+                    else
+                    {
+                        obj.UpdateDate = DateTime.Now;
+                        unitOfWork.Brand.Update(obj);
+                        await unitOfWork.Save();
+                        ViewBag.msg = "Categories has been Updated.";
+                    }
+                }
+            }
+            else
+            {
+                var data = await unitOfWork.Brand.GetAll();
+                foreach (var item in data)
+                {
+                    if (item.BrandName.Contains(obj.BrandName))
+                    {
+                        ViewBag.msg = "Brand name has been Used. Try another.";
+                        return View();
+                    }
+                    else
+                    {
+                        List<Brand_Category> brand_Categories = new List<Brand_Category>();
+
+                        obj.UpdateDate = DateTime.Now;
+                        unitOfWork.Brand.Update(obj);
+                        await unitOfWork.Save();
+                        foreach (var temp in CategoryId)
+                        {
+                            var brand_Cate = new Brand_Category();
+                            brand_Cate.BrandId = obj.BrandId;
+                            brand_Cate.CategoryId = temp;
+                            brand_Categories.Add(brand_Cate);
+                        }
+                        TempData["update_Brand"] = JsonConvert.SerializeObject(brand_Categories);
+                        return RedirectToAction("AddBrandCategory", "Brand", new {id=obj.BrandId});
+                    }
                 }
             }
             return View();

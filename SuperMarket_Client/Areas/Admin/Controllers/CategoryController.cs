@@ -67,7 +67,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             {
                 if (item.CategoryName.Contains(obj.CategoryName))
                 {
-                    ViewBag.msg = "Categories has been Used. Try another.";
+                    ViewBag.msg = "Category name has been Used. Try another.";
                     return View();
                 }
                 else
