@@ -12,8 +12,8 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220824111932_SPM-K")]
-    partial class SPMK
+    [Migration("20220825084940_spm")]
+    partial class spm
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -302,6 +302,9 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Origin")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -311,6 +314,9 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
+
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("BrandId");
 
@@ -355,6 +361,9 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("UpdateDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
@@ -368,20 +377,22 @@ namespace SuperMarket_DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CouponId"), 1L, 1);
 
-                    b.Property<int>("Count")
+                    b.Property<int?>("Count")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("CouponCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DiscountPercent")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ExpiredDate")
+                    b.Property<DateTime?>("ExpiredDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.HasKey("CouponId");

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SuperMarket_DataAccess.Migrations
 {
-    public partial class SPMK : Migration
+    public partial class spm : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -80,7 +80,9 @@ namespace SuperMarket_DataAccess.Migrations
                     BrandName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Origin = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Address = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false)
+                    Phone = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -94,7 +96,8 @@ namespace SuperMarket_DataAccess.Migrations
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -109,7 +112,7 @@ namespace SuperMarket_DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CouponCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DiscountPercent = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ExpiredDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Count = table.Column<int>(type: "int", nullable: false)
                 },

@@ -26,7 +26,18 @@ namespace SuperMarket_DataAccess.Services
 
         public void Update(Brand obj)
         {
-            throw new NotImplementedException();
+            var objFromDb = _db.Brands.FirstOrDefault(x => x.BrandId == obj.BrandId);
+            if (objFromDb != null)
+            {
+
+                objFromDb.BrandName = obj.BrandName;
+                objFromDb.Origin = obj.Origin;
+                objFromDb.Phone = obj.Phone;
+                objFromDb.Address = obj.Address;
+                objFromDb.UpdateDate = obj.UpdateDate;
+
+                _db.Brands.Update(objFromDb);
+            }
         }
     }
 }
