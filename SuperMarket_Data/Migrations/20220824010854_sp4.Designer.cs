@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SuperMarket_DataAccess.Data;
 
@@ -11,9 +12,10 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220824010854_sp4")]
+    partial class sp4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -300,9 +302,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Origin")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -312,9 +311,6 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
-
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("datetime2");
 
                     b.HasKey("BrandId");
 
@@ -359,9 +355,6 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("UpdateDate")
-                        .HasColumnType("datetime2");
-
                     b.HasKey("CategoryId");
 
                     b.ToTable("Categories");
@@ -375,24 +368,20 @@ namespace SuperMarket_DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CouponId"), 1L, 1);
 
-                    b.Property<int?>("Count")
-                        .IsRequired()
+                    b.Property<int>("Count")
                         .HasColumnType("int");
 
                     b.Property<string>("CouponCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-
                     b.Property<DateTime>("CreatedDate")
-
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DiscountPercent")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ExpiredDate")
-                        .IsRequired()
+                    b.Property<DateTime>("ExpiredDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("CouponId");

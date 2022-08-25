@@ -34,11 +34,10 @@ namespace SuperMarket_Models.Models
         public string City { get; set; }
         public string? OrderNotes { get; set; }
 
-        public int? CouponId { get; set; }
+        public int? CouponId { get; set; } = null;
         [ForeignKey("CouponId")]
         [ValidateNever]
         public Coupon? Coupon { get; set; }
-
         public string CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         [ValidateNever]

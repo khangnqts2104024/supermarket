@@ -518,8 +518,22 @@ console.log(domain);
                 `;
             $('.table_body').append(markup_empty_cart);
         }
+    }
 
-        
+     function reloadCart(){
+        var container = $("#myComponentContainer");
+        var refreshComponent = function () {
+            $.ajax({
+                url: "/Customer/Home/CartListViewComponent",
+                type: "GET",
+                success: function (response) {
+                    container.html(response);
+                }
+            });
+         };
+         refreshComponent();
+        //$(function () { window.setInterval(refreshComponent, 1000); });
+
     }
 
     //CheckOut Page
@@ -528,9 +542,9 @@ console.log(domain);
         showDivWhenEmptyCart();
 
         $(".PlusItem_Checkout").on("click", function () {
-            var _cartId = $(this).data("cartid");
-            var otherInput = $(this).closest("div.quantity-block").find("input[name='cartCount']");
-            var subTotalItem = $("#subTotalItem_" + _cartId);
+            let _cartId = $(this).data("cartid");
+            let otherInput = $(this).closest("div.quantity-block").find("input[name='cartCount']");
+            let subTotalItem = $("#subTotalItem_" + _cartId);
             $.ajax({
                 url: "/Customer/Cart/Plus",
                 type: "POST",
@@ -540,6 +554,7 @@ console.log(domain);
                         otherInput.val(response.count);
                         subTotalItem.html("$" + response.subTotalItem + ".00");
                         $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
+                        reloadCart();
                     } else {
                     }
                 }
@@ -547,16 +562,17 @@ console.log(domain);
         });
 
         $(".RemoveItem_Checkout").on("click", function () {
-            var _cartId = $(this).data("cartid");
-            var tr = $(this).closest("tr");
+            let _cartId = $(this).data("cartid");
+            let tr = $(this).closest("tr");
             //var subTotalItem = $("#subTotalItem_" + _cartId);
             $.ajax({
                 url: "/Customer/Cart/RemoveItem",
                 type: "POST",
                 data: { cartId: _cartId},
-                success: function (response) {
+                success:  function (response) {
                     if (response.statusCode == 200 && response.actionClient == "removed") {
                         tr.remove();
+                         reloadCart();
                         if (response.subTotalOrder != undefined) {
                             $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
                         } else {
@@ -564,6 +580,29 @@ console.log(domain);
                         }
                         showDivWhenEmptyCart();
 
+                    }
+                }
+            });
+        });
+
+        $(".RemoveItem_CartList").on("click", function () {
+            let _cartId = $(this).data("cartid");
+            
+            let tr = $(".trForRemove_" + _cartId);
+            $.ajax({
+                url: "/Customer/Cart/RemoveItem",
+                type: "POST",
+                data: { cartId: _cartId },
+                success:  function (response) {
+                    if (response.statusCode == 200 && response.actionClient == "removed") {
+                        tr.remove(); 
+                        reloadCart();
+                        if (response.subTotalOrder != undefined) {
+                            $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
+                        } else {
+                            $("#subTotalOrder").html("$0.00");
+                        }
+                        showDivWhenEmptyCart();
                     }
                 }
             });
@@ -603,6 +642,7 @@ console.log(domain);
                                                 $("#subTotalOrder").html("$0.00");
                                             }
                                             showDivWhenEmptyCart();
+                                            reloadCart();
                                             Swal.fire(
                                                 'Deleted!',
                                                 'Your item has been removed.',
@@ -624,6 +664,7 @@ console.log(domain);
                             $("#subTotalOrder").html("$0.00");
                         }
                         showDivWhenEmptyCart();
+                        reloadCart();
 
                     } 
                 }
@@ -656,7 +697,7 @@ console.log(domain);
                                 showConfirmButton: false,
                                 timer: 1500
                             })
-
+                            reloadCart();
                             $("#Count").val(response.count);
                         }
                         
@@ -669,54 +710,6 @@ console.log(domain);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //KHANG COUPON
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    //
     // Custom Shop item add Option increase decrease home 3
     $(function() {
       (function quantityProducts() {
@@ -725,14 +718,10 @@ console.log(domain);
           var $quantityNum = $(".quantity-num");
         $quantityArrowMinus.click(quantityMinus);
           $quantityArrowPlus.click(quantityPlus);
-
-
-
           function quantityMinus() {
               if ($quantityNum.val() > 1) {
                   $quantityNum.val(+$quantityNum.val() - 1);
               }
-          
         }
         function quantityPlus() {
           $quantityNum.val(+$quantityNum.val() + 1);
