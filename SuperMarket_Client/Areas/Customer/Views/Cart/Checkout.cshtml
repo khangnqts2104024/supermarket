@@ -19,7 +19,8 @@
                                     <input name="couponCode" class="form-control coupon_input" type="search" placeholder="Coupon code" aria-label="Search">
                                     <button type="submit" class="btn btn2 btn-thm">Apply Coupon</button>
                                 </form>
-                                <p>@if(Model.Coupon == null){ @ViewBag.coupon;}</p>
+                                <br />
+                                <p class="text-danger">@if(Model.Coupon == null){ @ViewBag.coupon;}</p>
                             </div>
                         </div>
 
