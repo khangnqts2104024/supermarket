@@ -11,5 +11,6 @@ namespace SuperMarket_Models.ViewModels
     {
         public IEnumerable<ShoppingCart> ListCart { get; set; }
         public Order Order { get; set; }
+        public Coupon Coupon { get; set; }
     }
 }

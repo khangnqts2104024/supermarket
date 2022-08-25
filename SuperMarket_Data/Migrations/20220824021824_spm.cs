@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SuperMarket_DataAccess.Migrations
 {
-    public partial class spm : Migration
+    public partial class SPMK : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
