@@ -5,7 +5,6 @@ using SuperMarket_DataAccess.Repository.IRepository;
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
         [Area("Customer")]
-        [Authorize]
         public class HomeController : Controller
         {
             private readonly IUnitOfWork unitOfWork;

@@ -14,15 +14,16 @@ namespace SuperMarket_Models.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CouponId { get; set; }
         [Required]
-        public string CouponCode { get; set; }
+        public string? CouponCode { get; set; }
         [Required]
+        [Range(1,99)]
         public int DiscountPercent { get; set; }
   
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime? CreatedDate { get; set; } = DateTime.Now;
         [Required]
-        public DateTime ExpiredDate { get; set; }
+        public DateTime? ExpiredDate { get; set; }
         [Required]
-        public int Count { get; set; }
+        public int? Count { get; set; }
         [NotMapped]
         public virtual List<Product>? Products { set; get; }
     }

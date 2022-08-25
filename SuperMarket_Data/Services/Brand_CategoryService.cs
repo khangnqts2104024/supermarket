@@ -10,29 +10,23 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_DataAccess.Services
 {
-    public class CategoryService : Repository<Category>, ICategory
+    public class Brand_CategoryService : Repository<Brand_Category>, IBrand_Category
     {
-
-
         private readonly ApplicationDbContext _db;
-
-
-
-
-        public CategoryService(ApplicationDbContext db) : base(db)
+        public Brand_CategoryService(ApplicationDbContext db) : base(db)
         {
             _db = db;
         }
 
-        public void Update(Category obj)
+        public void Update(Brand_Category obj)
         {
-            var objFromDb = _db.Categories.FirstOrDefault(x => x.CategoryId == obj.CategoryId);
+            var objFromDb = _db.Brand_Categories.FirstOrDefault(x => x.BrandCateId == obj.BrandCateId);
             if (objFromDb != null)
             {
 
-                objFromDb.CategoryName = obj.CategoryName;
-                objFromDb.UpdateDate=obj.UpdateDate;
-                _db.Categories.Update(objFromDb);
+                objFromDb.CategoryId = obj.CategoryId;
+                objFromDb.BrandId = obj.BrandId;
+                _db.Brand_Categories.Update(objFromDb);
             }
         }
     }

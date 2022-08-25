@@ -19,9 +19,7 @@ namespace SuperMarket_DataAccess.Repository.IRepository
         IStock Stock { get; }
         ICoupon Coupon { get; }
         ICustomer Customer { get; }
-
-     
-
+        IBrand_Category Brand_Category { get; }
         Task<int> Save();
         void ClearTracking();
     }
