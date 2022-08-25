@@ -375,20 +375,22 @@ namespace SuperMarket_DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CouponId"), 1L, 1);
 
-                    b.Property<int>("Count")
+                    b.Property<int?>("Count")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<string>("CouponCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("DiscountPercent")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("ExpiredDate")
+                    b.Property<DateTime?>("ExpiredDate")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.HasKey("CouponId");
