@@ -278,7 +278,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             }
 
                 var service = new SessionService();
-            //create a session for options based on SessionService
+                //create a session for options based on SessionService
                 Session session = service.Create(options);
                 unitOfWork.Order.UpdateStripePaymentId(shoppingCartVM.Order.OrderId, session.Id, session.PaymentIntentId);
 
@@ -315,7 +315,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 {
                     unitOfWork.Order.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
                     IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
-                    //
+                    //khang
                     if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }
                     //
                     unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
