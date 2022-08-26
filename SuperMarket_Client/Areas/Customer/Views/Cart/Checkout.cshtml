@@ -15,12 +15,12 @@
                         <div class="checkout_form mt30">
                             <div class="checkout_coupon">
                                 @*khang coupon*@
-                                <form class="df db-520" id="applyCoupon" asp-action="AddCoupon" asp-controller="Coupon" asp-area="Customer">
-                                    <input name="couponCode" class="form-control coupon_input" type="search" placeholder="Coupon code" aria-label="Search">
-                                    <button type="submit" class="btn btn2 btn-thm">Apply Coupon</button>
+                                <form class="df db-520">
+                                    <input name="couponCode" id="couponField" class="form-control coupon_input" type="search" placeholder="Coupon code" aria-label="Search">
+                                    <button id="applyCouponBtn" type="submit" class="btn btn2 btn-thm">Apply Coupon</button>
                                 </form>
                                 <br />
-                                <p class="text-danger">@if(Model.Coupon == null){ @ViewBag.coupon;}</p>
+                               
                             </div>
                         </div>
 
@@ -58,8 +58,6 @@
                                     <div class="form-group">
                                         <label class="form-label">Phone *</label>
                                         <input style="padding-left:10px;" class="form-control form_control" type="text" asp-for="Order.Phone" required>
-                                        @*khang*@
-                                 @if(Model.Coupon != null){<input type="text" name="cpId" value="@Model.Coupon.CouponId" readonly hidden>}
                                     </div>
                                 </div>
 
@@ -72,6 +70,9 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <input type="text" name="cpId" id="cpId" value="" readonly >
+
                         </form>
                     </div>
                 </div>
@@ -99,19 +100,17 @@
                           <li class="subtitle"><hr></li>
 
                           @*khang*@
-                        <li class="subtitle"><p>Discount @if(Model.Coupon!=null){
-                                       <span class="float-end totals text-thm"> @((Model.Order.OrderTotal * Model.Coupon.DiscountPercent/100).ToString("c")) </span>
-                                        }
-                                         else{<span class="float-end totals text-thm"> 0 </span>}
-                               </p></li>
+                        <li class="subtitle"><p>Discount
+                            <span id="discountValue" class="float-end totals text-thm"> 0 </span>
+                                    </p></li>
                         <li class="subtitle"><hr></li>
 
                         @*khang*@
-                        <li class="subtitle"><p>Total @if(Model.Coupon!=null){
-                                       <span class="float-end totals text-thm"> @((Model.Order.OrderTotal * (100-Model.Coupon.DiscountPercent)/100).ToString("c")) </span>
-                                        }
-                                         else{<span class="float-end totals text-thm"> @Model.Order.OrderTotal </span>}</p></li>
+                        <li class="subtitle"><p>Total 
+                                       <span id="orderTotalValue" class="float-end totals text-thm"> @(Model.Order.OrderTotal.ToString("c")) </span>
+                                       </p></li>
                         <li class="subtitle"><hr></li>
+                        
 
                     </ul>
                     <div class="ui_kit_radiobox checkout">
