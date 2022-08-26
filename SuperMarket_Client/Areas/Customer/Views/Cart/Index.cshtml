@@ -33,15 +33,15 @@
                                                         <td>@item.Product.Price.ToString("c")</td>
                                                         <td>
                                                             <div class="quantity-block">
-                                                                <button type="button" class="MinusItem_Checkout quantity-arrow-minus inner_page" data-cartid=@item.CartId > - </button>
+                                                                <button type="button" class="MinusItem_Cart quantity-arrow-minus inner_page" data-cartid=@item.CartId > - </button>
                                                                      <input  class="cart_count text-center" asp-for="@item.Count" name="cartCount"  type="text" readonly>
-                                                                <button type="button"  class="PlusItem_Checkout quantity-arrow-plus inner_page"  data-cartid=@item.CartId > + </button>
+                                                                <button type="button"  class="PlusItem_Cart quantity-arrow-plus inner_page"  data-cartid=@item.CartId > + </button>
                                                             </div>
                                                            
                                                         </td>
                                                         <td id="subTotalItem_@(item.CartId)" class="text-thm">@((item.Product.Price * @item.Count).ToString("c"))</td>
                                                         
-                                                        <td><i style="cursor:pointer;" class="RemoveItem_Checkout fas fa-trash-alt" data-cartid=@item.CartId></i></td>
+                                                        <td><i style="cursor:pointer;" class="RemoveItem_Cart fas fa-trash-alt" data-cartid=@item.CartId></i></td>
                                                     </tr>
                                                 }
                                             </tbody>
@@ -69,8 +69,8 @@
                                             <li class="subtitle"><p>Subtotal <span id="subTotalOrder" class="float-end totals text-thm">@Model.Order.OrderTotal.ToString("c")</span></p></li>
 
                                         </ul>
-                                        <div class="ui_kit_button payment_widget_btn">
-                                           <a asp-action="Checkout"  asp-controller="Cart" asp-area="Customer" class="btn btn-thm btn-block">PROCEED TO CHECKOUT</a>
+                                        <div class="ui_kit_button payment_widget_btn proceedToCheckoutBtn">
+                                           <a class="btn btn-thm btn-block" id="ProceedCheckout">PROCEED TO CHECKOUT</a>
                                         </div>
                                     </div>
                                 </div>
@@ -82,6 +82,7 @@
         </div>
     </div>
 </section>
+
 
 
 
