@@ -2,16 +2,16 @@
 @{
 	ViewData["Title"] = "Create Brand";
 }
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/css/bootstrap-select.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.8.1/js/bootstrap-select.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/css/bootstrap-select.min.css" integrity="sha512-mR/b5Y7FRsKqrYZou7uysnOdCIJib/7r5QeJMFvLNHNhtye3xJp1TdJVPLtetkukFn227nKpXD9OjUc09lx97Q==" crossorigin="anonymous"
+  referrerpolicy="no-referrer" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js" integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <h3>@ViewData["Title"]</h3>
 <div class="row">
 	<div class="col-md-6">
 		<p>@ViewBag.msg</p>
-		<form id="profile-form" method="post" asp-action="CreateBrand">
+		<form id="profile-form" method="post" asp-action="CreateBrand" onsubmit="return confirm('Are you sure to Create?')">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<input asp-for="BrandId" type="hidden" />
 			<div class="form-floating">
@@ -39,7 +39,7 @@
 				<select class="form-control selectpicker" name="CategoryId" asp-items="@ViewBag.categoryList" multiple data-live-search="true">
 				</select>
 			</div>
-			<button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Create</button>
+			<button id="update-profile-button" type="submit" onclick="return ValidateForm()" class="w-100 btn btn-lg btn-primary">Create</button>
 		</form>
 	</div>
 </div>
@@ -47,7 +47,4 @@
 @section Scripts {
 	<partial name="_ValidationScriptsPartial" />
 }
-<script>
-	$('select').selectpicker();
-</script>
 
