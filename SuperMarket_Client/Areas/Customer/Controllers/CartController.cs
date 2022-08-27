@@ -42,7 +42,32 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 }
                 return View(shoppingCartVM);
             }
-            return View();
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CheckCount()
+        {
+            if (User.Identity != null)
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                var listCart = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value);
+                if(listCart != null)
+                {
+                    return Json(new
+                    {
+                        statusCode = 200,
+                        count = listCart.Count(),
+                    });
+                }
+            }
+            return Json(new
+            {
+                statusCode = 401,
+                message = "User login required!"
+            });
+
         }
 
         [HttpPost]
@@ -153,7 +178,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Checkout(string? cpCode)
+        public async Task<IActionResult> Checkout()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -162,7 +187,10 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 ListCart = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId.Equals(claim.Value), includeProperties: "Product"),
                 Order = new()
             };
-
+            if (shoppingCartVM.ListCart.Count() == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
             shoppingCartVM.Order.Customer = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id.Equals(claim.Value));
             if (shoppingCartVM.Order.Customer != null)
             {
@@ -172,16 +200,6 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 shoppingCartVM.Order.City = shoppingCartVM.Order.Customer.City;
                 shoppingCartVM.Order.Country = shoppingCartVM.Order.Customer.Country;
                 //khang check coupon
-
-
-                if (cpCode != "Expired")
-                {
-                    shoppingCartVM.Coupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponCode.Equals(cpCode));
-                }
-                else {
-
-                    ViewBag.coupon = "Coupon not exist or expired! Please check your coupon or contact our customer service department!";
-                }
 
 
                 //khang
@@ -297,8 +315,6 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             var orderDetails = await unitOfWork.OrderDetail.GetAll(x => x.OrderId == id, includeProperties: "Product");
             //
             //var useCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(order.CouponId));
-            
-
             //
             OrderVM orderVM = new OrderVM()
             {

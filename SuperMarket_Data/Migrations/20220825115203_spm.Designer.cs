@@ -12,7 +12,11 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<<< HEAD:SuperMarket_Data/Migrations/20220825115203_spm.Designer.cs
     [Migration("20220825115203_spm")]
+========
+    [Migration("20220825162314_spm")]
+>>>>>>>> Testing:SuperMarket_Data/Migrations/20220825162314_spm.Designer.cs
     partial class spm
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

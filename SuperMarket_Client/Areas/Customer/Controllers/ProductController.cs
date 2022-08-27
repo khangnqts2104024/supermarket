@@ -87,5 +87,27 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 message = "User Not Authenticated",
             });
         }
+
+        //khang ss/
+
+
+        public async Task<IActionResult> CompareProduct()
+        {
+
+
+            return View();
+        }
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }
