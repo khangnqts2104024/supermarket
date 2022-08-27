@@ -13,6 +13,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
+        [HttpGet]
         public async Task<IActionResult> Brand_CategoryManage()
         {
             var data = await unitOfWork.Brand_Category.GetAll(includeProperties: "Brand,Category");

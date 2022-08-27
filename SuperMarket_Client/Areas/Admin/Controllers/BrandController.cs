@@ -181,6 +181,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             }
             return View();
         }
+        [HttpDelete]
         public async Task<IActionResult> DeleteBrand(int id)
         {
             var data = await unitOfWork.Brand_Category.GetAll(x => x.BrandId == id);
@@ -190,15 +191,13 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 var temp = await unitOfWork.Product.GetFirstOrDefault(x => x.BrandCateId == item.BrandCateId);
                 if (temp != null)
                 {
-                    ViewBag.msg = "This Brand has product in it, can not delete unless delete all product.";
-                    return RedirectToAction("Index");
+                    return Json(new {success=false,msgFail= "This Brand has product in it, can not delete unless delete all product." });
                 }
             }
             var data1 = await unitOfWork.Brand.GetFirstOrDefault(x => x.BrandId == id);
             unitOfWork.Brand.Remove(data1);
             await unitOfWork.Save();
-            ViewBag.msg = "Brand has beed deleted";
-            return View();
+            return Json(new { success = true, msgSuccess = "Brand has beed deleted." });
         }
     }
 }
