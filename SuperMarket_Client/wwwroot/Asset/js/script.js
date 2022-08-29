@@ -1,5 +1,4 @@
-var domain ="https://"+ window.location.host;
-console.log(domain);
+var domain ="https://"+ window.location.host + "/";
 (function ($) {
     
     "use strict";
@@ -536,12 +535,13 @@ console.log(domain);
 
     }
 
-    //CheckOut Page
+
+    //Index Cart Page
     $(function () {
 
         showDivWhenEmptyCart();
 
-        $(".PlusItem_Checkout").on("click", function () {
+        $(".PlusItem_Cart").on("click", function () {
             let _cartId = $(this).data("cartid");
             let otherInput = $(this).closest("div.quantity-block").find("input[name='cartCount']");
             let subTotalItem = $("#subTotalItem_" + _cartId);
@@ -561,18 +561,38 @@ console.log(domain);
             });
         });
 
-        $(".RemoveItem_Checkout").on("click", function () {
+        $("#ProceedCheckout").on("click", function (e) {
+            $.ajax({
+                url: "/Customer/Cart/CheckCount",
+                type: "GET",
+                success: function (response) {
+                    console.log(response.count);
+                    if (response.statusCode == 200 && response.count != 0) {
+                        window.location.href = domain + "Customer/Cart/Checkout";
+                        return true;
+                    } else {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'Your cart is empty!',
+                        });
+                    }
+                }
+            });
+        });
+
+        $(".RemoveItem_Cart").on("click", function () {
             let _cartId = $(this).data("cartid");
             let tr = $(this).closest("tr");
             //var subTotalItem = $("#subTotalItem_" + _cartId);
             $.ajax({
                 url: "/Customer/Cart/RemoveItem",
                 type: "POST",
-                data: { cartId: _cartId},
-                success:  function (response) {
+                data: { cartId: _cartId },
+                success: function (response) {
                     if (response.statusCode == 200 && response.actionClient == "removed") {
                         tr.remove();
-                         reloadCart();
+                        reloadCart();
                         if (response.subTotalOrder != undefined) {
                             $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
                         } else {
@@ -587,15 +607,15 @@ console.log(domain);
 
         $(".RemoveItem_CartList").on("click", function () {
             let _cartId = $(this).data("cartid");
-            
+
             let tr = $(".trForRemove_" + _cartId);
             $.ajax({
                 url: "/Customer/Cart/RemoveItem",
                 type: "POST",
                 data: { cartId: _cartId },
-                success:  function (response) {
+                success: function (response) {
                     if (response.statusCode == 200 && response.actionClient == "removed") {
-                        tr.remove(); 
+                        tr.remove();
                         reloadCart();
                         if (response.subTotalOrder != undefined) {
                             $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
@@ -608,7 +628,7 @@ console.log(domain);
             });
         });
 
-        $(".MinusItem_Checkout").on("click", function () {
+        $(".MinusItem_Cart").on("click", function () {
             var _cartId = $(this).data("cartid");
             var otherInput = $(this).closest("div.quantity-block").find("input[name='cartCount']");
             var subTotalItem = $("#subTotalItem_" + _cartId);
@@ -666,15 +686,12 @@ console.log(domain);
                         showDivWhenEmptyCart();
                         reloadCart();
 
-                    } 
+                    }
                 }
 
             });
         });
-    })
-
-    //Add To Cart
-    $(document).on('ready', function () {
+        //Add To Cart
         $("#formAddCart").on('submit', function (e) {
             let userLogged = $("#manage").val();
             if (userLogged != undefined) {
@@ -700,12 +717,50 @@ console.log(domain);
                             reloadCart();
                             $("#Count").val(response.count);
                         }
-                        
+
                     }
                 });
-            } 
-            
+            }
+
         })
+
+    });
+
+      //Check out Page
+    $(function () {
+        $("#applyCouponBtn").on("click", function (e) {
+            e.preventDefault();
+            
+            let couponCode = $("#couponField").val();
+            $.ajax({
+                url: "/Customer/Coupon/AddCoupon",
+                type: "POST",
+                data: { couponCode: couponCode },
+                success: function (response) {
+                    console.log(response);
+                  
+                    if (response.cpCode == "Expired") {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'This Coupon Code Has Expired',
+                        });
+                    } else if (response.cpCode == "NotExists") {
+                        Swal.fire({
+                            icon: 'warning',
+                            title: 'Oops...',
+                            text: 'Coupon Code Not Exists!',
+                        });
+                    } else {
+                      
+                        $("#discountValue").text("$" + response.discountAmount)
+                        $("#orderTotalValue").text("$" + response.orderTotalAfterCoupon)
+                        $("#cpId").val(response.couponId);
+                    }
+                }
+                
+            });
+        });
     });
 
 

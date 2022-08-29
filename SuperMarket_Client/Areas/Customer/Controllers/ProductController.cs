@@ -17,15 +17,16 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            return View();
+            var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category,Brand_Category.Brand,Brand_Category.Category");
+            return View(data);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            if(id == 0)
+            if (id == 0)
             {
-                return RedirectToAction("Index", "Home", new {Area="Customer"});
+                return RedirectToAction("Index", "Home", new { Area = "Customer" });
             }
             ShoppingCart cartObj = new ShoppingCart()
             {
@@ -52,19 +53,20 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     {
                         shoppingCart.CustomerId = claim.Value;
                         var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CustomerId == claim.Value && x.ProductId == shoppingCart.ProductId);
-                        if(cartFromDb != null)
+                        if (cartFromDb != null)
                         {
                             unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
                             await unitOfWork.Save();
-                            return Json(new {
+                            return Json(new
+                            {
                                 statusCode = 200,
                                 message = "Updated Cart Successfully",
-                                count = 1, 
+                                count = 1,
                             });
                         }
                         else
                         {
-                           await unitOfWork.ShoppingCart.Add(shoppingCart);
+                            await unitOfWork.ShoppingCart.Add(shoppingCart);
                             await unitOfWork.Save();
                             return Json(new
                             {
@@ -79,10 +81,11 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
                 }
             }
-                return Json(new{
-                            statusCode = 401,
-                            message = "User Not Authenticated",
-                         });
+            return Json(new
+            {
+                statusCode = 401,
+                message = "User Not Authenticated",
+            });
         }
 
         //khang ss/
