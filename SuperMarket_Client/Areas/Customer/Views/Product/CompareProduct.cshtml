@@ -1,52 +1,513 @@
-﻿@model SuperMarket_Models.ViewModels.ProductVM
+﻿@using Newtonsoft.Json
+@using Newtonsoft.Json
+@model IEnumerable<SuperMarket_Models.Models.Product>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    .red {
+        background-color: red;
+        border: solid;
+    }
+
+    .blue {
+        background-color: blue;
+        border: solid;
+    }
+
+    .green {
+        background-color: green;
+        border: solid;
+    }
+
+    .compareItem {
+        width: 200px;
+    }
+
+
+    * {
+        box-sizing: border-box;
+    }
+
+    a {
+        text-decoration: none;
+        background-color: transparent;
+    }
+
+    .comparison-header {
+        position: relative;
+        margin: auto;
+        /* overflow: unset; */
+    }
+
+    .comparison-page {
+        font-size: 16px;
+    }
+
+        .comparison-page .modal-dialog a {
+            color: #1f2125 !important;
+        }
+
+        .comparison-page .btn-block {
+            font-weight: 600;
+            font-size: 20px;
+        }
+
+    .table {
+        table-layout: fixed;
+        margin: 0;
+    }
+
+    .product-picker {
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -ms-flex-pack: center;
+        justify-content: center;
+        background: #f8f9fa;
+        height: 200px;
+        color: #979797 !important;
+    }
+
+    .text-center {
+        text-align: center !important;
+    }
+
+    .break-line {
+        white-space: pre-line;
+    }
+
+    .comparison-page .specs button {
+        margin-top: 48px;
+        padding: 0 !important;
+    }
+
+    .btn {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 30px;
+        font-size: 0.92857rem;
+        border-radius: 3px;
+        transition: all 0.35s ease;
+        min-width: 110px;
+    }
+
+    .btn-block {
+        display: block;
+        width: 100%;
+    }
+
+    .transform {
+        transform: rotate(180deg);
+    }
+
+    .list-group {
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+
+    .list-group-item {
+        border: unset;
+        text-decoration: none;
+        display: block;
+        padding: 0.75rem 1.25rem;
+        margin-bottom: -1px;
+        background-color: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.125);
+    }
+
+    .active:after {
+        content: "\002B";
+        font-size: 25px;
+    }
+
+    #btnScrollTop {
+        bottom: 20px;
+        right: 30px;
+        z-index: 11111199;
+        border: none;
+        outline: none;
+        background-color: red;
+        color: white;
+        cursor: pointer;
+        padding: 15px;
+        border-radius: 10px;
+        font-size: 18px;
+    }
+
+        #btnScrollTop:hover {
+            background-color: #555;
+        }
+
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .content {
+        height: 50px;
+        overflow: auto;
+    }
+    
+        .card {
+            min-height: 100px;
+            max-height: 120px;
+            border-bottom: solid thin gainsboro;
+            text-align: left;
+            font-family: arial;
+            margin: 5px;
+            overflow: auto;
+
+        }
+</style>
+
+
+<body>
 
 
 
-<div class="container" >
 
-    <div>
-        <select>
-            <option>category</option>
-            <option>sasd</option>
-        </select>
-        @*MODAL*@
-        <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#product1">
-  Launch demo modal1
-</button>
+    <div class="">
 
-<!-- Modal -->
-<div class="modal fade" id="#product1" tabindex="-1" aria-labelledby="#product1Label" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="#product1Label">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        product 1
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+        <div class=" comparison-header table-responsive horizontal dragscroll" style="width: 60em;">
+            <table class="table table-compare">
+                <tbody>
+                    <tr >
+
+
+
+                        <td  id="compare-container" scope="col" class=" compareItem" data-picker="0" onclick="picker(this)">
+                            <div class="">
+                                <a class="checkbox text-center " href="" data-index="0">
+                                    <i class="fa fa-close" style="font-size:24px"></i>
+                                </a>
+                                <div class="blue  d-flex flex-column border-white justify-content-center ">
+                                    <img src="~/Images/default_avatar.jpg" alt="">
+                                    <div class="green flex-fill d-flex align-items-center content ">contentxw </div>
+                                </div>
+
+                                <hr class="mb-2">
+
+                            </div>
+                            <a class="product-picker text-center" style="text-align: center;" href="" data-index="0" data-bs-toggle="modal"
+                               data-bs-target="#exampleModal">
+                                <i class="fa fa-lg fa-plus"></i>
+                                <p class="text-center">Choose Product</p>
+                            </a>
+                        </td>
+
+
+
+                        <td scope="col" class=" compareItem" data-picker="1" onclick="picker(this)">
+                            <div class="">
+                                <a class="checkbox text-center " href="" data-index="1">
+                                    <i class="fa fa-close" style="font-size:24px"></i>
+                                </a>
+                                <div class="blue  d-flex flex-column border-white justify-content-center ">
+                                    <img src="../fpt.jpg" alt="">
+                                    <div class="green flex-fill d-flex align-items-center content">
+                                        content contentcontentcontentcontentcon
+
+                                        tentcontentcontentcontenta
+                                    </div>
+                                </div>
+
+                                <hr class="mb-2">
+
+                            </div>
+                            <a class="product-picker text-center" style="text-align: center;" href="" data-index="1" data-bs-toggle="modal"
+                               data-bs-target="#exampleModal">
+                                <i class="fa fa-lg fa-plus"></i>
+                                <p class="text-center">Choose Product</p>
+                            </a>
+                        </td>
+
+
+                        <td scope="col" class=" compareItem" data-picker="2" onclick="picker(this)">
+                            <div class="">
+                                <a class="checkbox text-center " href="" data-index="2">
+                                    <i class="fa fa-close" style="font-size:24px"></i>
+                                </a>
+                                <div class="blue  d-flex flex-column border-white justify-content-center ">
+                                    <img src="../fpt.jpg" alt="">
+                                    <div class="green flex-fill d-flex align-items-center content">content </div>
+                                </div>
+
+                                <hr class="mb-2">
+
+                            </div>
+                            <a class="product-picker text-center" style="text-align: center;" href="" data-index="2" data-bs-toggle="modal"
+                               data-bs-target="#exampleModal">
+                                <i class="fa fa-lg fa-plus"></i>
+                                <p class="text-center">Choose Product</p>
+                            </a>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- ok -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body" >
+                        <input type="text" oninput="searchProduct(this); return false;" />
+               
+
+
+                        <ul class="list-group list-group-flush" id="main">
+
+                        
+
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <div>
+            <div class="container comparison-page ">
+
+                <div class="comparison-header horizontal dragscroll" style="width: 1077px;">
+                    <h1>Product Compare</h1>
+                </div>
+                <div class="specs" style="margin-top: 0px;">
+
+
+
+
+                    <div id="product-container">
+
+
+                        <table class="table table-bordered table-compare table-striped-columns">
+                            <tbody class="break-line">
+                                     <tr  >
+                                    <th>ProductId</th>
+                                    <td data-index="0" data-field="ProductId" >
+                                      
+                                    </td>
+                                    <td data-index="1" data-field="ProductId">
+                                      
+                                    </td>
+                                    <td data-index="2" data-field="ProductId"></td>
+                                </tr>
+                                <tr>
+                                    <th>ProductName</th>
+                                    <td data-index="0" data-field="ProductName">
+                                      
+                                    </td>
+                                    <td data-index="1" data-field="ProductName">
+                                      
+                                    </td>
+                                    <td data-index="2" data-field="ProductName"></td>
+                                </tr>
+                                <tr>
+                                    <th>BrandName</th>
+                                    <td data-index="0" data-field="BrandName">
+                                      
+                                    </td>
+                                    <td data-index="1" data-field="BrandName">
+                                      
+                                    </td>
+                                    <td data-index="2" data-field="BrandName"></td>
+                                </tr>
+
+                                <tr>
+                                    <th>Origin</th>
+                                    <td data-index="0" data-field="Origin">
+                                      
+                                    </td>
+                                    <td data-index="1" data-field="Origin">
+                                      
+                                    </td>
+                                    <td data-index="2" data-field="Origin"></td>
+                                </tr>
+
+
+                                <tr>
+                                    <th>Price</th>
+                                    <td data-index="0" data-field="Price">
+                                     
+                                    </td>
+                                    <td data-index="1" data-field="Price">
+                                    
+                                    </td>
+                                    <td data-index="2" data-field="Price"></td>
+                                </tr>
+
+                                <tr>
+                                    <th>Weight</th>
+                                    <td data-index="0" data-field="Weight">
+                                    
+                                    </td>
+                                    <td data-index="1" data-field="Weight">
+                                
+                                    </td>
+                                    <td data-index="2" data-field="Weight"></td>
+                                </tr>
+                                <tr>
+                                    <th>ExpiryDate</th>
+                                    <td data-index="0" data-field="ExpiryDate">
+                                     
+                                    </td>
+                                    <td data-index="1" data-field="ExpiryDate">
+                                      
+                                    </td>
+                                    <td data-index="2" data-field="ExpiryDate"></td>
+                                </tr>
+
+                                <tr>
+                                    <th>Description</th>
+                                    <td data-index="0" data-field="Description">
+                                     
+                                    </td>
+                                    <td data-index="1" data-field="Description">
+                                      
+                                    </td>
+                                    <td data-index="2" data-field="Description"></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
     </div>
-  </div>
-</div>
 
-    </div>
-    <div class="d-flex justify-content-center p-2 flex-row">
-    <div  style="background-color:red;" class="col-md-4">
-        ss
-    </div>
+</body>
 
-    <div style="background-color:blue;" class="col-md-4">
-     d
-    </div>
- <div style="background-color:green;" class="col-md-4">
-  dg
-    </div>
+@section Scripts{
+    <script>
+        var jsObject = @Html.Raw(JsonConvert.SerializeObject(@Model));
 
-    </div>
+        var index;
+        var comparecolumn;
+        var product;
+        $(document).ready(function() {
 
-</div>
+            //console.log(jsObject);
+         
+
+
+            //product = jsObject.find(p => p.ProductId == 1);
+            //console.log(product);
+
+
+
+        });
+
+        function picker(picker) {
+            index = picker.getAttribute("data-picker");
+
+
+
+
+      
+        }
+        //choose product
+        function chooseproduct(productId) {
+            var productChoosed = productId.getAttribute("data-product");
+
+            product = jsObject.find(p => p.ProductId == productChoosed)
+           
+            comparecolumn = $('[data-index=' + index + ']');
+
+            //check same product!
+            var checkProduct = $('[data-field= ProductId]');
+            var flag=0;
+            for (var i = 0; i < checkProduct.length; i++) { 
+                if (checkProduct[i].innerHTML == productChoosed) { flag += 1; }
+            }
+            if(flag>0){ alert("This Product was choosed!");}
+            else
+            {
+            //console.log($('[data-field= ProductId]'));
+            column();
+             }
+            
+        }
+        //add info to html
+        function column() {
+
+            for (var i = 0; i < comparecolumn.length; i++) {
+                //
+
+                if (comparecolumn[i].getAttribute("data-field") === "ProductName") {
+                    comparecolumn[i].innerHTML = product.ProductName;
+                    // thay lai du lieu
+                } else if (comparecolumn[i].getAttribute("data-field") === "BrandName") {
+                    comparecolumn[i].innerHTML = product.Brand_Category.Brand.BrandName;
+                } else if (comparecolumn[i].getAttribute("data-field") === "Origin") {
+                    comparecolumn[i].innerHTML = product.Brand_Category.Brand.Origin;
+                } else if (comparecolumn[i].getAttribute("data-field") === "Price") {
+                    comparecolumn[i].innerHTML = product.Price;
+                } else if (comparecolumn[i].getAttribute("data-field") === "Weight") {
+                    comparecolumn[i].innerHTML = product.Weight;
+                } else if (comparecolumn[i].getAttribute("data-field") === "ExpiryDate") {
+                    comparecolumn[i].innerHTML = product.ExpiryDate;
+                } else if (comparecolumn[i].getAttribute("data-field") === "Description") {
+                    comparecolumn[i].innerHTML = product.Description;
+                } else if (comparecolumn[i].getAttribute("data-field") === "ProductId") {
+                    comparecolumn[i].innerHTML = product.ProductId;
+                }
+            }
+        
+
+        };
+        //search product in model(jvs).
+        function searchProduct(e) {
+            var sproduct = [];
+             $("#main").html(sproduct.join(""));
+            if (e.value != "") {
+            var search = jsObject.find(p => p.ProductName.includes(e.value));
+             }
+            console.log(search);
+            //search.forEach(info => {
+              sproduct.push(
+                    // html code for product
+                      
+                               
+                            
+                    ` <a id="myLink" title="" href="" data-product="${search.ProductId}" onclick="chooseproduct(this);return false;">
+                    <div class="card">
+                        <div>
+                            <div>
+                                <h2>${search.ProductName}</h2>
+                            </div>
+                    
+                            <div >
+                                <p class="comment">About: ${search.Title}</p>
+                            </div>
+                        </div>
+                    </div>
+                    </a>`
+
+                    // end
+                )
+            //});
+             $("#main").html(sproduct.join(""));
+        }
+
+    </script>
+}
+
+
