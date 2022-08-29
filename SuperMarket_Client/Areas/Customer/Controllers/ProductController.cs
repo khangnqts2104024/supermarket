@@ -93,7 +93,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
         public async Task<IActionResult> CompareProduct()
         {
-            var model = await unitOfWork.Product.GetAll(p => p.Brand_Category.CategoryId.Equals(1), includeProperties: "Brand_Category.Brand");
+            var model = await unitOfWork.Product.GetAll(p => p.Brand_Category.CategoryId.Equals(1), includeProperties: "Brand_Category.Brand,ImageProduct");
 
             return View(model);
         }

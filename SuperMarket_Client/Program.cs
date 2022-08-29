@@ -18,6 +18,8 @@ builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProvide
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+//add newtonsoftJson
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
@@ -46,6 +48,6 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
 
-    pattern: "{area=Customer}/{controller=Cart}/{action=Index}/{id?}");
+    pattern: "{area=Customer}/{controller=Product}/{action=CompareProduct}/{id?}");
 
 app.Run();
