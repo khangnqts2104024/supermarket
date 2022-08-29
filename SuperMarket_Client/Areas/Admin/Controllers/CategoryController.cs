@@ -33,7 +33,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 {
                     foreach (var item in data)
                     {
-                        if (item.CategoryName.Contains(obj.CategoryName))
+                        if (item.CategoryName==obj.CategoryName)
                         {
                             count++;
                         }
