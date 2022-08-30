@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using SuperMarket_DataAccess.Repository.IRepository;
 using SuperMarket_Models.Models;
 using System.Security.Claims;
@@ -91,9 +92,26 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         //khang ss/
 
 
-        public async Task<IActionResult> CompareProduct()
+        public async Task<IActionResult> CompareProduct(int? CategoryId, int? productId)
         {
-            var model = await unitOfWork.Product.GetAll(p => p.Brand_Category.CategoryId.Equals(1), includeProperties: "Brand_Category.Brand,ImageProduct");
+            if (CategoryId == null) { CategoryId = 1; }
+            
+           
+            var ListCategory = await unitOfWork.Category.GetAll();
+                   ViewBag.listCate = new SelectList(ListCategory, "CategoryId", "CategoryName");
+        
+                var cate= await unitOfWork.Category.GetFirstOrDefault(c => c.CategoryId.Equals(CategoryId));
+                 ViewBag.CateName = cate.CategoryName;
+         var product = await unitOfWork.Product.GetFirstOrDefault(p => p.ProductId.Equals(productId), includeProperties: "Brand_Category.Brand,ImageProduct");
+
+            if (product != null)
+            {
+                ViewBag.dProduct = product;
+            }
+            else { ViewBag.dProduct = null; }
+                
+
+            var model = await unitOfWork.Product.GetAll(p => p.Brand_Category.CategoryId.Equals(CategoryId), includeProperties: "Brand_Category.Brand,ImageProduct");
 
             return View(model);
         }
