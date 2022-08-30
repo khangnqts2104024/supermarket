@@ -1,0 +1,14 @@
+﻿@model List<Category>
+
+
+
+
+@foreach (var item in Model)
+{
+	<li>
+		<a href="#">
+			<span class="menu-icn flaticon-fish"></span>
+			<span class="menu-title">@item.CategoryName</span>
+		</a>
+	</li>
+}
