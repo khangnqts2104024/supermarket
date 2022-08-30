@@ -133,7 +133,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         {
             if (CategoryId == null)
             {
-                var data = await unitOfWork.Brand.GetAll();
+                var data = await unitOfWork.Brand.GetAll(x=>x.BrandId!=obj.BrandId);
                 foreach (var item in data)
                 {
                     if (item.BrandName.Contains(obj.BrandName))

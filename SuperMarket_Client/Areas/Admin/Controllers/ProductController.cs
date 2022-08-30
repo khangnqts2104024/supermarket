@@ -220,7 +220,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateProduct(int id)
         {
-            var data = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id,includeProperties:"Brand_Category.Brand,Brand_Category.Category");
+            var data = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category");
             var imgList = await unitOfWork.ImageProduct.GetAll(x => x.ProductId == id);
             ViewBag.imgList = imgList;
             return View(data);
@@ -512,6 +512,22 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             await unitOfWork.Save();
 
             return RedirectToAction("UpdateProduct", new { id = obj.ProductId });
+        }
+
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            var check=await unitOfWork.Stock.GetFirstOrDefault(x=>x.ProductId==id);
+            if (check != null)
+            {
+                return Json(new { success = false });
+            }
+            else
+            {
+                var data = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id);
+                unitOfWork.Product.Remove(data);
+                await unitOfWork.Save();
+                return Json(new { success = true });
+            }
         }
     }
 }
