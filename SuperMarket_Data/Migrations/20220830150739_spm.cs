@@ -97,7 +97,8 @@ namespace SuperMarket_DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CategoryImg = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

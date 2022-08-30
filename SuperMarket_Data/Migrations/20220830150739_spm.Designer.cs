@@ -12,7 +12,7 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220827081455_spm")]
+    [Migration("20220830150739_spm")]
     partial class spm
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -353,6 +353,10 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"), 1L, 1);
+
+                    b.Property<string>("CategoryImg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CategoryName")
                         .IsRequired()

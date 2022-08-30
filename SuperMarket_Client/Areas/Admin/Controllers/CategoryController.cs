@@ -8,9 +8,12 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
     public class CategoryController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
-        public CategoryController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment env;
+
+        public CategoryController(IUnitOfWork unitOfWork, IWebHostEnvironment env)
         {
             this.unitOfWork = unitOfWork;
+            this.env = env;
         }
 
         public async Task<IActionResult> Index()
@@ -23,8 +26,10 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateCategory(SuperMarket_Models.Models.Category obj)
+        public async Task<IActionResult> CreateCategory(SuperMarket_Models.Models.Category obj, IFormFile CategoryImg)
         {
+            string wwwRootPath = env.WebRootPath;
+
             if (obj != null)
             {
                 var data = await unitOfWork.Category.GetAll();
@@ -33,7 +38,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 {
                     foreach (var item in data)
                     {
-                        if (item.CategoryName==obj.CategoryName)
+                        if (item.CategoryName == obj.CategoryName)
                         {
                             count++;
                         }
@@ -45,6 +50,14 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                     }
                     else
                     {
+                        string fileName = Guid.NewGuid().ToString();
+                        var uploads = Path.Combine(wwwRootPath, @"Images\CategoryImage");
+                        var extension = Path.GetExtension(CategoryImg.FileName);
+                        using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                        {
+                            CategoryImg.CopyTo(fileStreams);
+                        }
+                        obj.CategoryImg = @"\Images\CategoryImage\" + fileName + extension;
                         await unitOfWork.Category.Add(obj);
                         await unitOfWork.Save();
                         ViewBag.msg = "Categories has been Created.";
@@ -54,31 +67,102 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> UpdateCategory(int id)
+        public async Task<IActionResult> UpdateCategory(int id,string? msg)
         {
+            if (msg!=null){
+                ViewBag.msg = msg;
+            }
             var data = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == id);
             return View(data);
         }
         [HttpPost]
-        public async Task<IActionResult> UpdateCategory(SuperMarket_Models.Models.Category obj)
+        public async Task<IActionResult> UpdateCategory(SuperMarket_Models.Models.Category obj, IFormFile CategoryImg)
         {
-            var data = await unitOfWork.Category.GetAll(x=>x.CategoryId!=obj.CategoryId);
-            foreach (var item in data)
+            var data = await unitOfWork.Category.GetAll(x => x.CategoryId != obj.CategoryId);
+            string wwwRootPath = env.WebRootPath;
+            if (data.Count()==0)
             {
-                if (item.CategoryName.Contains(obj.CategoryName))
+                if (CategoryImg != null)
                 {
-                    ViewBag.msg = "Category name has been Used. Try another.";
-                    return View();
-                }
-                else
-                {
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(wwwRootPath, @"Images\CategoryImage");
+                    var extension = Path.GetExtension(CategoryImg.FileName);
+                    var temp = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == obj.CategoryId);
+                    var oldImgPath = Path.Combine(wwwRootPath, temp.CategoryImg.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImgPath))
+                    {
+                        System.IO.File.Delete(oldImgPath);
+                    }
+
+                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        CategoryImg.CopyTo(fileStreams);
+                    }
+                    obj.CategoryImg = @"\Images\CategoryImage\" + fileName + extension;
                     obj.UpdateDate = DateTime.Now;
                     unitOfWork.Category.Update(obj);
                     await unitOfWork.Save();
-                    ViewBag.msg = "Categories has been Updated.";
+                    return RedirectToAction("UpdateCategory", new { msg = "Categories has been Updated." });
                 }
+                else
+                {
+                    var temp = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == obj.CategoryId);
+                    obj.CategoryImg = temp.CategoryImg;
+                    obj.UpdateDate = DateTime.Now;
+                    unitOfWork.Category.Update(obj);
+                    await unitOfWork.Save();
+                    return RedirectToAction("UpdateCategory", new { msg = "Categories has been Updated." });
+                }
+                
             }
-            return View();
+            else
+            {
+                foreach (var item in data)
+                {
+                    if (item.CategoryName.Contains(obj.CategoryName))
+                    {
+                        return RedirectToAction("UpdateCategory", new { msg = "Category name has been Used. Try another." });
+                    }
+                    else
+                    {
+                        if(CategoryImg != null)
+                        {
+                            string fileName = Guid.NewGuid().ToString();
+                            var uploads = Path.Combine(wwwRootPath, @"Images\CategoryImage");
+                            var extension = Path.GetExtension(CategoryImg.FileName);
+                            var temp = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == obj.CategoryId);
+                            var oldImgPath = Path.Combine(wwwRootPath, temp.CategoryImg.TrimStart('\\'));
+                            if (System.IO.File.Exists(oldImgPath))
+                            {
+                                System.IO.File.Delete(oldImgPath);
+                            }
+
+                            using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                            {
+                                CategoryImg.CopyTo(fileStreams);
+                            }
+                            obj.CategoryImg = @"\Images\CategoryImage\" + fileName + extension;
+                            obj.UpdateDate = DateTime.Now;
+                            unitOfWork.Category.Update(obj);
+                            await unitOfWork.Save();
+                            return RedirectToAction("UpdateCategory", new { msg = "Categories has been Updated." });
+                        }
+                        else
+                        {
+                            var temp = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == obj.CategoryId);
+                            obj.CategoryImg = temp.CategoryImg;
+                            obj.UpdateDate = DateTime.Now;
+                            unitOfWork.Category.Update(obj);
+                            await unitOfWork.Save();
+                            return RedirectToAction("UpdateCategory", new { msg = "Categories has been Updated." });
+                        }
+                        
+
+                    }
+                }
+            
+            }
+            return null;
         }
         public async Task<IActionResult> DeleteCategory(int id)
         {
