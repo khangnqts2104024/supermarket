@@ -20,7 +20,15 @@ namespace SuperMarket_DataAccess.Services
 
         public void Update(ImageProduct obj)
         {
-            throw new NotImplementedException();
+            var objFromDb = _db.ImageProducts.FirstOrDefault(x => x.ImageId == obj.ImageId);
+            if (objFromDb != null)
+            {
+
+                objFromDb.Url = obj.Url;
+                objFromDb.ProductId = obj.ProductId;
+                
+                _db.ImageProducts.Update(objFromDb);
+            }
         }
     }
 }

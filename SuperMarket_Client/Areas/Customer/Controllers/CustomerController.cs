@@ -38,7 +38,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             if (file != null)
             {
                 string fileName = Guid.NewGuid().ToString();
-                var uploads = Path.Combine(wwwRootPath, @"Images");
+                var uploads = Path.Combine(wwwRootPath, @"Images\CustomerAvatar");
                 var extension = Path.GetExtension(file.FileName);
 
                 if (customer.CustomerAvatar != null)
@@ -54,7 +54,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 {
                     file.CopyTo(fileStreams);
                 }
-                customer.CustomerAvatar = @"\Images\" + fileName + extension;
+                customer.CustomerAvatar = @"\Images\CustomerAvatar\" + fileName + extension;
                 unitOfWork.Customer.Update(customer);
                 await unitOfWork.Save();
                 return RedirectToAction("Index", new { id = customer.Id });

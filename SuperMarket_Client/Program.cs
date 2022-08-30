@@ -46,6 +46,6 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
 
-    pattern: "{area=Customer}/{controller=Cart}/{action=Index}/{id?}");
+    pattern: "{area=Admin}/{controller=Brand_Category}/{action=Brand_CategoryManage}/{id?}");
 
 app.Run();

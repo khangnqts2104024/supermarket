@@ -62,7 +62,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateCategory(SuperMarket_Models.Models.Category obj)
         {
-            var data = await unitOfWork.Category.GetAll();
+            var data = await unitOfWork.Category.GetAll(x=>x.CategoryId!=obj.CategoryId);
             foreach (var item in data)
             {
                 if (item.CategoryName.Contains(obj.CategoryName))

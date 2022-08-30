@@ -18,6 +18,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         public async Task<IActionResult> Index()
         {
             var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category,Brand_Category.Brand,Brand_Category.Category");
+            var categoryList = await unitOfWork.Category.GetAll();
+            ViewBag.categoryList=categoryList;
             return View(data);
         }
 
