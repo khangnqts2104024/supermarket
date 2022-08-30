@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using SuperMarket_DataAccess.Repository.IRepository;
 using SuperMarket_Models.Models;
+using SuperMarket_Models.ViewModels;
 using System.Security.Claims;
 
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [BranchActionFilter]
     public class ProductController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -15,6 +17,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
+
         public async Task<IActionResult> Index()
         {
             var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category,Brand_Category.Brand,Brand_Category.Category");
@@ -24,24 +27,61 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-            if (id == 0)
+
+            int? branchId = HttpContext.Session.GetInt32("branchId");
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (id == 0 || branchId == null)
+
             {
                 return RedirectToAction("Index", "Home", new { Area = "Customer" });
             }
-            ShoppingCart cartObj = new ShoppingCart()
+            ShoppingCart cart = new ShoppingCart()
             {
                 Count = 1,
                 ProductId = id,
-                Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category", thenIncludeProperties: "Brand,Category"),
-
+                Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock.Branch"),
             };
-            return View(cartObj);
-        }
+            Cart_Feedback_RatingVM objVM = new Cart_Feedback_RatingVM()
+            {
+               ShoppingCart = cart,
+               branchId = (int)branchId,
+               Feedback_RatingList = (List<Feedback_Rating>)await unitOfWork.Feedback_Rating.GetAll(x=>x.ProductId == id,includeProperties:"Product,Customer"),
+               //Rating = (List<Rating>)await unitOfWork.Rating.GetAll(x => x.ProductId == id,includeProperties: "Product,Customer"),
+            };
 
+            //var feedback_rating = from feedback in objVM.Feedback
+            //                      join rating in objVM.Rating
+            //                      on new { X1 = feedback.ProductId, X2 = feedback.CustomerId } equals new { X1= rating.ProductId, X2 = rating.CustomerId }
+            //                      select new Feedback_Rating {
+            //                        ProductId = feedback.ProductId,
+            //                        CustomerId = feedback.CustomerId,
+            //                        Content = feedback.Content,
+            //                        FullName = feedback.Customer.FullName,
+            //                        PostedDate = feedback.PostedDate,
+            //                        RatingPoint = rating.RatingPoint,
+            //                      };
+            
+            
+            
+         
+            objVM.RatingPointAverage = CalculateRatingPointAverage(objVM.Feedback_RatingList, id);
+
+
+            if (objVM.ShoppingCart.Product != null)
+            {
+                var stockByBranchID = objVM.ShoppingCart.Product.Stock.FirstOrDefault(x => x.BranchId == branchId && x.ProductId == id);
+                objVM.StockCount = (int)stockByBranchID.Count;
+            }
+            objVM.FeedbackCount = objVM.Feedback_RatingList.Count();
+
+
+            return View(objVM);
+        }
+      
         [HttpPost]
-        //[ValidateAntiForgeryToken]
         [Authorize]
-        public async Task<IActionResult> Details(ShoppingCart shoppingCart)
+        public async Task<IActionResult> Details(Cart_Feedback_RatingVM objVM)
         {
             if (User.Identity != null)
             {
@@ -51,11 +91,26 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
                     if (claim != null)
                     {
-                        shoppingCart.CustomerId = claim.Value;
-                        var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CustomerId == claim.Value && x.ProductId == shoppingCart.ProductId);
+
+                        objVM.ShoppingCart.CustomerId = claim.Value;
+                        var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CustomerId == claim.Value && x.ProductId == objVM.ShoppingCart.ProductId);
+
                         if (cartFromDb != null)
                         {
-                            unitOfWork.ShoppingCart.IncrementCount(cartFromDb, shoppingCart.Count);
+
+                            var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == objVM.branchId && x.ProductId == objVM.ShoppingCart.ProductId);
+
+                            if (objVM.ShoppingCart.Count + cartFromDb.Count > stock.Count)
+                            {
+                                return Json(new
+                                {
+                                    statusCode = 400,
+                                    message = "The product you have selected has reached a limited quantity",
+                                    count = 1,
+                                });
+                            }
+
+                            unitOfWork.ShoppingCart.IncrementCount(cartFromDb, objVM.ShoppingCart.Count);
                             await unitOfWork.Save();
                             return Json(new
                             {
@@ -66,7 +121,20 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         }
                         else
                         {
-                            await unitOfWork.ShoppingCart.Add(shoppingCart);
+
+                            var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == objVM.branchId && x.ProductId == objVM.ShoppingCart.ProductId);
+
+                            if (objVM.ShoppingCart.Count > stock.Count)
+                            {
+                                return Json(new
+                                {
+                                    statusCode = 400,
+                                    message = "The product you have selected has reached a limited quantity",
+                                    count = 1,
+                                });
+                            }
+                            await unitOfWork.ShoppingCart.Add(objVM.ShoppingCart);
+
                             await unitOfWork.Save();
                             return Json(new
                             {
@@ -75,10 +143,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                                 count = 1,
                             });
                         }
-
-
                     }
-
                 }
             }
             return Json(new
@@ -88,6 +153,54 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             });
         }
 
+        
+        public  int CalculateRatingPointAverage(List<Feedback_Rating> ratingListByProductId,int productId)
+        {
+            var result = ratingListByProductId.Where(x => x.ProductId == productId)
+                .GroupBy(x => x.RatingPoint).Select(
+                g => new
+                {
+                    RatingPoint = g.Key,
+                    Count = g.Count()
+                }
+                ).ToList();
+
+            int numOf1Star = 0;
+            int numOf2Star = 0;
+            int numOf3Star = 0;
+            int numOf4Star = 0;
+            var numOf5Star = 0;
+
+            if (result.FirstOrDefault(x => x.RatingPoint == 1) != null)
+            {
+                numOf1Star = result.FirstOrDefault(x => x.RatingPoint == 1).Count;
+            }
+            if (result.FirstOrDefault(x => x.RatingPoint == 2) != null)
+            {
+                numOf2Star = result.FirstOrDefault(x => x.RatingPoint == 2).Count;
+            }
+            if (result.FirstOrDefault(x => x.RatingPoint == 3) != null)
+            {
+                numOf3Star = result.FirstOrDefault(x => x.RatingPoint == 3).Count;
+            }
+            if (result.FirstOrDefault(x => x.RatingPoint == 4) != null)
+            {
+                numOf4Star = result.FirstOrDefault(x => x.RatingPoint == 4).Count;
+            }
+            if (result.FirstOrDefault(x => x.RatingPoint == 5) != null)
+            {
+                numOf5Star = result.FirstOrDefault(x => x.RatingPoint == 5).Count;
+            }
+            int totalNumberOfRating = ratingListByProductId.Count();
+            if(totalNumberOfRating == 0)
+            {
+                totalNumberOfRating = 1;
+            }
+            
+            return (int)(1 * numOf1Star + 2 * numOf2Star + 3 * numOf3Star + 4 * numOf4Star + 5 * numOf5Star) / totalNumberOfRating;
+        }    
+
+   
         //khang ss/
 
 

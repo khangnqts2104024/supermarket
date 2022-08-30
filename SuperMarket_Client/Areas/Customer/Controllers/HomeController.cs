@@ -19,6 +19,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             {
                 try
                 {
+                    HttpContext.Session.SetInt32("branchId", 1);
                     var data = await unitOfWork.Product.GetAll(includeProperties: "ImageProduct,Brand_Category.Category");
 
                     return View(data);
@@ -42,6 +43,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             return ViewComponent("CartList");
         }
+
+        
     }
     
 }

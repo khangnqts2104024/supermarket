@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+
+using SuperMarket_Models.Models;
 
 namespace SuperMarket_DataAccess.Repository.IRepository
 {
@@ -20,6 +18,8 @@ namespace SuperMarket_DataAccess.Repository.IRepository
         ICoupon Coupon { get; }
         ICustomer Customer { get; }
         IBrand_Category Brand_Category { get; }
+        IFeedback_Rating Feedback_Rating { get; }
+
         Task<int> Save();
         void ClearTracking();
     }

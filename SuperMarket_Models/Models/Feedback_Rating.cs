@@ -9,25 +9,21 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_Models.Models
 {
-    public class ShoppingCart
+    public class Feedback_Rating
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CartId { get; set; }
-        [Required]
-        public int Count { get; set; }
+        public int Id { get; set; }
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
         [ValidateNever]
         public Product Product { get; set; }
-
         public string CustomerId { get; set; }
         [ForeignKey("CustomerId")]
         [ValidateNever]
         public Customer Customer { get; set; }
-
-        
-
-
+        public int RatingPoint { get; set; }
+        public string Content { get; set; }
+        public DateTime PostedDate { get; set; }
     }
 }

@@ -52,5 +52,7 @@ namespace SuperMarket_Models.Models
         public virtual List<ImageProduct> ImageProduct { get; set; }
 
         public List<Stock>? Stock { get; set; }
+
+       
     }
 }
