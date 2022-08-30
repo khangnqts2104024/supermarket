@@ -9,8 +9,9 @@ namespace SuperMarket_Models.ViewModels
 {
     public class ShoppingCartVM
     {
-        public IEnumerable<ShoppingCart> ListCart { get; set; }
+        public List<ShoppingCart> ListCart { get; set; }
         public Order Order { get; set; }
         public Coupon Coupon { get; set; }
+        
     }
 }

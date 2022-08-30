@@ -6,17 +6,17 @@ using SuperMarket_Models.Models;
 
 namespace SuperMarket_DataAccess.Services
 {
-    public class OrderDetailService : Repository<OrderDetail>, IOrderDetail
+    public class Feedback_RatingService : Repository<Feedback_Rating>, IFeedback_Rating
     {
         private readonly ApplicationDbContext _db;
-        public OrderDetailService(ApplicationDbContext db) : base(db)
+        public Feedback_RatingService(ApplicationDbContext db):base(db)
         {
             _db = db;
         }
 
-        public void Update(OrderDetail obj)
+        public void Update(Feedback_Rating obj)
         {
-            throw new NotImplementedException();
+
         }
     }
 }

@@ -48,5 +48,7 @@ namespace SuperMarket_Models.Models
         public List<ImageProduct> ImageProduct { get; set; }
 
         public List<Stock>? Stock { get; set; }
+
+       
     }
 }

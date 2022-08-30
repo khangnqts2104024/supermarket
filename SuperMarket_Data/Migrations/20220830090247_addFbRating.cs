@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SuperMarket_DataAccess.Migrations
 {
-    public partial class spm : Migration
+    public partial class addFbRating : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -340,6 +340,35 @@ namespace SuperMarket_DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Feedback_Ratings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RatingPoint = table.Column<int>(type: "int", nullable: false),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Feedback_Ratings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Feedback_Ratings_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Feedback_Ratings_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "ProductId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ImageProducts",
                 columns: table => new
                 {
@@ -495,6 +524,16 @@ namespace SuperMarket_DataAccess.Migrations
                 column: "CategoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Feedback_Ratings_CustomerId",
+                table: "Feedback_Ratings",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Feedback_Ratings_ProductId",
+                table: "Feedback_Ratings",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ImageProducts_ProductId",
                 table: "ImageProducts",
                 column: "ProductId");
@@ -564,6 +603,9 @@ namespace SuperMarket_DataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "Bills");
+
+            migrationBuilder.DropTable(
+                name: "Feedback_Ratings");
 
             migrationBuilder.DropTable(
                 name: "ImageProducts");
