@@ -18,15 +18,23 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             this.unitOfWork = unitOfWork;
         }
 
+        public async Task<IActionResult> Index()
+        {
+            var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category,Brand_Category.Brand,Brand_Category.Category");
+            return View(data);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
+
             int? branchId = HttpContext.Session.GetInt32("branchId");
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if (id == 0 || branchId == null)
+
             {
-                return RedirectToAction("Index", "Home", new {Area="Customer"});
+                return RedirectToAction("Index", "Home", new { Area = "Customer" });
             }
             ShoppingCart cart = new ShoppingCart()
             {
@@ -83,8 +91,10 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
                     if (claim != null)
                     {
+
                         objVM.ShoppingCart.CustomerId = claim.Value;
                         var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CustomerId == claim.Value && x.ProductId == objVM.ShoppingCart.ProductId);
+
                         if (cartFromDb != null)
                         {
 
@@ -102,14 +112,16 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
                             unitOfWork.ShoppingCart.IncrementCount(cartFromDb, objVM.ShoppingCart.Count);
                             await unitOfWork.Save();
-                            return Json(new {
+                            return Json(new
+                            {
                                 statusCode = 200,
                                 message = "Updated Cart Successfully",
-                                count = 1, 
+                                count = 1,
                             });
                         }
                         else
                         {
+
                             var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == objVM.branchId && x.ProductId == objVM.ShoppingCart.ProductId);
 
                             if (objVM.ShoppingCart.Count > stock.Count)
@@ -122,6 +134,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                                 });
                             }
                             await unitOfWork.ShoppingCart.Add(objVM.ShoppingCart);
+
                             await unitOfWork.Save();
                             return Json(new
                             {
@@ -133,10 +146,11 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     }
                 }
             }
-                return Json(new{
-                            statusCode = 401,
-                            message = "User Not Authenticated",
-                         });
+            return Json(new
+            {
+                statusCode = 401,
+                message = "User Not Authenticated",
+            });
         }
 
         
@@ -192,9 +206,9 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
         public async Task<IActionResult> CompareProduct()
         {
+            var model = await unitOfWork.Product.GetAll(p => p.Brand_Category.CategoryId.Equals(1), includeProperties: "Brand_Category.Brand,ImageProduct");
 
-
-            return View();
+            return View(model);
         }
 
 
