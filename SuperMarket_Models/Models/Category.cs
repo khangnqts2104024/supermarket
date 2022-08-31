@@ -19,5 +19,6 @@ namespace SuperMarket_Models.Models
         [Required]
         public DateTime CreatedDate { get; set; } = DateTime.Now;
         public DateTime? UpdateDate { get; set; }
+        public string CategoryImg { get; set; }
     }
 }

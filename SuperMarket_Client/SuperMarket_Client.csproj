@@ -32,4 +32,9 @@
     <ProjectReference Include="..\SuperMarket_Utility\SuperMarket_Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Images\CategoryImage\" />
+    <Folder Include="wwwroot\Images\ProductImage\" />
+  </ItemGroup>
+
 </Project>

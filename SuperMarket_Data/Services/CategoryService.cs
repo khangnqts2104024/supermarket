@@ -28,6 +28,7 @@ namespace SuperMarket_DataAccess.Services
 
                 objFromDb.CategoryName = obj.CategoryName;
                 objFromDb.UpdateDate=obj.UpdateDate;
+                objFromDb.CategoryImg=obj.CategoryImg;
                 _db.Categories.Update(objFromDb);
             }
         }

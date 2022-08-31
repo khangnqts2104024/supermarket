@@ -43,90 +43,25 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="shop_item_8grid_slider nav_none dots_none">
-					<div class="item">
+					@foreach (Category item in @ViewBag.CategoryList)
+					{
+						<div class="item">
 						<a href="page-shop-list-v6.html">
 							<div class="iconbox">
-								<div class="icon"><img src="images/icons/food-grocery.png" alt="food-grocery.png"></div>
+								<div class="icon"><img src="@item.CategoryImg" alt="food-grocery.png"></div>
 								<div class="details">
-									<h5 class="title">Food & Grocery</h5>
+									<h5 class="title">@item.CategoryName</h5>
 								</div>
 							</div>
 						</a>
 					</div>
-					<div class="item">
-						<a href="page-shop-list-v6.html">
-							<div class="iconbox">
-								<div class="icon"><img src="images/icons/bakery-bread.png" alt="bakery-bread.png"></div>
-								<div class="details">
-									<h5 class="title">Bakery</h5>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="item">
-						<a href="page-shop-list-v6.html">
-							<div class="iconbox">
-								<div class="icon"><img src="images/icons/vegetable.png" alt="vegetable.png"></div>
-								<div class="details">
-									<h5 class="title">Vegetables</h5>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="item">
-						<a href="page-shop-list-v6.html">
-							<div class="iconbox">
-								<div class="icon"><img src="images/icons/fruit-pinapple.png" alt="fruit-pinapple.png"></div>
-								<div class="details">
-									<h5 class="title">Fruits</h5>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="item">
-						<a href="page-shop-list-v6.html">
-							<div class="iconbox">
-								<div class="icon"><img src="images/icons/seafood-fish.png" alt="seafood-fish.png"></div>
-								<div class="details">
-									<h5 class="title">Sea Food</h5>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="item">
-						<a href="page-shop-list-v6.html">
-							<div class="iconbox">
-								<div class="icon"><img src="images/icons/freshmeat.png" alt="freshmeat.png"></div>
-								<div class="details">
-									<h5 class="title">Fresh Meat</h5>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="item">
-						<a href="page-shop-list-v6.html">
-							<div class="iconbox">
-								<div class="icon"><img src="images/icons/egg.png" alt="egg.png"></div>
-								<div class="details">
-									<h5 class="title">Butter & Eggs</h5>
-								</div>
-							</div>
-						</a>
-					</div>
-					<div class="item">
-						<a href="page-shop-list-v6.html">
-							<div class="iconbox">
-								<div class="icon"><img src="images/icons/milk.png" alt="milk.png"></div>
-								<div class="details">
-									<h5 class="title">Milks & Creams</h5>
-								</div>
-							</div>
-						</a>
-					</div>
+					}
+					
+					
 				</div>
 			</div>
 		</div>
-		<div class="row mt70">
+		@*<div class="row mt70">
 			<div class="col-lg-8 col-xl-6">
 				<div class="banner_one">
 					<div class="thumb style1"><img src="images/banner/1.jpg" alt="1.jpg"></div>
@@ -157,7 +92,7 @@
 					</div>
 				</div>
 			</div>
-		</div>
+		</div>*@
 	</div>
 </section>
 
@@ -211,7 +146,10 @@
 											<div class="thumb">
 												@foreach(var Image in data.ImageProduct)
 												{
-													<img src="@Image.Url" alt="fp1.png">
+													if (Image.IsMainImage == true)
+													{
+														<img src="@Image.Url" alt="fp1.png">
+													}
 												}
 												<div class="thumb_info">
 													<ul class="mb0">
@@ -264,7 +202,11 @@
 											<div class="thumb">
 												@foreach(var Image in data.ImageProduct)
 												{
-													<img src="@Image.Url" alt="fp1.png">
+														if (Image.IsMainImage == true)
+														{
+														<img src="@Image.Url" alt="fp1.png">
+															
+														}
 												}
 												<div class="thumb_info">
 													<ul class="mb0">

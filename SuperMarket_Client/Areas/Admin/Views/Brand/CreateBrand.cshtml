@@ -9,38 +9,41 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.14.0-beta2/js/bootstrap-select.min.js" integrity="sha512-FHZVRMUW9FsXobt+ONiix6Z0tIkxvQfxtCSirkKc5Sb4TKHmqq1dZa8DphF0XqKb3ldLu/wgMa8mT6uXiLlRlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <h3>@ViewData["Title"]</h3>
 <div class="row">
-	<div class="col-md-6">
+	<div class="col-md-8 offset-2" style="border: 2px solid;
+  padding: 10px;
+  box-shadow: 5px 10px #888888;">
 		<p>@ViewBag.msg</p>
-		<form id="profile-form" method="post" asp-action="CreateBrand" onsubmit="return confirm('Are you sure to Create?')">
+		<form id="profile-form" method="post" asp-action="CreateBrand" onsubmit="return confirm('Are you sure to Create?')" class="row">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<input asp-for="BrandId" type="hidden" />
-			<div class="form-floating">
+			<div class="form-floating col-6 py-2">
 				<label asp-for="BrandName" class="form-label"></label>
 				<input asp-for="BrandName" class="form-control" />
 			</div>
-			<div class="form-floating">
+			<div class="form-floating col-6 py-2">
 				<label asp-for="Origin" class="form-label"></label>
 
 				<input asp-for="Origin" class="form-control" />
 			</div>
-			<div class="form-floating">
+			<div class="form-floating col-6 py-2">
 				<label asp-for="Address" class="form-label"></label>
 
 				<input asp-for="Address" class="form-control" />
 
 			</div>
-			<div class="form-floating">
+			<div class="form-floating col-6 py-2">
 				<label asp-for="Phone" class="form-label"></label>
 
 				<input asp-for="Phone" class="form-control" />
 			</div>
-			<div class="form-floating">
+			<div class="form-floating col-6 py-2">
 				<label class="form-label">Category</label>
 				<select class="form-control selectpicker" name="CategoryId" asp-items="@ViewBag.categoryList" multiple data-live-search="true">
 				</select>
 			</div>
 			<button id="update-profile-button" type="submit" onclick="return ValidateForm()" class="w-100 btn btn-lg btn-primary">Create</button>
 		</form>
+		<a href="/Admin/Brand/Index">Back to Brand Manage</a>
 	</div>
 </div>
 
