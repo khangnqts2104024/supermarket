@@ -20,7 +20,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 try
                 {
                     var data = await unitOfWork.Product.GetAll(includeProperties: "ImageProduct,Brand_Category.Category");
-
+                ViewBag.CategoryList = await unitOfWork.Category.GetAll();
                     return View(data);
 
                 }

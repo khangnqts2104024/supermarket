@@ -1,11 +1,12 @@
-﻿@model IEnumerable<Product>
+﻿@model IEnumerable<Brand>
 @{
-	ViewData["Title"] = "Product Manage";
+	ViewData["Title"] = "Brand Manage";
 }
 <h3>@ViewData["Title"]</h3>
 
-<a class="btn btn-outline-primary" href="/Admin/Product/CreateProduct">Create Product</a> | 
+<a class="btn btn-outline-primary" href="/Admin/Brand/CreateBrand">Create Brand</a> |
 <a class="btn btn-outline-primary" href="/Admin/Brand_Category/Brand_CategoryManage">Back to Brand-Category manage</a>
+
 <hr />
 
 <table class="table" id="ProductTable">
@@ -13,37 +14,25 @@
 		<tr>
 
 			<th>
-				Product Name
+				Brand Name
 			</th>
 			<th>
-				Title
+				Origin
 			</th>
 			<th>
-				Description
+				Address
 			</th>
 			<th>
-				Created Date
+				Phone
 			</th>
 			<th>
-				Manufacture Date
+				Created date
 			</th>
 			<th>
-				Expiry Date
+				Update Date
 			</th>
-			<th>
-				Weight
-			</th>
-			@*<th>
-				Stock
-			</th>*@
 			<th>
 				Category
-			</th>
-			<th>
-				Brand
-			</th>
-			<th>
-				Price
 			</th>
 			<th>
 
@@ -60,30 +49,25 @@
 		function loadDataTable() {
 			dataTable = $("#ProductTable").DataTable({
 				"ajax": {
-					"url": "/Admin/Product/GetAllProduct"
+					"url": "/Admin/Brand/GetAllBrand"
 				},
 				"columns": [
-					{ "data": "productName", "width": "15%" },
-					{ "data": "title", "width": "15%" },
-					{ "data": "description", "width": "15%" },
-					{ "data": "createdDate", "width": "15%" },
-					{ "data": "manufactureDate", "width": "15%" },
-					{ "data": "expiryDate", "width": "15%" },
-					{ "data": "weight", "width": "15%" },
-					{ "data": "brand_Category.category.categoryName", "width": "15%" },
-					{ "data": "brand_Category.brand.brandName", "width": "15%" },
-					{ "data": "price", "width": "15%" },
+					{ "data": "brand.brandName", "width": "15%" },
+					{ "data": "brand.origin", "width": "15%" },
+					{ "data": "brand.address", "width": "15%" },
+					{ "data": "brand.phone", "width": "15%" },
+					{ "data": "brand.createdDate", "width": "15%" },
+					{ "data": "brand.updateDate", "width": "15%" },
+					{ "data": "category.categoryName", "width": "15%" },
 					{
-						"data": "productId",
+						"data": "brand.brandId",
 						"render": function(data) {
 							return `<div class="w-75 btn-group" role="group">
 
 												</a>
-												<a onClick=Delete('/Admin/Product/DeleteProduct/${data}')  class="btn btn-outline-primary" />Delete
+												<a onClick=DeleteBrand('/Admin/Brand/DeleteBrand/${data}')  class="btn btn-outline-primary" />Delete
 												</a>
-												<a href="/Admin/Product/UpdateProduct?id=${data}"  class="btn btn-outline-primary" />Update
-												</a>
-												<a href="/Admin/Product/Stock?id=${data}"  class="btn btn-outline-primary" />Stock
+												<a href="/Admin/Brand/UpdateBrand?id=${data}"  class="btn btn-outline-primary" />Update
 												</a>
 												</div>`
 						},
@@ -92,7 +76,7 @@
 				]
 			});
 		}
-		function Delete(url) {
+		function DeleteBrand(url) {
 			Swal.fire({
 				title: 'Are you sure?',
 				text: "You won't be able to revert this!",
@@ -130,3 +114,4 @@
 		}
 	</script>
 }
+

@@ -21,6 +21,13 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             return View();
         }
         [HttpGet]
+        public async Task<IActionResult> GetAllBrand()
+        {
+            var data = await unitOfWork.Brand_Category.GetAll(includeProperties:"Brand,Category");
+
+            return Json(new { data = data });
+        }
+        [HttpGet]
         public async Task<IActionResult> CreateBrand(string message)
         {
             if (message == null)
@@ -53,8 +60,8 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                     }
                     if (count > 0)
                     {
-                        ViewBag.msg = "This brand has been Used. Try another.";
-                        return View();
+                        return RedirectToAction("CreateBrand", "Brand", new { message = "This brand has been Used. Try another." });
+
                     }
 
                     else
@@ -146,7 +153,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 }
                 foreach (var item in data)
                 {
-                    if (item.BrandName.Contains(obj.BrandName))
+                    if (item.BrandName==obj.BrandName)
                     {
                         return RedirectToAction("UpdateBrand", new { msg = "Brand name has been Used. Try another." });
                     }
@@ -184,7 +191,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 {
                     foreach (var item in data)
                     {
-                        if (item.BrandName.Contains(obj.BrandName))
+                        if (item.BrandName==obj.BrandName)
                         {
                             return RedirectToAction("UpdateBrand", new { msg = "Brand name has been Used. Try another." });
                         }

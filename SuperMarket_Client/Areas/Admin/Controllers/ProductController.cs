@@ -27,17 +27,17 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock");
             return Json(new { data = data });
         }
-        [HttpGet]
-        public async Task<IActionResult> ProductDetail(int id)
-        {
-            var data = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category");
-            var stock = await unitOfWork.Stock.GetAll(x => x.ProductId == id, includeProperties: "Branch");
-            var ImageList = await unitOfWork.ImageProduct.GetAll(x => x.ProductId == id);
-            ViewBag.ImageList = ImageList;
-            ViewBag.stockList = stock;
-            return View(data);
-        }
-        [HttpPost]
+		//[HttpGet]
+		//public async Task<IActionResult> ProductDetail(int id)
+		//{
+		//	var data = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category");
+		//	var stock = await unitOfWork.Stock.GetAll(x => x.ProductId == id, includeProperties: "Branch");
+		//	var ImageList = await unitOfWork.ImageProduct.GetAll(x => x.ProductId == id);
+		//	ViewBag.ImageList = ImageList;
+		//	ViewBag.stockList = stock;
+		//	return View(data);
+		//}
+		[HttpPost]
         public async Task<IActionResult> UpdateProduct(Product obj, IFormFile file)
         {
             return View();

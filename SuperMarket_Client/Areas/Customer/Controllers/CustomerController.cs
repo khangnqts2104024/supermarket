@@ -6,7 +6,7 @@ using System.Security.Claims;
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
-
+	[Authorize]
     public class CustomerController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -18,15 +18,18 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             this.env = env;
         }
 
-        public async Task<IActionResult> Index(string id)
+        public async Task<IActionResult> Index()
         {
-            if (id == null)
+            if (User.Identities==null)
             {
-                return RedirectToAction("Index", "Customer", new { Area = "Customer" });
+
+                return RedirectToAction("Index", "Home", new { Area = "Customer" });
             }
             else
             {
-                var data = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id == id);
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                var data = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id == claim.Value);
                 return View(data);
             }
 
