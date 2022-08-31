@@ -6,6 +6,7 @@ using SuperMarket_DataAccess.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using SuperMarket_Utility;
 using Stripe;
+using SuperMarket_Client.Areas.Customer.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,10 @@ builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProvide
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
+builder.Services.AddSession();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+//add newtonsoftJson
+
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
@@ -38,6 +42,7 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseSession();
 StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 app.UseAuthentication();;
 
@@ -45,7 +50,7 @@ app.UseAuthorization();
 app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
-
     pattern: "{area=Admin}/{controller=Brand_Category}/{action=Brand_CategoryManage}/{id?}");
+
 
 app.Run();

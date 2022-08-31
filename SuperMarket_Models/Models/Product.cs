@@ -1,14 +1,17 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SuperMarket_Models.Models
 {
+    [JsonObject(IsReference = true)]
     public class Product
     {
         [Key]
@@ -45,8 +48,11 @@ namespace SuperMarket_Models.Models
         [ForeignKey("BrandCateId")]
         [ValidateNever]
         public Brand_Category Brand_Category { get; set; }
-        public List<ImageProduct> ImageProduct { get; set; }
+       
+        public virtual List<ImageProduct> ImageProduct { get; set; }
 
         public List<Stock>? Stock { get; set; }
+
+       
     }
 }

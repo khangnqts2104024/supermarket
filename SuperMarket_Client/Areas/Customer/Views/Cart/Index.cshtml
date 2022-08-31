@@ -1,4 +1,35 @@
 ﻿@model SuperMarket_Models.ViewModels.ShoppingCartVM
+
+@if(ViewBag.ListItemCartOutStock != null)
+{
+    <div id="itemOutStock" hidden>
+            @foreach (var item in ViewBag.ListItemCartOutStock)
+            {
+                <p> <i class="fa fa-circle" style="font-size:6px;margin-right:10px;"></i>  @item</p>
+            }
+
+     </div>
+}
+
+@section Scripts{
+    <script type="text/javascript">
+var itemOutStock = $("#itemOutStock").html();
+if ($.trim($("#itemOutStock").html()) != '') {
+    Swal.fire({
+        title: 'These products selected are currently out of stock. They will be automatically removed from your cart.!',
+        html: itemOutStock,
+    });
+
+    let subTotalOrder = $("#subTotalOrder");
+    subTotalOrder.text();
+}
+
+</script>
+}
+
+
+
+
 <!-- Shop Checkouts Content -->
 <section class="shop-cart">
     <div class="container">
@@ -34,15 +65,16 @@
                                                         <td>
                                                             <div class="quantity-block">
                                                                 <button type="button" class="MinusItem_Cart quantity-arrow-minus inner_page" data-cartid=@item.CartId > - </button>
-                                                                     <input  class="cart_count text-center" asp-for="@item.Count" name="cartCount"  type="text" readonly>
+                                                                     <input  class="cart_count text-center" asp-for="@item.Count" name="cartCount" data-cartid=@item.CartId  type="text" readonly>
                                                                 <button type="button"  class="PlusItem_Cart quantity-arrow-plus inner_page"  data-cartid=@item.CartId > + </button>
                                                             </div>
-                                                           
                                                         </td>
+
                                                         <td id="subTotalItem_@(item.CartId)" class="text-thm">@((item.Product.Price * @item.Count).ToString("c"))</td>
                                                         
                                                         <td><i style="cursor:pointer;" class="RemoveItem_Cart fas fa-trash-alt" data-cartid=@item.CartId></i></td>
                                                     </tr>
+                                                    
                                                 }
                                             </tbody>
                                         </table>
@@ -82,6 +114,7 @@
         </div>
     </div>
 </section>
+
 
 
 

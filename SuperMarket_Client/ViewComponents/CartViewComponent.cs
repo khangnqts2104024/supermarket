@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SuperMarket_DataAccess.Repository.IRepository;
+using SuperMarket_Models.Models;
+using System.Security.Claims;
 
 namespace SuperMarket_Client.ViewComponents
 {
@@ -15,8 +17,16 @@ namespace SuperMarket_Client.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var cartList = await unitOfWork.ShoppingCart.GetAll(includeProperties:"Product");
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            List<ShoppingCart> cartList = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x=>x.CustomerId == claim.Value,includeProperties:"Product");
             decimal totalCart = 0;
+            if(cartList.Count() == 0)
+            {
+                ViewBag.CartCount = 0;
+                ViewBag.totalCart = 0;
+                return View("CartList", cartList);
+            }
 
             foreach (var item in cartList)
             {
@@ -25,10 +35,9 @@ namespace SuperMarket_Client.ViewComponents
 
             ViewBag.CartCount = cartList.Count();
             ViewBag.totalCart = totalCart;
-
-
-
             return View("CartList", cartList);
         }
+
+        
     }
 }

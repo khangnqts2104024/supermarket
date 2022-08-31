@@ -5,23 +5,25 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace SuperMarket_Models.Models
 {
-    public class ImageProduct
+    public class Feedback_Rating
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ImageId { get; set; }
-        [Required]
-        public string Url { get; set; }
-        public bool IsMainImage { get; set; }
+        public int Id { get; set; }
         public int ProductId { get; set; }
-        [JsonIgnore]
         [ForeignKey("ProductId")]
         [ValidateNever]
         public Product Product { get; set; }
+        public string CustomerId { get; set; }
+        [ForeignKey("CustomerId")]
+        [ValidateNever]
+        public Customer Customer { get; set; }
+        public int RatingPoint { get; set; }
+        public string Content { get; set; }
+        public DateTime PostedDate { get; set; }
     }
 }

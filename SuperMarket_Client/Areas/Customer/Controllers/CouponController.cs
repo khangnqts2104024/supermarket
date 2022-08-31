@@ -85,7 +85,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             ShoppingCartVM shoppingCartVM = new ShoppingCartVM()
             {
-                ListCart = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product"),
+                ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product"),
                 Order = new(),
                 //khang
 

@@ -4,9 +4,8 @@ using SuperMarket_Models.Models;
 
 namespace SuperMarket_DataAccess.Repository.IRepository
 {
-    public interface IProduct :IRepository<Product>
+    public interface IFeedback_Rating : IRepository<Feedback_Rating>
     {
-        void Update(Product obj);
-
+        void Update(Feedback_Rating obj);
     }
 }

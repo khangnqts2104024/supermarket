@@ -1,10 +1,6 @@
 ﻿using SuperMarket_DataAccess.Data;
 using SuperMarket_DataAccess.Repository.IRepository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace SuperMarket_DataAccess.Services
 {
@@ -16,20 +12,14 @@ namespace SuperMarket_DataAccess.Services
         public IOrderDetail OrderDetail { get;private set; }
         public IProduct Product { get; private set; }
         public IImageProduct ImageProduct { get; private set; }
-
         public ICategory Category { get; private set; }
-
         public IBranch Branch { get; private set; }
-
         public IBrand Brand { get; private set; }
-
         public IStock Stock { get; private set; }
-
         public ICoupon Coupon { get; private set; }
-
         public ICustomer Customer { get; private set; }
-
         public IBrand_Category Brand_Category { get; private set; }
+        public IFeedback_Rating Feedback_Rating { get; private set; }
         public UnitOfWork(ApplicationDbContext db)
         {
             _db = db;
@@ -45,9 +35,7 @@ namespace SuperMarket_DataAccess.Services
             Customer=new CustomerService(_db);
             ImageProduct = new ImageProductService(_db);
             Brand_Category = new Brand_CategoryService(_db);
-            //view model
-       
-
+            Feedback_Rating = new Feedback_RatingService(_db); 
         }
         public virtual async Task<int> Save()
         {

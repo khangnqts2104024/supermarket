@@ -1,20 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using SuperMarket_Models.Models;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SuperMarket_Models.Models
+namespace SuperMarket_Models.ViewModels
 {
-    public class ShoppingCart
+    public class Cart_Feedback_RatingVM
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int CartId { get; set; }
-        [Required]
         public int Count { get; set; }
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
@@ -26,8 +22,26 @@ namespace SuperMarket_Models.Models
         [ValidateNever]
         public Customer Customer { get; set; }
 
+
+        [NotMapped]
+        [ValidateNever]
+        public List<Feedback_Rating> Feedback_RatingList { get; set; }
         
 
+        [NotMapped]
+        [ValidateNever]
+        public int StockCount { get; set; }
 
+        [NotMapped]
+        [ValidateNever]
+        public int branchId { get; set; }
+
+        [NotMapped]
+        [ValidateNever]
+        public int FeedbackCount { get; set; }
+
+        [NotMapped]
+        [ValidateNever]
+        public int RatingPointAverage { get; set; }
     }
 }

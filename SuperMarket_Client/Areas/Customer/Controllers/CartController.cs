@@ -12,6 +12,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
     [Authorize]
+    [BranchActionFilter]
+
     public class CartController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -26,56 +28,91 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            if (User.Identity != null)
+            //check branchId is exists in Session
+            var branchId = HttpContext.Session.GetInt32("branchId");
+            //redirect to Home if user not login and not set branchId
+            if (User.Identity != null && branchId !=null)
             {
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
                 ShoppingCartVM shoppingCartVM = new ShoppingCartVM()
                 {
-                    ListCart = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product"),
+                    ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product"),
                     Order = new()
                 };
 
-                foreach (var item in shoppingCartVM.ListCart)
+                //return View if cart is empty
+                if(shoppingCartVM.ListCart.Count() == 0)
                 {
-                    shoppingCartVM.Order.OrderTotal += (item.Product.Price * item.Count);
+                    return View(shoppingCartVM);
                 }
+                unitOfWork.ClearTracking();
+
+                //create a list to add which item out of stock
+                List<string> ListItemCartOutStock = new List<string>();
+               
+                //clone listcart to another list
+                List<ShoppingCart>? indexListCart = new List<ShoppingCart>(shoppingCartVM.ListCart);
+                foreach (var item in indexListCart)
+                {
+                    var IsOutStock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == branchId && x.ProductId == item.ProductId && x.Count < item.Count);
+                    if (IsOutStock != null)
+                    {
+                        //add item to list then remove out from cart.
+                        ListItemCartOutStock.Add(item.Product.Title);
+                        unitOfWork.ShoppingCart.Remove(item);
+                        shoppingCartVM.ListCart.Remove(item);
+                        await unitOfWork.Save();
+                    }
+                }
+
+                if(shoppingCartVM.ListCart.Count() > 0)
+                {
+                    foreach (var item in shoppingCartVM.ListCart)
+                    {
+                        shoppingCartVM.Order.OrderTotal += (item.Product.Price * item.Count);
+                    }
+                }
+                else
+                {
+                    shoppingCartVM.Order.OrderTotal = 0;
+                }
+
+
+                //send list of item out stock to View, then show alert with sweetalert.
+                if (ListItemCartOutStock.Count() != 0)
+                {
+                    ViewBag.ListItemCartOutStock = ListItemCartOutStock;
+                }
+
+                indexListCart = null;
                 return View(shoppingCartVM);
             }
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> CheckCount()
-        {
-            if (User.Identity != null)
-            {
-                var claimsIdentity = (ClaimsIdentity)User.Identity;
-                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-                var listCart = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value);
-                if(listCart != null)
-                {
-                    return Json(new
-                    {
-                        statusCode = 200,
-                        count = listCart.Count(),
-                    });
-                }
-            }
-            return Json(new
-            {
-                statusCode = 401,
-                message = "User login required!"
-            });
-
-        }
-
         [HttpPost]
-        public async Task<IActionResult> Plus(int cartId)
+        public async Task<IActionResult> Plus(int cartId, int itemCount)
         {
+            //check branchId is exists in Session
+            var branchId = HttpContext.Session.GetInt32("branchId");
             var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CartId == cartId, includeProperties: "Product");
             if (cartFromDb != null)
             {
+                var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == branchId && x.ProductId == cartFromDb.ProductId);
+
+                if (itemCount == stock.Count)
+                {
+                    return Json(new
+                    {
+                        statusCode = 400,
+                        message = "The product you have selected has reached a limited quantity",
+                        count = cartFromDb.Count,
+                        subTotalItem = cartFromDb.Product.Price * cartFromDb.Count,
+                        subTotalOrder = await GetOrderTotal()
+                    });
+                }
+
                 unitOfWork.ShoppingCart.IncrementCount(cartFromDb, 1);
                 await unitOfWork.Save();
                 return Json(new
@@ -84,32 +121,6 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     message = "Increment Count Successfully",
                     count = cartFromDb.Count,
                     subTotalItem = cartFromDb.Product.Price * cartFromDb.Count,
-                    subTotalOrder = await GetOrderTotal()
-                });
-            }
-            else
-            {
-                return Json(new
-                {
-                    statusCode = 404,
-                    message = "Cannot Found Item"
-                });
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> RemoveItem(int cartId)
-        {
-            var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CartId == cartId, includeProperties: "Product");
-            if (cartFromDb != null)
-            {
-                unitOfWork.ShoppingCart.Remove(cartFromDb);
-                await unitOfWork.Save();
-                return Json(new
-                {
-                    statusCode = 200,
-                    message = "Remove Success!",
-                    actionClient = "removed",
                     subTotalOrder = await GetOrderTotal()
                 });
             }
@@ -177,6 +188,32 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> RemoveItem(int cartId)
+        {
+            var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CartId == cartId, includeProperties: "Product");
+            if (cartFromDb != null)
+            {
+                unitOfWork.ShoppingCart.Remove(cartFromDb);
+                await unitOfWork.Save();
+                return Json(new
+                {
+                    statusCode = 200,
+                    message = "Remove Success!",
+                    actionClient = "removed",
+                    subTotalOrder = await GetOrderTotal()
+                });
+            }
+            else
+            {
+                return Json(new
+                {
+                    statusCode = 404,
+                    message = "Cannot Found Item"
+                });
+            }
+        }
+
         [HttpGet]
         public async Task<IActionResult> Checkout()
         {
@@ -184,84 +221,91 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             ShoppingCartVM shoppingCartVM = new ShoppingCartVM()
             {
-                ListCart = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId.Equals(claim.Value), includeProperties: "Product"),
+                ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId.Equals(claim.Value), includeProperties: "Product"),
                 Order = new()
             };
             if (shoppingCartVM.ListCart.Count() == 0)
             {
                 return RedirectToAction("Index", "Home");
             }
-            shoppingCartVM.Order.Customer = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id.Equals(claim.Value));
-            if (shoppingCartVM.Order.Customer != null)
-            {
-                shoppingCartVM.Order.Name = shoppingCartVM.Order.Customer.FullName;
-                shoppingCartVM.Order.Phone = shoppingCartVM.Order.Customer.PhoneNumber;
-                shoppingCartVM.Order.Address = shoppingCartVM.Order.Customer.Address;
-                shoppingCartVM.Order.City = shoppingCartVM.Order.Customer.City;
-                shoppingCartVM.Order.Country = shoppingCartVM.Order.Customer.Country;
-                //khang check coupon
-
-
-                //khang
-                foreach (var item in shoppingCartVM.ListCart)
+           
+                shoppingCartVM.Order.Customer = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id.Equals(claim.Value));
+                if (shoppingCartVM.Order.Customer != null)
                 {
-                    shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
+                    shoppingCartVM.Order.Name = shoppingCartVM.Order.Customer.FullName;
+                    shoppingCartVM.Order.Phone = shoppingCartVM.Order.Customer.PhoneNumber;
+                    shoppingCartVM.Order.Address = shoppingCartVM.Order.Customer.Address;
+                    shoppingCartVM.Order.City = shoppingCartVM.Order.Customer.City;
+                    shoppingCartVM.Order.Country = shoppingCartVM.Order.Customer.Country;
+                    //khang
+                    foreach (var item in shoppingCartVM.ListCart)
+                    {
+                        shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
+                    }
                 }
-            }
-         
             return View(shoppingCartVM);
         }
 
         [HttpPost]
         public async Task<IActionResult> Checkout(ShoppingCartVM shoppingCartVM,int? cpId)
         {
+            //var orderHasPaymentIntentId = HttpContext.Session.GetString("paymentIntent");
+            var paymentIntentSession = HttpContext.Session.GetString("paymentIntent");
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            shoppingCartVM.ListCart = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId.Equals(claim.Value), includeProperties: "Product");
-            shoppingCartVM.Order.OrderDate = System.DateTime.Now;
-            shoppingCartVM.Order.CustomerId = claim.Value;
-            //khang
+            shoppingCartVM.ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId.Equals(claim.Value), includeProperties: "Product");
             int dcPercent = 0;
-            var usedCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(cpId));
-            if (usedCoupon != null)
+
+            if (paymentIntentSession == null)
             {
-                shoppingCartVM.Order.Coupon = usedCoupon;
-                shoppingCartVM.Order.CouponId = usedCoupon.CouponId;
-                dcPercent = usedCoupon.DiscountPercent;
-            }
-        
-
-            decimal total = 0;
-            //khang
-            foreach (var item in shoppingCartVM.ListCart)
-            {
-                //shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
-                 total += item.Product.Price * item.Count;
-
-            }
-
-            shoppingCartVM.Order.OrderTotal = total - total * dcPercent/ 100;
-
-            //
-            shoppingCartVM.Order.OrderStatus = SD.StatusPending;
-            shoppingCartVM.Order.PaymentStatus = SD.StatusPending;
-
-            await unitOfWork.Order.Add(shoppingCartVM.Order);
-            await unitOfWork.Save();
-
-            foreach (var item in shoppingCartVM.ListCart)
-            {
-                OrderDetail orderDetail = new OrderDetail()
+                shoppingCartVM.Order.OrderDate = System.DateTime.Now;
+                shoppingCartVM.Order.CustomerId = claim.Value;
+                //khang
+                var usedCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(cpId));
+                if (usedCoupon != null)
                 {
-                    ProductId = item.ProductId,
-                    Count = item.Count,
-                    OrderId = shoppingCartVM.Order.OrderId,
-                    Price = item.Product.Price * item.Count
-                };
-                await unitOfWork.OrderDetail.Add(orderDetail);
+                    shoppingCartVM.Order.Coupon = usedCoupon;
+                    shoppingCartVM.Order.CouponId = usedCoupon.CouponId;
+                    dcPercent = usedCoupon.DiscountPercent;
+                }
+
+                decimal total = 0;
+                //khang
+                foreach (var item in shoppingCartVM.ListCart)
+                {
+                    //shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
+                    total += item.Product.Price * item.Count;
+                }
+
+                shoppingCartVM.Order.OrderTotal = total - total * dcPercent / 100;
+                //
+                shoppingCartVM.Order.OrderStatus = SD.StatusPending;
+                shoppingCartVM.Order.PaymentStatus = SD.StatusPending;
+
+                await unitOfWork.Order.Add(shoppingCartVM.Order);
                 await unitOfWork.Save();
+
+                foreach (var item in shoppingCartVM.ListCart)
+                {
+                    OrderDetail orderDetail = new OrderDetail()
+                    {
+                        ProductId = item.ProductId,
+                        Count = item.Count,
+                        OrderId = shoppingCartVM.Order.OrderId,
+                        Price = item.Product.Price * item.Count
+                    };
+                    await unitOfWork.OrderDetail.Add(orderDetail);
+                    await unitOfWork.Save();
+                }
             }
+            else
+            {
+                shoppingCartVM.Order = await unitOfWork.Order.GetFirstOrDefault(x => x.SessionId == paymentIntentSession, includeProperties: "Customer,OrderDetail");
+            }
+
+
+
+
 
             //Start Redirect To Stripe Page
             var domain = "https://localhost:7166/";
@@ -298,15 +342,43 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 var service = new SessionService();
                 //create a session for options based on SessionService
                 Session session = service.Create(options);
-                unitOfWork.Order.UpdateStripePaymentId(shoppingCartVM.Order.OrderId, session.Id, session.PaymentIntentId);
-
-
+                HttpContext.Session.SetString("paymentIntent", session.Id);
+                unitOfWork.Order.UpdateStripePaymentId(shoppingCartVM.Order.OrderId, session.Id, session.Id);
                 await unitOfWork.Save();
-
                 Response.Headers.Add("Location", session.Url);
                 return new StatusCodeResult(303);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> CheckCount()
+        {
+            if (User.Identity != null)
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                var listCart = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value);
+                if (listCart != null)
+                {
+                    return Json(new
+                    {
+                        statusCode = 200,
+                        count = listCart.Count(),
+                    });
+                }
+            }
+            return Json(new
+            {
+                statusCode = 401,
+                message = "User login required!"
+            });
+
+        }
+
+        public async Task<IActionResult> CheckStockCartItem()
+        {
+
+            return View();
+        }
 
         [HttpGet]
         public async Task<IActionResult> CompleteOrder(int id)
@@ -330,6 +402,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 if (session.PaymentStatus.ToLower() == "paid")
                 {
                     unitOfWork.Order.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                    unitOfWork.Order.UpdateStripePaymentId(id, orderVM.Order.SessionId, null);
                     IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
                     //khang
                     if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }
@@ -347,7 +420,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             ShoppingCartVM shoppingCartVM = new ShoppingCartVM()
             {
-                ListCart = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product"),
+                ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product"),
                 Order = new()
                 //khang
                 

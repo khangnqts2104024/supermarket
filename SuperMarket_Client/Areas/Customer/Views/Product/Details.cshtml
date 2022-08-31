@@ -1,4 +1,5 @@
-﻿@model SuperMarket_Models.Models.ShoppingCart 
+﻿@model SuperMarket_Models.ViewModels.Cart_Feedback_RatingVM
+
 
 <!-- Inner Page Breadcrumb -->
   <section class="inner_page_breadcrumb pt50 pb50 mt70-992">
@@ -91,40 +92,52 @@
 				<div class="col-lg-6">
 					<div class="shop_single_product_details">
             <div class="shop_item_stock mb30">
-              <span class="stock">IN STOCK</span>
+                        @if(@Model.StockCount > 0)
+                        {
+                            <span class="stock"> <span id="stockCount">@Model.StockCount</span> IN STOCK</span>
+                        }
+                        else{
+                            <span class="stock"> <span hidden id="stockCount">@Model.StockCount</span> OUT OF STOCK</span>
+                        }
             </div>
 
-           
-		        <h3 class="title mb20">@Model.Product.Title</h3>
+		        <h3 class="title">@Model.Product.Title</h3>
 
-            <div class="sspd_review">
-              <ul class="mb15">
-                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-              </ul>
+            <div class="sspd_review mb20 mt10">
+           
+                <div class="small-ratings">
+                    @for (var i = 0; i < @Model.RatingPointAverage; i++)
+                    {
+                        <i class="fa fa-star rating-color"></i>
+                    }
+                    @for (int i = 0; i < 5-@Model.RatingPointAverage; i++)
+                    {
+                        <i class="fa fa-star"></i>
+                    }
+                </div>
+
             </div>
 
 	        <div class="sspd_price mb35"><small><del>$79.49</del></small> @Model.Product.Price.ToString("c")</div>
                 <p class="mb25">@Model.Product.Description</p>
                  <form id="formAddCart" asp-action="Details" asp-area="Customer" asp-controller="Product" method="Post">
                      <input type="hidden" asp-for="ProductId" />
-                     <ul class="cart_btns ui_kit_button mb30">
+                     <input type="hidden" asp-for="branchId" />
+                     <ul class="cart_btns ui_kit_button mb30" style="margin-bottom:20px;">
                         <li class="list-inline-item">
-                        <div class="cart_btn">
-                            <div class="quantity-block">
-                                <button type="button" class="quantity-arrow-minus inner_page"> - </button>
-                                <input asp-for="Count" class="quantity-num inner_page" type="number"/>
-                                <button type="button" class="quantity-arrow-plus inner_page"> + </button>
+                            <div class="cart_btn">
+                                <div class="quantity-block">
+                                    <button type="button" class="quantity-arrow-minus inner_page"> - </button>
+                                    <input asp-for="Count" class="quantity-num inner_page" type="number"/>
+                                    <button type="button" class="quantity-arrow-plus inner_page"> + </button>
+                                </div>
                             </div>
-                        </div>
                         </li>
-                        <li class="list-inline-item"><button type="submit" class="btn btn-thm"><span class="flaticon-shopping-cart mr5 fz18 vam"></span> Add to Cart</button></li>
+                        
+                        <li class="list-inline-item"><button type="submit"  class="btn btn-thm disabledBtn"><span class="flaticon-shopping-cart mr5 fz18 vam"></span> Add to Cart</button></li>
 		            </ul>
 
-                    
+                        <p id="messageLimitedQuantity" style="color:red;" class="mb20"></p>
 
                     <ul class="wishlist_compare">
                         <li class="list-inline-item"><a href="#" class="favorite_icon"><span class="flaticon-heart"></span> Add to Wishlist</a></li>
@@ -152,7 +165,7 @@
                 <button class="nav-link" id="aiinfo-tab" data-bs-toggle="tab" data-bs-target="#aiinfo" type="button" role="tab" aria-controls="aiinfo" aria-selected="false">Additional information</button>
               </li>
               <li class="nav-item" role="presentation">
-                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false"> Reviews (9)</button>
+                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false"> Reviews (@Model.FeedbackCount)</button>
               </li>
             </ul>
             <div class="tab-content" id="myTabContent2">
@@ -186,116 +199,70 @@
                   <div class="col-lg-6">
                     <div class="shop_single_tab_content mb30-991">
                       <div class="product_single_content">
-                        <div class="mbp_pagination_comments">
+                        <div class="mbp_pagination_comments" style="height:350px;overflow:auto;padding:20px;">
                           <h5 class="fz16 mb30">Reviews</h5>
-                          <div class="mbp_first d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                              <img src="images/blog/reviewer1.png" class="mr-3" alt="reviewer1.png">
-                            </div>
-                            <div class="flex-grow-1 ms-4">
-                              <h4 class="sub_title mt20">Bessie Cooper</h4>
-                              <div class="sspd_postdate mb15">April 6, 2021 at 3:21 AM
-                                <div class="sspd_review pull-right">
-                                  <ul class="mb0 pl15">
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                  </ul>
+                          <div id="listUserFeedback">
+                              @foreach (var item in @Model.Feedback_RatingList)
+                          {
+                             <div class="mbp_first d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                  <img src="images/blog/reviewer1.png" class="mr-3" alt="reviewer1.png">
+                                </div>
+                                <div class="flex-grow-1 ms-4">
+                                  <h4 class="sub_title mt20">@item.Customer.FullName</h4>
+                                <div class="sspd_postdate mb15">@item.PostedDate
+                                    <div class="sspd_review pull-right">
+                                      <div class="small-ratings">
+                                    @for (var i = 0; i < @item.RatingPoint; i++)
+                                    {
+                                        <i class="fa fa-star rating-color"></i>
+                                    }
+                                    @for (int i = 0; i < 5-@item.RatingPoint; i++)
+                                    {
+                                        <i class="fa fa-star"></i>
+                                    }
+                                </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
+                              <p class="mt15 mb30">@item.Content</p>
+                              <hr>
+                          }
                           </div>
-                          <p class="mt15 mb30">Every single thing we tried with John was delicious! Found some awesome places we would definitely go back to on our trip. John was also super friendly and passionate about Beşiktaş and Istanbul.</p>
-                          <hr>
-                          <div class="mbp_first d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                              <img src="images/blog/reviewer2.png" class="mr-3" alt="reviewer2.png">
-                            </div>
-                            <div class="flex-grow-1 ms-4">
-                              <h4 class="sub_title mt20">Savannah Nguyen</h4>
-                              <div class="sspd_postdate mb15">April 6, 2021 at 3:21 AM
-                                <div class="sspd_review pull-right">
-                                  <ul class="mb0 pl15">
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mt15 mb30">Every single thing we tried with John was delicious! Found some awesome places we would definitely go back to on our trip. John was also super friendly and passionate about Beşiktaş and Istanbul.</p>
-                          <hr>
-                          <div class="mbp_first d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                              <img src="images/blog/reviewer3.png" class="mr-3" alt="reviewer3.png">
-                            </div>
-                            <div class="flex-grow-1 ms-4">
-                              <h4 class="sub_title mt20">Albert Flores</h4>
-                              <div class="sspd_postdate mb15">April 6, 2021 at 3:21 AM
-                                <div class="sspd_review pull-right">
-                                  <ul class="mb0 pl15">
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                    <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="mt15">Every single thing we tried with John was delicious! Found some awesome places we would definitely go back to on our trip. John was also super friendly and passionate about Beşiktaş and Istanbul.</p>
                         </div>
                       </div>
                     </div>
                   </div>
+
+                  
+
                   <div class="col-lg-6">
                     <div class="bsp_reveiw_wrt pt30">
-                      <form class="comments_form">
+                      <form class="comments_form" >
                         <div class="row">
                           <div class="col-lg-12">
-                            <h5 class="fz16 mb30">Be the first to review “@Model.Product.Title” </h5>
-                            <p class="fz14 mb30">Your email address will not be published. Required fields are marked *</p>
-                            <div class="sspd_review mb30">
-                              <ul>
-                                <li class="list-inline-item"><span class="heading-color fz14">Your Rating</span></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                                <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                              </ul>
+                              <input type="hidden" asp-for="ProductId" />
+                              <input type="hidden" asp-for="branchId" />
+                            <h5 class="fz16 mb10">Be the first to review “@Model.Product.Title” </h5>
+                            <div class="sspd_review mb10">
+                               <div class="rating mb10"> 
+                                    <input  type="radio" data-rating="ratingProduct" class="ratingProduct" data-id="5" name="ratingProduct5" value="5" id="5"><label for="5">☆</label> 
+                                    <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="4" name="ratingProduct4" value="4" id="4"><label for="4">☆</label>
+                                    <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="3" name="ratingProduct3" value="3" id="3"><label for="3">☆</label>
+                                    <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="2" name="ratingProduct2" value="2" id="2"><label for="2">☆</label>
+                                    <input type="radio" data-rating="ratingProduct"  class="ratingProduct" data-id="1" name="ratingProduct1" value="1" id="1"><label for="1">☆</label>
+                                </div>
                             </div>
                           </div>
                           <div class="col-md-12">
                             <div class="form-group">
                               <label class="fz14 heading-color mb10">Your review *</label>
-                              <textarea class="form-control" rows="6"></textarea>
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label class="fz14 heading-color mb10">Name</label>
-                              <input type="text" class="form-control">
-                            </div>
-                          </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label class="fz14 heading-color mb10">Email</label>
-                              <input type="email" class="form-control">
+                              <textarea id="feedbackContent" required class="form-control" rows="6"></textarea>
                             </div>
                           </div>
                           <div class="col-md-12">
-                            <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
-                              <label class="form-check-label" for="defaultCheck1">Save my name, email, and website in this browser for the next time I comment.</label>
-                            </div>
-                            <button type="submit" class="btn btn-thm">SUBMIT</button>
+                            <button type="submit" id="submitReview" class="btn btn-thm">SUBMIT</button>
                           </div>
                         </div>
                       </form>
@@ -497,11 +464,5 @@
   </section>
 
 
-@section Scripts{
-    <script>
-        //$(function(){
-        //    alert(123);
-        //})
-    </script>
-}
+
 
