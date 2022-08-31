@@ -228,74 +228,84 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             {
                 return RedirectToAction("Index", "Home");
             }
-            shoppingCartVM.Order.Customer = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id.Equals(claim.Value));
-            if (shoppingCartVM.Order.Customer != null)
-            {
-                shoppingCartVM.Order.Name = shoppingCartVM.Order.Customer.FullName;
-                shoppingCartVM.Order.Phone = shoppingCartVM.Order.Customer.PhoneNumber;
-                shoppingCartVM.Order.Address = shoppingCartVM.Order.Customer.Address;
-                shoppingCartVM.Order.City = shoppingCartVM.Order.Customer.City;
-                shoppingCartVM.Order.Country = shoppingCartVM.Order.Customer.Country;
-                //khang check coupon
-
-
-                //khang
-                foreach (var item in shoppingCartVM.ListCart)
+           
+                shoppingCartVM.Order.Customer = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id.Equals(claim.Value));
+                if (shoppingCartVM.Order.Customer != null)
                 {
-                    shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
+                    shoppingCartVM.Order.Name = shoppingCartVM.Order.Customer.FullName;
+                    shoppingCartVM.Order.Phone = shoppingCartVM.Order.Customer.PhoneNumber;
+                    shoppingCartVM.Order.Address = shoppingCartVM.Order.Customer.Address;
+                    shoppingCartVM.Order.City = shoppingCartVM.Order.Customer.City;
+                    shoppingCartVM.Order.Country = shoppingCartVM.Order.Customer.Country;
+                    //khang
+                    foreach (var item in shoppingCartVM.ListCart)
+                    {
+                        shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
+                    }
                 }
-            }
-         
             return View(shoppingCartVM);
         }
 
         [HttpPost]
         public async Task<IActionResult> Checkout(ShoppingCartVM shoppingCartVM,int? cpId)
         {
+            //var orderHasPaymentIntentId = HttpContext.Session.GetString("paymentIntent");
+            var paymentIntentSession = HttpContext.Session.GetString("paymentIntent");
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             shoppingCartVM.ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId.Equals(claim.Value), includeProperties: "Product");
-            shoppingCartVM.Order.OrderDate = System.DateTime.Now;
-            shoppingCartVM.Order.CustomerId = claim.Value;
-            //khang
             int dcPercent = 0;
-            var usedCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(cpId));
-            if (usedCoupon != null)
+
+            if (paymentIntentSession == null)
             {
-                shoppingCartVM.Order.Coupon = usedCoupon;
-                shoppingCartVM.Order.CouponId = usedCoupon.CouponId;
-                dcPercent = usedCoupon.DiscountPercent;
-            }
-
-            decimal total = 0;
-            //khang
-            foreach (var item in shoppingCartVM.ListCart)
-            {
-                //shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
-                 total += item.Product.Price * item.Count;
-            }
-
-            shoppingCartVM.Order.OrderTotal = total - total * dcPercent/ 100;
-            //
-            shoppingCartVM.Order.OrderStatus = SD.StatusPending;
-            shoppingCartVM.Order.PaymentStatus = SD.StatusPending;
-
-            await unitOfWork.Order.Add(shoppingCartVM.Order);
-            await unitOfWork.Save();
-
-            foreach (var item in shoppingCartVM.ListCart)
-            {
-                OrderDetail orderDetail = new OrderDetail()
+                shoppingCartVM.Order.OrderDate = System.DateTime.Now;
+                shoppingCartVM.Order.CustomerId = claim.Value;
+                //khang
+                var usedCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(cpId));
+                if (usedCoupon != null)
                 {
-                    ProductId = item.ProductId,
-                    Count = item.Count,
-                    OrderId = shoppingCartVM.Order.OrderId,
-                    Price = item.Product.Price * item.Count
-                };
-                await unitOfWork.OrderDetail.Add(orderDetail);
+                    shoppingCartVM.Order.Coupon = usedCoupon;
+                    shoppingCartVM.Order.CouponId = usedCoupon.CouponId;
+                    dcPercent = usedCoupon.DiscountPercent;
+                }
+
+                decimal total = 0;
+                //khang
+                foreach (var item in shoppingCartVM.ListCart)
+                {
+                    //shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
+                    total += item.Product.Price * item.Count;
+                }
+
+                shoppingCartVM.Order.OrderTotal = total - total * dcPercent / 100;
+                //
+                shoppingCartVM.Order.OrderStatus = SD.StatusPending;
+                shoppingCartVM.Order.PaymentStatus = SD.StatusPending;
+
+                await unitOfWork.Order.Add(shoppingCartVM.Order);
                 await unitOfWork.Save();
+
+                foreach (var item in shoppingCartVM.ListCart)
+                {
+                    OrderDetail orderDetail = new OrderDetail()
+                    {
+                        ProductId = item.ProductId,
+                        Count = item.Count,
+                        OrderId = shoppingCartVM.Order.OrderId,
+                        Price = item.Product.Price * item.Count
+                    };
+                    await unitOfWork.OrderDetail.Add(orderDetail);
+                    await unitOfWork.Save();
+                }
             }
+            else
+            {
+                shoppingCartVM.Order = await unitOfWork.Order.GetFirstOrDefault(x => x.SessionId == paymentIntentSession, includeProperties: "Customer,OrderDetail");
+            }
+
+
+
+
 
             //Start Redirect To Stripe Page
             var domain = "https://localhost:7166/";
@@ -332,11 +342,9 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 var service = new SessionService();
                 //create a session for options based on SessionService
                 Session session = service.Create(options);
-                unitOfWork.Order.UpdateStripePaymentId(shoppingCartVM.Order.OrderId, session.Id, session.PaymentIntentId);
-
-
+                HttpContext.Session.SetString("paymentIntent", session.Id);
+                unitOfWork.Order.UpdateStripePaymentId(shoppingCartVM.Order.OrderId, session.Id, session.Id);
                 await unitOfWork.Save();
-
                 Response.Headers.Add("Location", session.Url);
                 return new StatusCodeResult(303);
         }
@@ -394,6 +402,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 if (session.PaymentStatus.ToLower() == "paid")
                 {
                     unitOfWork.Order.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                    unitOfWork.Order.UpdateStripePaymentId(id, orderVM.Order.SessionId, null);
                     IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
                     //khang
                     if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }

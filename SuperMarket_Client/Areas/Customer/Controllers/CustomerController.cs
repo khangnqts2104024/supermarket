@@ -6,7 +6,7 @@ using System.Security.Claims;
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
-
+    [Authorize]
     public class CustomerController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -66,5 +66,31 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 return RedirectToAction("Index", new { id = customer.Id });
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Order()
+        {
+            return View();
+        }
+
+        //For datatable api call
+        [HttpGet]
+        public async Task<IActionResult> GetAllOrder()
+        {
+            var claimIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var orderList = await unitOfWork.Order.GetAll(x => x.CustomerId == claim.Value);
+
+            foreach (var item in orderList)
+            {
+                item.OrderDetail = (List<SuperMarket_Models.Models.OrderDetail>)await unitOfWork.OrderDetail.GetAll(x => x.OrderId == item.OrderId,includeProperties:"Product");
+            }
+
+            return Json(new
+            {
+                data = orderList,
+            });
+        }
+
     }
 }

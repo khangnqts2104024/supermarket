@@ -11,7 +11,18 @@ namespace SuperMarket_Models.ViewModels
 {
     public class Cart_Feedback_RatingVM
     {
-        public ShoppingCart ShoppingCart { get; set; }
+        public int Count { get; set; }
+        public int ProductId { get; set; }
+        [ForeignKey("ProductId")]
+        [ValidateNever]
+        public Product Product { get; set; }
+
+        public string CustomerId { get; set; }
+        [ForeignKey("CustomerId")]
+        [ValidateNever]
+        public Customer Customer { get; set; }
+
+
         [NotMapped]
         [ValidateNever]
         public List<Feedback_Rating> Feedback_RatingList { get; set; }
