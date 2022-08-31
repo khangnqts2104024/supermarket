@@ -12,7 +12,7 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220830150739_spm")]
+    [Migration("20220831134625_spm")]
     partial class spm
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -265,6 +265,10 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
+                    b.Property<string>("BranchImg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BranchName")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
@@ -402,6 +406,40 @@ namespace SuperMarket_DataAccess.Migrations
                     b.HasKey("CouponId");
 
                     b.ToTable("Coupons");
+                });
+
+            modelBuilder.Entity("SuperMarket_Models.Models.Feedback_Rating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CustomerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("PostedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RatingPoint")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CustomerId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Feedback_Ratings");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.ImageProduct", b =>
@@ -738,6 +776,25 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("SuperMarket_Models.Models.Feedback_Rating", b =>
+                {
+                    b.HasOne("SuperMarket_Models.Models.Customer", "Customer")
+                        .WithMany()
+                        .HasForeignKey("CustomerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("SuperMarket_Models.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Customer");
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("SuperMarket_Models.Models.ImageProduct", b =>
                 {
                     b.HasOne("SuperMarket_Models.Models.Product", "Product")
@@ -769,7 +826,7 @@ namespace SuperMarket_DataAccess.Migrations
             modelBuilder.Entity("SuperMarket_Models.Models.OrderDetail", b =>
                 {
                     b.HasOne("SuperMarket_Models.Models.Order", "Order")
-                        .WithMany()
+                        .WithMany("OrderDetail")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -828,6 +885,11 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Navigation("Branch");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SuperMarket_Models.Models.Order", b =>
+                {
+                    b.Navigation("OrderDetail");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.Product", b =>
