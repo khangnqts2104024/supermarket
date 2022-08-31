@@ -217,18 +217,20 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> Checkout()
         {
+            var paymentIntentSession = HttpContext.Session.GetString("paymentIntent");
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             ShoppingCartVM shoppingCartVM = new ShoppingCartVM()
             {
                 ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId.Equals(claim.Value), includeProperties: "Product"),
-                Order = new()
             };
             if (shoppingCartVM.ListCart.Count() == 0)
             {
                 return RedirectToAction("Index", "Home");
             }
-           
+            if (paymentIntentSession == null)
+            {
+                shoppingCartVM.Order = new();
                 shoppingCartVM.Order.Customer = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id.Equals(claim.Value));
                 if (shoppingCartVM.Order.Customer != null)
                 {
@@ -243,21 +245,45 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         shoppingCartVM.Order.OrderTotal += item.Product.Price * item.Count;
                     }
                 }
+            }
+            else
+            {
+                var orderPending = await unitOfWork.Order.GetFirstOrDefault(x => x.CustomerId == claim.Value && x.SessionId == paymentIntentSession && x.PaymentStatus == SD.PaymentStatusPending);
+                var coupon = await unitOfWork.Coupon.GetFirstOrDefault(x => x.CouponId == orderPending.CouponId);
+                if(coupon != null)
+                {
+                    coupon.Count += 1;
+                    unitOfWork.Coupon.Update(coupon);
+                    await unitOfWork.Save();
+                }
+
+                if (orderPending != null)
+                {
+                    unitOfWork.Order.Remove(orderPending);
+                    await unitOfWork.Save();
+                }
+                HttpContext.Session.Remove("paymentIntent");
+                return RedirectToAction("Index", "Cart");
+
+            }
+
+
             return View(shoppingCartVM);
         }
 
         [HttpPost]
         public async Task<IActionResult> Checkout(ShoppingCartVM shoppingCartVM,int? cpId)
         {
-            //var orderHasPaymentIntentId = HttpContext.Session.GetString("paymentIntent");
             var paymentIntentSession = HttpContext.Session.GetString("paymentIntent");
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             shoppingCartVM.ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId.Equals(claim.Value), includeProperties: "Product");
+         
             int dcPercent = 0;
 
             if (paymentIntentSession == null)
             {
+                
                 shoppingCartVM.Order.OrderDate = System.DateTime.Now;
                 shoppingCartVM.Order.CustomerId = claim.Value;
                 //khang
@@ -303,10 +329,6 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 shoppingCartVM.Order = await unitOfWork.Order.GetFirstOrDefault(x => x.SessionId == paymentIntentSession, includeProperties: "Customer,OrderDetail");
             }
 
-
-
-
-
             //Start Redirect To Stripe Page
             var domain = "https://localhost:7166/";
             var options = new SessionCreateOptions
@@ -343,7 +365,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 //create a session for options based on SessionService
                 Session session = service.Create(options);
                 HttpContext.Session.SetString("paymentIntent", session.Id);
-                unitOfWork.Order.UpdateStripePaymentId(shoppingCartVM.Order.OrderId, session.Id, session.Id);
+                unitOfWork.Order.UpdateStripePaymentId(shoppingCartVM.Order.OrderId, session.Id, session.PaymentIntentId);
                 await unitOfWork.Save();
                 Response.Headers.Add("Location", session.Url);
                 return new StatusCodeResult(303);
@@ -402,12 +424,12 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 if (session.PaymentStatus.ToLower() == "paid")
                 {
                     unitOfWork.Order.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
-                    unitOfWork.Order.UpdateStripePaymentId(id, orderVM.Order.SessionId, null);
                     IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
                     //khang
                     if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }
                     //
                     unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+                    HttpContext.Session.Remove("paymentIntent");
                     await unitOfWork.Save();
                 }
             }

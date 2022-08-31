@@ -96,6 +96,15 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 data = orderList,
             });
         }
+        [HttpGet]
+        public async Task<IActionResult> CancelRequest(int id)
+        {
+            
+            
+            return Json(new {
+            
+            });
+        }
 
     }
 }
