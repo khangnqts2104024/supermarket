@@ -7,7 +7,6 @@ using System.Security.Claims;
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    [Authorize]
     [BranchActionFilter]
 
     public class FeedbackAndRatingController : Controller
@@ -24,6 +23,14 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claimsIdentity == null || claim == null)
+            {
+                return Json(new
+                {
+                    statusCode = 401,
+                    message = "Please Login to Review",
+                });
+            }
             var branchId = HttpContext.Session.GetInt32("branchId");
             if(branchId != 0)
             {
