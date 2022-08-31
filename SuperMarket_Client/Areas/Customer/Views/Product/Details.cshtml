@@ -101,7 +101,7 @@
                         }
             </div>
 
-		        <h3 class="title">@Model.ShoppingCart.Product.Title</h3>
+		        <h3 class="title">@Model.Product.Title</h3>
 
             <div class="sspd_review mb20 mt10">
            
@@ -118,17 +118,17 @@
 
             </div>
 
-	        <div class="sspd_price mb35"><small><del>$79.49</del></small> @Model.ShoppingCart.Product.Price.ToString("c")</div>
-                <p class="mb25">@Model.ShoppingCart.Product.Description</p>
+	        <div class="sspd_price mb35"><small><del>$79.49</del></small> @Model.Product.Price.ToString("c")</div>
+                <p class="mb25">@Model.Product.Description</p>
                  <form id="formAddCart" asp-action="Details" asp-area="Customer" asp-controller="Product" method="Post">
-                     <input type="hidden" asp-for="ShoppingCart.ProductId" />
+                     <input type="hidden" asp-for="ProductId" />
                      <input type="hidden" asp-for="branchId" />
                      <ul class="cart_btns ui_kit_button mb30" style="margin-bottom:20px;">
                         <li class="list-inline-item">
                             <div class="cart_btn">
                                 <div class="quantity-block">
                                     <button type="button" class="quantity-arrow-minus inner_page"> - </button>
-                                    <input asp-for="ShoppingCart.Count" class="quantity-num inner_page" type="number"/>
+                                    <input asp-for="Count" class="quantity-num inner_page" type="number"/>
                                     <button type="button" class="quantity-arrow-plus inner_page"> + </button>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@
 
                      
 		            <ul class="sspd_sku mb30">
-                        <li><a href="#">Categories:</a> <span>@Model.ShoppingCart.Product.Brand_Category.Category.CategoryName</span></li>
+                        <li><a href="#">Categories:</a> <span>@Model.Product.Brand_Category.Category.CategoryName</span></li>
 		            </ul>
 
                  </form>
@@ -175,7 +175,7 @@
                     <div class="product_single_content">
                       <div class="mbp_pagination_comments">
                         <div class="mbp_first">
-                          @Model.ShoppingCart.Product.Description
+                          @Model.Product.Description
                         </div>
                       </div>
                     </div>
@@ -187,8 +187,8 @@
                   <div class="col-lg-7">
                     <div class="shop_item_ai_info">
                       <ul class="mb0">
-                        <li><a href="#">Weight <span class="float-end">@Model.ShoppingCart.Product.Weight</span></a></li>
-                        <li><a href="#">Brand <span class="float-end">>@Model.ShoppingCart.Product.Brand_Category.Brand.BrandName</span></a></li>
+                        <li><a href="#">Weight <span class="float-end">@Model.Product.Weight</span></a></li>
+                        <li><a href="#">Brand <span class="float-end">>@Model.Product.Brand_Category.Brand.BrandName</span></a></li>
                       </ul>
                     </div>
                   </div>
@@ -242,9 +242,9 @@
                       <form class="comments_form" >
                         <div class="row">
                           <div class="col-lg-12">
-                              <input type="hidden" asp-for="ShoppingCart.ProductId" />
+                              <input type="hidden" asp-for="ProductId" />
                               <input type="hidden" asp-for="branchId" />
-                            <h5 class="fz16 mb10">Be the first to review “@Model.ShoppingCart.Product.Title” </h5>
+                            <h5 class="fz16 mb10">Be the first to review “@Model.Product.Title” </h5>
                             <div class="sspd_review mb10">
                                <div class="rating mb10"> 
                                     <input  type="radio" data-rating="ratingProduct" class="ratingProduct" data-id="5" name="ratingProduct5" value="5" id="5"><label for="5">☆</label> 

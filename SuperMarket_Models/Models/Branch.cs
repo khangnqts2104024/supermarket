@@ -24,7 +24,7 @@ namespace SuperMarket_Models.Models
         public string? Latitude { get; set; }
         public string? Longtitude { get; set; }
         
-
+        public string BranchImg { get; set; }
 
 
     }

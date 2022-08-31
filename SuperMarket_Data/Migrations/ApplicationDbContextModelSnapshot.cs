@@ -263,6 +263,10 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
+                    b.Property<string>("BranchImg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("BranchName")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
@@ -351,6 +355,10 @@ namespace SuperMarket_DataAccess.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryId"), 1L, 1);
+
+                    b.Property<string>("CategoryImg")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CategoryName")
                         .IsRequired()
@@ -816,7 +824,7 @@ namespace SuperMarket_DataAccess.Migrations
             modelBuilder.Entity("SuperMarket_Models.Models.OrderDetail", b =>
                 {
                     b.HasOne("SuperMarket_Models.Models.Order", "Order")
-                        .WithMany()
+                        .WithMany("OrderDetail")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -875,6 +883,11 @@ namespace SuperMarket_DataAccess.Migrations
                     b.Navigation("Branch");
 
                     b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("SuperMarket_Models.Models.Order", b =>
+                {
+                    b.Navigation("OrderDetail");
                 });
 
             modelBuilder.Entity("SuperMarket_Models.Models.Product", b =>

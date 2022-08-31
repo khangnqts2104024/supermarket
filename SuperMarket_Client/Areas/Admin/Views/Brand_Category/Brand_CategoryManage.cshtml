@@ -5,6 +5,9 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
+<a class="btn btn-outline-primary" href="/Admin/Product/Index">Product Manage</a> |
+<a class="btn btn-outline-primary" href="/Admin/Category/CreateCategory">Create Category</a>|
+<a class="btn btn-outline-primary" href="/Admin/Brand/Index">Brand Manage</a>
 @foreach (Category item in @ViewBag.CategoryList)
 {
 	<div class="accordion accordion-flush" id="accordionFlushExample">
@@ -13,7 +16,10 @@
 				<button class="accordion-button collapsed " style="background: linear-gradient(#e66465, #9198e5);" type="button" data-bs-toggle="collapse" data-bs-target="#item_@item.CategoryId" aria-expanded="false" aria-controls="flush-collapseOne">
 					@item.CategoryName
 				</button>
+				<a class="btn btn-outline-primary" href="/Admin/Category/UpdateCategory/@item.CategoryId">Update Category</a> |
+				<a class="btn btn-outline-primary" onclick="return deleteCategoryBtn(@item.CategoryId)">Delete Category</a>
 			</h2>
+
 			@foreach (var data in Model)
 			{
 				if (item.CategoryId == data.Category.CategoryId)
@@ -24,11 +30,10 @@
 							Created date: @data.Brand.CreatedDate |
 							Address: @data.Brand.Address |
 							Origin: @data.Brand.Origin |
-							<a class="btn btn-outline-success" id="deleteBtn" onclick="return deleteBrandBtn(@data.BrandId)">Delete Brand</a>
-							<a class="btn btn-outline-success" href="/Admin/Brand/UpdateBrand/@data.BrandId">Update Brand</a>
 							<button class="btn btn-outline-success" type="button" data-bs-toggle="collapse" data-bs-target="#item_BC_@data.BrandCateId" aria-expanded="false" aria-controls="collapseExample">
 								Show all Product
 							</button>
+
 
 
 						</div>
@@ -38,7 +43,7 @@
 							{
 								<div class="collapse pt-1" id="item_BC_@data.BrandCateId">
 									<div class="card card-body" style="background-color:#E8E8E8">
-										@product.ProductName
+										Product name: @product.ProductName
 									</div>
 								</div>
 							}
@@ -68,12 +73,51 @@
 						id: data
 					}, success: function(respond) {
 						if (respond.success) {
+							setTimeout(function() { location.reload(1); }, 1000);
+
 							Swal.fire({
 								icon: 'success',
 								title: respond.msgSuccess,
 								showConfirmButton: false
 							})
-                            location.reload();
+						} else {
+							Swal.fire({
+								icon: 'error',
+								title: 'Oops...',
+								text: respond.msgFail
+							})
+						}
+					}, error: function(response) {
+						alert("error!");  //
+					}
+				})
+			}
+		})
+	}
+	function deleteCategoryBtn(data) {
+		Swal.fire({
+			title: 'Are you sure?',
+			text: "You won't be able to revert this!",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Yes, delete it!'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				$.ajax({
+					url: '/Admin/Category/DeleteCategory',
+					type: 'Delete',
+					data: {
+						id: data
+					}, success: function(respond) {
+						if (respond.success) {
+							setTimeout(function() { location.reload(1); }, 1000);
+							Swal.fire({
+								icon: 'success',
+								title: respond.msgSuccess,
+								showConfirmButton: false
+							})
 						} else {
 							Swal.fire({
 								icon: 'error',

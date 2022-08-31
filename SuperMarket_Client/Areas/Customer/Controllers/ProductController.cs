@@ -22,6 +22,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         public async Task<IActionResult> Index()
         {
             var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category,Brand_Category.Brand,Brand_Category.Category");
+            var categoryList = await unitOfWork.Category.GetAll();
+            ViewBag.categoryList=categoryList;
             return View(data);
         }
 
@@ -33,45 +35,26 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if (id == 0 || branchId == null)
-
             {
                 return RedirectToAction("Index", "Home", new { Area = "Customer" });
             }
-            ShoppingCart cart = new ShoppingCart()
-            {
-                Count = 1,
-                ProductId = id,
-                Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock.Branch"),
-            };
+         
             Cart_Feedback_RatingVM objVM = new Cart_Feedback_RatingVM()
             {
-               ShoppingCart = cart,
                branchId = (int)branchId,
                Feedback_RatingList = (List<Feedback_Rating>)await unitOfWork.Feedback_Rating.GetAll(x=>x.ProductId == id,includeProperties:"Product,Customer"),
-               //Rating = (List<Rating>)await unitOfWork.Rating.GetAll(x => x.ProductId == id,includeProperties: "Product,Customer"),
+               Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock.Branch"),
+               Count = 1,
+               ProductId = id,
             };
 
-            //var feedback_rating = from feedback in objVM.Feedback
-            //                      join rating in objVM.Rating
-            //                      on new { X1 = feedback.ProductId, X2 = feedback.CustomerId } equals new { X1= rating.ProductId, X2 = rating.CustomerId }
-            //                      select new Feedback_Rating {
-            //                        ProductId = feedback.ProductId,
-            //                        CustomerId = feedback.CustomerId,
-            //                        Content = feedback.Content,
-            //                        FullName = feedback.Customer.FullName,
-            //                        PostedDate = feedback.PostedDate,
-            //                        RatingPoint = rating.RatingPoint,
-            //                      };
-            
-            
-            
-         
+          
             objVM.RatingPointAverage = CalculateRatingPointAverage(objVM.Feedback_RatingList, id);
 
 
-            if (objVM.ShoppingCart.Product != null)
+            if (objVM.Product != null)
             {
-                var stockByBranchID = objVM.ShoppingCart.Product.Stock.FirstOrDefault(x => x.BranchId == branchId && x.ProductId == id);
+                var stockByBranchID = objVM.Product.Stock.FirstOrDefault(x => x.BranchId == branchId && x.ProductId == id);
                 objVM.StockCount = (int)stockByBranchID.Count;
             }
             objVM.FeedbackCount = objVM.Feedback_RatingList.Count();
@@ -92,16 +75,19 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
                     if (claim != null)
                     {
-
-                        objVM.ShoppingCart.CustomerId = claim.Value;
-                        var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CustomerId == claim.Value && x.ProductId == objVM.ShoppingCart.ProductId);
-
+                        var shoppingCart = new ShoppingCart()
+                        {
+                            Count = objVM.Count,
+                            ProductId = objVM.ProductId,
+                            CustomerId = claim.Value
+                        };
+                        var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CustomerId == claim.Value && x.ProductId == objVM.ProductId);
                         if (cartFromDb != null)
                         {
 
-                            var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == objVM.branchId && x.ProductId == objVM.ShoppingCart.ProductId);
+                            var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == objVM.branchId && x.ProductId == objVM.ProductId);
 
-                            if (objVM.ShoppingCart.Count + cartFromDb.Count > stock.Count)
+                            if (objVM.Count + cartFromDb.Count > stock.Count)
                             {
                                 return Json(new
                                 {
@@ -111,7 +97,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                                 });
                             }
 
-                            unitOfWork.ShoppingCart.IncrementCount(cartFromDb, objVM.ShoppingCart.Count);
+                            unitOfWork.ShoppingCart.IncrementCount(cartFromDb, objVM.Count);
                             await unitOfWork.Save();
                             return Json(new
                             {
@@ -123,9 +109,9 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         else
                         {
 
-                            var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == objVM.branchId && x.ProductId == objVM.ShoppingCart.ProductId);
+                            var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == objVM.branchId && x.ProductId == objVM.ProductId);
 
-                            if (objVM.ShoppingCart.Count > stock.Count)
+                            if (objVM.Count > stock.Count)
                             {
                                 return Json(new
                                 {
@@ -134,7 +120,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                                     count = 1,
                                 });
                             }
-                            await unitOfWork.ShoppingCart.Add(objVM.ShoppingCart);
+                           
+                            await unitOfWork.ShoppingCart.Add(shoppingCart);
 
                             await unitOfWork.Save();
                             return Json(new

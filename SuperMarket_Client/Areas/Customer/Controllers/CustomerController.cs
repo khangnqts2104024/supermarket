@@ -7,6 +7,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
 
+    [Authorize]
+
     public class CustomerController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -18,15 +20,18 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             this.env = env;
         }
 
-        public async Task<IActionResult> Index(string id)
+        public async Task<IActionResult> Index()
         {
-            if (id == null)
+            if (User.Identities==null)
             {
-                return RedirectToAction("Index", "Customer", new { Area = "Customer" });
+
+                return RedirectToAction("Index", "Home", new { Area = "Customer" });
             }
             else
             {
-                var data = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id == id);
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                var data = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id == claim.Value);
                 return View(data);
             }
 
@@ -38,7 +43,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             if (file != null)
             {
                 string fileName = Guid.NewGuid().ToString();
-                var uploads = Path.Combine(wwwRootPath, @"Images");
+                var uploads = Path.Combine(wwwRootPath, @"Images\CustomerAvatar");
                 var extension = Path.GetExtension(file.FileName);
 
                 if (customer.CustomerAvatar != null)
@@ -54,7 +59,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 {
                     file.CopyTo(fileStreams);
                 }
-                customer.CustomerAvatar = @"\Images\" + fileName + extension;
+                customer.CustomerAvatar = @"\Images\CustomerAvatar\" + fileName + extension;
                 unitOfWork.Customer.Update(customer);
                 await unitOfWork.Save();
                 return RedirectToAction("Index", new { id = customer.Id });
@@ -66,5 +71,31 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 return RedirectToAction("Index", new { id = customer.Id });
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Order()
+        {
+            return View();
+        }
+
+        //For datatable api call
+        [HttpGet]
+        public async Task<IActionResult> GetAllOrder()
+        {
+            var claimIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var orderList = await unitOfWork.Order.GetAll(x => x.CustomerId == claim.Value);
+
+            foreach (var item in orderList)
+            {
+                item.OrderDetail = (List<SuperMarket_Models.Models.OrderDetail>)await unitOfWork.OrderDetail.GetAll(x => x.OrderId == item.OrderId,includeProperties:"Product");
+            }
+
+            return Json(new
+            {
+                data = orderList,
+            });
+        }
+
     }
 }
