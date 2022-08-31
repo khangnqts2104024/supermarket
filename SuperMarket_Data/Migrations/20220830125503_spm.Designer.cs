@@ -12,8 +12,8 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220830090247_addFbRating")]
-    partial class addFbRating
+    [Migration("20220830125503_spm")]
+    partial class spm
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
