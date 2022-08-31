@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using SuperMarket_DataAccess.Repository.IRepository;
 
 namespace SuperMarket_Client.ViewComponents
@@ -16,6 +17,7 @@ namespace SuperMarket_Client.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var categoryList = await unitOfWork.Category.GetAll();
+            
             return View("CategoryList", categoryList);
         }
     }
