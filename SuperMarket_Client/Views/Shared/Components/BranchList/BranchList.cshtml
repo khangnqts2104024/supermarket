@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<Branch>
 
 
-<div class="popup_onload_modal">
+
 	<!-- Modal -->
 	<div class="modal fade" id="mailchimp_newslatter_popup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="mailchimp_newslatter_popup" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-centered">
@@ -21,13 +21,13 @@
 									</div>
 								</div>
 								<div class="footer_social_widget">
-									<form class="footer_mailchimp_form mb10">
+									<form class="footer_mailchimp_form mb10" method="post" asp-action="CreateSession" asp-controller="Home" asp-area="Customer">
 										<div class="row align-items-center">
-											<select class="form-select form-select-lg mb-3" id="selectModalPopup" aria-label=".form-select-lg example" onchange="    if (this.selectedIndex) { return test() }">
+											<select class="form-select form-select-lg mb-3" id="selectModalPopup" aria-label=".form-select-lg example" name="selectBranch">
 												<option>Select the branch</option>
 												@foreach (var item in Model)
 												{
-													<option value="@item.BranchId">@item.BranchName<input value="@item.BranchImg" /></option>
+													<option value="@item.BranchId">@item.BranchName</option>
 												}
 											</select>
 											<button type="submit">Enter</button>
@@ -44,11 +44,4 @@
 			</div>
 		</div>
 	</div>
-</div>
-<script>
-let img = document.getElementById("imgPreviewModalPopup");
-let input = document.getElementById("selectModalPopup");
-function test() {
-	img.src=""
-}
-</script>
+
