@@ -44,5 +44,6 @@ namespace SuperMarket_Models.Models
         public Customer Customer { get; set; }
         [ValidateNever]
         public List<OrderDetail> OrderDetail { get; set; }
+
     }
-}
+}  
