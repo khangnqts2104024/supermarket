@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SuperMarket_DataAccess.Migrations
 {
-    public partial class addFbRating : Migration
+    public partial class spm : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,7 +64,8 @@ namespace SuperMarket_DataAccess.Migrations
                     Address = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Latitude = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Longtitude = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Longtitude = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    BranchImg = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,7 +98,8 @@ namespace SuperMarket_DataAccess.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true)
+                    UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CategoryImg = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {

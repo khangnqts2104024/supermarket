@@ -19,7 +19,19 @@ namespace SuperMarket_DataAccess.Services
 
         public void Update(Branch obj)
         {
-            throw new NotImplementedException();
+            var objFromDb = _db.Branches.FirstOrDefault(x => x.BranchId == obj.BranchId);
+            if (objFromDb != null)
+            {
+
+                objFromDb.BranchName = obj.BranchName;
+                objFromDb.Address = obj.Address;
+                objFromDb.Phone = obj.Phone;
+                objFromDb.Address = obj.Address;
+                objFromDb.Latitude = obj.Latitude;
+                objFromDb.Longtitude = obj.Longtitude;
+                objFromDb.BranchImg=obj.BranchImg;
+                _db.Branches.Update(objFromDb);
+            }
         }
     }
 }
