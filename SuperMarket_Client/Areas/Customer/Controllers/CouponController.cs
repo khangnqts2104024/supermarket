@@ -43,6 +43,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                             {
                             statusCode = 200,
                             cpCode = coupon.CouponCode,
+                            message = "Applied Coupon Successfully",
                             orderTotalBeforeCoupon = orderTotalBeforeCoupon,
                             orderTotalAfterCoupon = orderTotalAfterCoupon,
                             discountAmount = discountAmount,

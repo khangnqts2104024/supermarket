@@ -1,6 +1,7 @@
 var domain = "https://" + window.location.host + "/";
 var rating_product = $('[data-rating = "ratingProduct"]');
 var globalRating = 0;
+var isApplied = false;
 
 (function ($) {
 
@@ -55,7 +56,7 @@ var globalRating = 0;
                 { data: 'orderDate' },
                 { data: 'orderStatus' },
                 { data: 'orderTotal', render: $.fn.dataTable.render.number('.', ',', 2, '$') },
-                { data: "orderId", render: function (dataField) { return '<a href="' + dataField + '">Action</a>'; } },
+                { data: "orderId", render: function (dataField) { return '<a href="/Customer/Customer/CancelRequest/' + dataField +'"> Order Cancellation </a>'; } },
             ],
             order: [[1, 'asc']],
         });
@@ -95,7 +96,7 @@ var globalRating = 0;
         e.preventDefault();
         let isChecked = false;
         var content = $.trim($('#feedbackContent').val());
-        var productId = $("#ShoppingCart_ProductId").val();
+        var productId = $("#ProductId").val();
         for (var i = 0; i < rating_product.length; i++) {
             if (rating_product[i].checked == true) {
                 isChecked = true;
@@ -121,6 +122,7 @@ var globalRating = 0;
                 type: "POST",
                 data: { content: content, ratingPoint: id, productId: productId },
                 success: function (response) {
+                    console.log(response)
                     if (response.statusCode == 401 || response.statusCode == 400) {
                         Swal.fire({
                             icon: 'error',
@@ -162,6 +164,13 @@ var globalRating = 0;
                         for (var i = 0; i < rating_product.length; i++) {
                             $("#" + i).prop("checked", false);
                         }
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Your feedback has has been sent',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                     }
                 }
             });
@@ -913,6 +922,14 @@ var globalRating = 0;
     //Check out Page
     $(function () {
         $("#applyCouponBtn").on("click", function (e) {
+            if (isApplied == true) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Coupon Code Was Applied!',
+                });
+                return false;
+            }
             e.preventDefault();
 
             let couponCode = $("#couponField").val();
@@ -921,8 +938,6 @@ var globalRating = 0;
                 type: "POST",
                 data: { couponCode: couponCode },
                 success: function (response) {
-                    console.log(response);
-
                     if (response.cpCode == "Expired") {
                         Swal.fire({
                             icon: 'warning',
@@ -936,10 +951,16 @@ var globalRating = 0;
                             text: 'Coupon Code Not Exists!',
                         });
                     } else {
-
                         $("#discountValue").text("$" + response.discountAmount)
                         $("#orderTotalValue").text("$" + response.orderTotalAfterCoupon)
                         $("#cpId").val(response.couponId);
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        isApplied = true;
                     }
                 }
 

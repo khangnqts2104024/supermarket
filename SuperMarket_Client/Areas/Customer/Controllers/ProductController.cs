@@ -45,8 +45,9 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                Count = 1,
                ProductId = id,
             };
+            objVM.Feedback_RatingList = objVM.Feedback_RatingList.OrderByDescending(x=>x.Id).ToList();
 
-          
+
             objVM.RatingPointAverage = CalculateRatingPointAverage(objVM.Feedback_RatingList, id);
 
 
