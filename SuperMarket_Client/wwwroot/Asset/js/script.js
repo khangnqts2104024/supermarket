@@ -1,16 +1,15 @@
 var domain = "https://" + window.location.host + "/";
 var rating_product = $('[data-rating = "ratingProduct"]');
 var globalRating = 0;
+var isApplied = false;
 
 (function ($) {
 
     /* Formatting function for row details - modify as you need */
     function format(data) {
-        console.log(data)
         // `d` is the original data object for the row
         var trs = '';
-        
-          
+
                 for (var item of data.orderDetail) {
                     trs +=
                         `<tr>
@@ -21,9 +20,6 @@ var globalRating = 0;
                          <td>${item.product.expiryDate}</td>
                          </tr>`;
                 }
-                
-               
-       
        
         return (
             '<table class="table table-border table-hover">' +
@@ -54,11 +50,27 @@ var globalRating = 0;
                 { data: 'orderId' },
                 { data: 'orderDate' },
                 { data: 'orderStatus' },
+                { data: 'paymentStatus' },
                 { data: 'orderTotal', render: $.fn.dataTable.render.number('.', ',', 2, '$') },
-                { data: "orderId", render: function (dataField) { return '<a href="' + dataField + '">Action</a>'; } },
+                {
+                    data: "orderId", render: function (dataField,type,row)
+                    {
+                        if (row.orderStatus == "Approved") {
+                            return '<a style="color:red;" href="/Customer/Customer/CancelRequest?orderId=' + dataField + '"> Order Cancellation </a>';
+                        } else if (row.orderStatus == "CancelRequest") {
+                            return '<span href="#"> Waiting For Acceptance </span>';
+                        } else {
+                            return '<span href="#"> N/A </span>';
+
+                        }
+                    }
+                },
             ],
+            
             order: [[1, 'asc']],
         });
+
+
 
         // Add event listener for opening and closing details
         $('#OrderDataTable tbody').on('click', 'td.dt-control', function () {
@@ -95,7 +107,7 @@ var globalRating = 0;
         e.preventDefault();
         let isChecked = false;
         var content = $.trim($('#feedbackContent').val());
-        var productId = $("#ShoppingCart_ProductId").val();
+        var productId = $("#ProductId").val();
         for (var i = 0; i < rating_product.length; i++) {
             if (rating_product[i].checked == true) {
                 isChecked = true;
@@ -162,6 +174,13 @@ var globalRating = 0;
                         for (var i = 0; i < rating_product.length; i++) {
                             $("#" + i).prop("checked", false);
                         }
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Your feedback has has been sent',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                     }
                 }
             });
@@ -724,7 +743,6 @@ var globalRating = 0;
                         $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
                         reloadCart();
                     } else {
-                        console.log(response)
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
@@ -743,7 +761,6 @@ var globalRating = 0;
                 url: "/Customer/Cart/CheckCount",
                 type: "GET",
                 success: function (response) {
-                    console.log(response.count);
                     if (response.statusCode == 200 && response.count != 0) {
                         window.location.href = domain + "Customer/Cart/Checkout";
                         return true;
@@ -854,8 +871,6 @@ var globalRating = 0;
                         cartCount.val(response.count);
                         subTotalItem.html("$" + response.subTotalItem + ".00");
                         if (response.subTotalOrder != undefined) {
-                            console.log(response)
-                            console.log(response.subTotalOrder)
                             $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
                         } else {
                             $("#subTotalOrder").html("$0.00");
@@ -913,6 +928,14 @@ var globalRating = 0;
     //Check out Page
     $(function () {
         $("#applyCouponBtn").on("click", function (e) {
+            if (isApplied == true) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Coupon Code Was Applied!',
+                });
+                return false;
+            }
             e.preventDefault();
 
             let couponCode = $("#couponField").val();
@@ -921,8 +944,6 @@ var globalRating = 0;
                 type: "POST",
                 data: { couponCode: couponCode },
                 success: function (response) {
-                    console.log(response);
-
                     if (response.cpCode == "Expired") {
                         Swal.fire({
                             icon: 'warning',
@@ -936,10 +957,16 @@ var globalRating = 0;
                             text: 'Coupon Code Not Exists!',
                         });
                     } else {
-
                         $("#discountValue").text("$" + response.discountAmount)
                         $("#orderTotalValue").text("$" + response.orderTotalAfterCoupon)
                         $("#cpId").val(response.couponId);
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        isApplied = true;
                     }
                 }
 
