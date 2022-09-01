@@ -274,6 +274,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(ShoppingCartVM shoppingCartVM,int? cpId)
         {
+            var branchId = HttpContext.Session.GetInt32("branchId");
             var paymentIntentSession = HttpContext.Session.GetString("paymentIntent");
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -307,7 +308,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 //
                 shoppingCartVM.Order.OrderStatus = SD.StatusPending;
                 shoppingCartVM.Order.PaymentStatus = SD.StatusPending;
-
+                shoppingCartVM.Order.BranchId = (int)branchId;
                 await unitOfWork.Order.Add(shoppingCartVM.Order);
                 await unitOfWork.Save();
 
@@ -318,7 +319,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         ProductId = item.ProductId,
                         Count = item.Count,
                         OrderId = shoppingCartVM.Order.OrderId,
-                        Price = item.Product.Price * item.Count
+                        Price = item.Product.Price * item.Count,
+
                     };
                     await unitOfWork.OrderDetail.Add(orderDetail);
                     await unitOfWork.Save();
