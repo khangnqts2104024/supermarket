@@ -26,7 +26,6 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             }
             catch (Exception)
             {
-
                 return View();
             }
 
