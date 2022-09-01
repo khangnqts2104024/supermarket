@@ -16,6 +16,7 @@ namespace SuperMarket_Client.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
+       
             var List = await unitOfWork.Branch.GetAll();
             return View("BranchList",List);
         }

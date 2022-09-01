@@ -10,7 +10,7 @@
         public const string StatusPending = "Pending";
         public const string StatusApproved = "Approved";
         public const string StatusInProcess = "Processing";
-        public const string statusRefunded = "Refunded";
+        public const string StatusRefunded = "Refunded";
         public const string StatusCancelRequest = "CancelRequest";
         public const string StatusCompleted = "Completed";
 

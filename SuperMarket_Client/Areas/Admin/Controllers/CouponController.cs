@@ -16,11 +16,8 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> NewCoupon()
+        public IActionResult NewCoupon()
         {
-
-
-
             return  View();
         }
         [HttpPost]

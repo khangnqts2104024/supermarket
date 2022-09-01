@@ -4,7 +4,12 @@ var globalRating = 0;
 var isApplied = false;
 
 (function ($) {
+    $("#showModal").on("click", function () {
+        $('#selectBranch_popup').modal('hide');
+        alert(123);
+        $('#selectBranch_popup').modal('show');
 
+    })
     /* Formatting function for row details - modify as you need */
     function format(data) {
         // `d` is the original data object for the row
@@ -97,10 +102,6 @@ var isApplied = false;
             rating_product[i].checked = false;
         }
         $("#" + id).prop("checked", true);
-
-
-
-
     });
 
     $("#submitReview").on("click", function (e) {
@@ -230,11 +231,15 @@ var isApplied = false;
             animationSpeed: 'fast', //slow, medium, fast
             accoridonExpAll: false //Expands all the accordion menu on click
         });
+
+        
     });
 
-    function newslatter_popup() {
-        $('#mailchimp_newslatter_popup').modal('show');
+    function selectBranch_popup() {
+       
     }
+
+   
 
     function mobileNavToggle() {
         if ($('#main-nav-bar .navbar-nav .sub-menu').length) {
@@ -2099,7 +2104,7 @@ var isApplied = false;
         // add your functions
         counterNumber();
         preloaderLoad();
-        newslatter_popup();
+        /*selectBranch_popup();*/
 
     });
     // window on Scroll function
