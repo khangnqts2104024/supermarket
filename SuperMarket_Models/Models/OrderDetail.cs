@@ -30,5 +30,8 @@ namespace SuperMarket_Models.Models
         [ForeignKey("ProductId")]
         [ValidateNever]
         public Product Product { get; set; }
+       
+
+       
     }
 }

@@ -19,7 +19,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             {
                 try
                 {
-                    HttpContext.Session.SetInt32("branchId", 1);
+                    HttpContext.Session.SetInt32("branchId", 4);
                     var data = await unitOfWork.Product.GetAll(includeProperties: "ImageProduct,Brand_Category.Category");
                 ViewBag.CategoryList = await unitOfWork.Category.GetAll();
                     return View(data);
