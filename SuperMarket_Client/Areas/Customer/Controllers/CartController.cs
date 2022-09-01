@@ -1,6 +1,7 @@
 ﻿
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Stripe.Checkout;
 using SuperMarket_DataAccess.Repository.IRepository;
 using SuperMarket_Models.Models;
@@ -220,9 +221,12 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             var paymentIntentSession = HttpContext.Session.GetString("paymentIntent");
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var listCoupon = await unitOfWork.Coupon.GetAll(x=>x.Count >0 && x.ExpiredDate > DateTime.Now);
+            var selectListCoupon = new SelectList(listCoupon, nameof(Coupon.CouponCode), nameof(Coupon.Description));
             ShoppingCartVM shoppingCartVM = new ShoppingCartVM()
             {
                 ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId.Equals(claim.Value), includeProperties: "Product"),
+                ListCoupon = selectListCoupon
             };
             if (shoppingCartVM.ListCart.Count() == 0)
             {
@@ -398,16 +402,15 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
         }
 
-        public async Task<IActionResult> CheckStockCartItem()
-        {
-
-            return View();
-        }
-
+      
         [HttpGet]
         public async Task<IActionResult> CompleteOrder(int id)
         {
-            var order = await unitOfWork.Order.GetFirstOrDefault(x => x.OrderId == id,includeProperties:"Coupon");
+            if(id == 0)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            var order = await unitOfWork.Order.GetFirstOrDefault(x => x.OrderId == id, includeProperties: "Coupon");
             var orderDetails = await unitOfWork.OrderDetail.GetAll(x => x.OrderId == id, includeProperties: "Product");
             //
             //var useCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(order.CouponId));
