@@ -7,11 +7,9 @@ var isApplied = false;
 
     /* Formatting function for row details - modify as you need */
     function format(data) {
-        console.log(data)
         // `d` is the original data object for the row
         var trs = '';
-        
-          
+
                 for (var item of data.orderDetail) {
                     trs +=
                         `<tr>
@@ -22,9 +20,6 @@ var isApplied = false;
                          <td>${item.product.expiryDate}</td>
                          </tr>`;
                 }
-                
-               
-       
        
         return (
             '<table class="table table-border table-hover">' +
@@ -55,11 +50,27 @@ var isApplied = false;
                 { data: 'orderId' },
                 { data: 'orderDate' },
                 { data: 'orderStatus' },
+                { data: 'paymentStatus' },
                 { data: 'orderTotal', render: $.fn.dataTable.render.number('.', ',', 2, '$') },
-                { data: "orderId", render: function (dataField) { return '<a href="/Customer/Customer/CancelRequest/' + dataField +'"> Order Cancellation </a>'; } },
+                {
+                    data: "orderId", render: function (dataField,type,row)
+                    {
+                        if (row.orderStatus == "Approved") {
+                            return '<a style="color:red;" href="/Customer/Customer/CancelRequest?orderId=' + dataField + '"> Order Cancellation </a>';
+                        } else if (row.orderStatus == "CancelRequest") {
+                            return '<span href="#"> Waiting For Acceptance </span>';
+                        } else {
+                            return '<span href="#"> N/A </span>';
+
+                        }
+                    }
+                },
             ],
+            
             order: [[1, 'asc']],
         });
+
+
 
         // Add event listener for opening and closing details
         $('#OrderDataTable tbody').on('click', 'td.dt-control', function () {
@@ -122,7 +133,6 @@ var isApplied = false;
                 type: "POST",
                 data: { content: content, ratingPoint: id, productId: productId },
                 success: function (response) {
-                    console.log(response)
                     if (response.statusCode == 401 || response.statusCode == 400) {
                         Swal.fire({
                             icon: 'error',
@@ -733,7 +743,6 @@ var isApplied = false;
                         $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
                         reloadCart();
                     } else {
-                        console.log(response)
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
@@ -752,7 +761,6 @@ var isApplied = false;
                 url: "/Customer/Cart/CheckCount",
                 type: "GET",
                 success: function (response) {
-                    console.log(response.count);
                     if (response.statusCode == 200 && response.count != 0) {
                         window.location.href = domain + "Customer/Cart/Checkout";
                         return true;
@@ -863,8 +871,6 @@ var isApplied = false;
                         cartCount.val(response.count);
                         subTotalItem.html("$" + response.subTotalItem + ".00");
                         if (response.subTotalOrder != undefined) {
-                            console.log(response)
-                            console.log(response.subTotalOrder)
                             $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
                         } else {
                             $("#subTotalOrder").html("$0.00");

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SuperMarket_Models.Models
 {
-    [JsonObject(IsReference = true)]
+    //[JsonObject(IsReference = true)]
     public class Product
     {
         [Key]
