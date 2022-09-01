@@ -43,27 +43,20 @@
 		<div class="preloader"></div>
 	
 		@{
-		if(this.ViewContext.RouteData.Values["controller"] != null)
-		{
-			var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
-			if (@Context.Session.GetInt32("branchId") == null && controllerName != "Customer")
+			if(this.ViewContext.RouteData.Values["controller"] != null)
 			{
-						<div class="popup_onload_modal">
-							@await Component.InvokeAsync("BranchList")
-						</div>
+				var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+				if (@Context.Session.GetInt32("branchId") == null && controllerName != "Customer")
+				{
+									<div class="popup_onload_modal">
+										@await Component.InvokeAsync("BranchList")
+									</div>
+									<input type="hidden" id="checkSessionBranchId" value="1" />
 
-						@section Scripts{
-							<script type="text/javascript">
-								$(function(){
-									alert(123);
-							 		$('#selectBranch_popup').modal('show');
-								})
-							</script>
-						}
-			}
+				}
 			}
 		}
-		
+							
 	<div class="popup_onload_modal">
 		@await Component.InvokeAsync("BranchList")
 	</div>
@@ -72,28 +65,20 @@
 		<!-- header top -->
 		<div class="header_top bgc-thm2 dn-992">
 			<div class="container">
-				<div class="row">
-					<div class="col-lg-3 col-xl-3">
+				<div class="row" >
+					<div class="col-lg-6 col-xl-6">
 						<div class="ht_contact_widget">
 							<ul class="m0">
-								<li class="list-inline-item"><a href="#"><span class="flaticon-phone-call mr5"></span> You are ordering at  </a></li>
-								<li class="list-inline-item"><a href="#"><span class="flaticon-email mr5"></span> order@freshen.com</a></li>
+								@if(Context.Session.GetString("branchName") != null){
+									<li class="list-inline-item"><a href="#"><span class="flaticon-phone-call mr5"></span> You are ordering at @Context.Session.GetString("branchName") </a></li>
+									<li class="list-inline-item"><a href="#" class="text-white" data-toggle="modal" data-target="#selectBranch_popup" id="showModal">Change Branch</a></li>
+								}
 							</ul>
 						</div>
 					</div>
-					<div class="col-lg-4 col-xl-4">
-						<div class="ht_contact_widget text-center">
-							<a class="text-white" href="#">Free shipping for orders over $59. $5.00 USPS Shipping on $25+ !</a>
-						</div>
-					</div>
-					<div class="col-lg-2 col-xl-2">
-						<div class="ht_contact_widget text-center">
-							<a href="#" class="text-white" data-toggle="modal" data-target="#selectBranch_popup" id="showModal">
-								Choose the branch
-							</a>
-						</div>
-					</div>
-					<div class="col-lg-3 col-xl-3">
+					
+				
+					<div class="col-lg-6 col-xl-6">
 						<div class="ht_language_widget text-end">
 							<ul class="m0">
 								<partial name="_LoginPartial" />

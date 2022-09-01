@@ -4,12 +4,7 @@ var globalRating = 0;
 var isApplied = false;
 
 (function ($) {
-    $("#showModal").on("click", function () {
-        $('#selectBranch_popup').modal('hide');
-        alert(123);
-        $('#selectBranch_popup').modal('show');
-
-    })
+  
     /* Formatting function for row details - modify as you need */
     function format(data) {
         // `d` is the original data object for the row
@@ -43,6 +38,15 @@ var isApplied = false;
     }
 
     $(document).ready(function () {
+        $('#selectBranch_popup').modal({ backdrop: 'static', keyboard: false })  
+        var checkSessionBranchId = $("#checkSessionBranchId").val();
+        if (checkSessionBranchId == 1) {
+            $('#selectBranch_popup').modal('show');
+        }
+        $("#showModal").on("click", function () {
+            $('#selectBranch_popup').modal('show');
+        })
+
         var table = $('#OrderDataTable').DataTable({
             ajax: '/Customer/Customer/GetAllOrder',
             columns: [
@@ -236,7 +240,7 @@ var isApplied = false;
     });
 
     function selectBranch_popup() {
-       
+        $('#selectBranch_popup').modal('show');
     }
 
    
@@ -2104,7 +2108,7 @@ var isApplied = false;
         // add your functions
         counterNumber();
         preloaderLoad();
-        /*selectBranch_popup();*/
+        //selectBranch_popup();
 
     });
     // window on Scroll function
