@@ -45,5 +45,11 @@ namespace SuperMarket_Models.Models
         [ValidateNever]
         public List<OrderDetail> OrderDetail { get; set; }
 
+        //khang
+        public int BranchId { get; set; }
+        [ForeignKey("BranchId")]
+        [ValidateNever]
+        public Branch Branch { get; set; }
+
     }
 }  

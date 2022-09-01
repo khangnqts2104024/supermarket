@@ -11,8 +11,8 @@
         public const string StatusApproved = "Approved";
         public const string StatusInProcess = "Processing";
         public const string statusRefunded = "Refunded";
-        public const string StatusCancelRequest = "CancelRequest";
         public const string StatusCompleted = "Completed";
+        public const string StatusCancelRequest = "CancelRequest";
 
         //payment
         public const string PaymentStatusPending = "Pending";

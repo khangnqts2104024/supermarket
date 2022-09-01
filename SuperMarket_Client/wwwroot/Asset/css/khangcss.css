@@ -72,10 +72,12 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    text-decoration: none;
 }
 
     .option:hover {
         box-shadow: 2px 0px 5px rgb(9, 62, 112);
+        text-decoration: none;
     }
 
 .status {

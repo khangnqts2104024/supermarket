@@ -26,8 +26,10 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             }
             catch (Exception)
             {
+
                 return View();
             }
+
 
         }
         public async Task<IActionResult> CreateSession(int selectBranch)

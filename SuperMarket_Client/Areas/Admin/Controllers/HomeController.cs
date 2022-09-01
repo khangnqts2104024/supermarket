@@ -12,5 +12,9 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         {
             return View();
         }
+        public IActionResult Report()
+        {
+            return View();
+        }
     }
 }
