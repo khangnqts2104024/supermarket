@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SuperMarket_DataAccess.Repository.IRepository;
+using SuperMarket_Utility;
 using System.Security.Claims;
 
 namespace SuperMarket_Client.Areas.Customer.Controllers
@@ -14,7 +15,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         private readonly IUnitOfWork unitOfWork;
         private readonly IWebHostEnvironment env;
 
-        public CustomerController(IUnitOfWork unitOfWork,IWebHostEnvironment env)
+        public CustomerController(IUnitOfWork unitOfWork, IWebHostEnvironment env)
         {
             this.unitOfWork = unitOfWork;
             this.env = env;
@@ -22,15 +23,14 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
         public async Task<IActionResult> Index()
         {
-            if (User.Identities==null)
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            if (claimsIdentity == null || claim == null)
             {
-
                 return RedirectToAction("Index", "Home", new { Area = "Customer" });
             }
             else
             {
-                var claimsIdentity = (ClaimsIdentity)User.Identity;
-                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
                 var data = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id == claim.Value);
                 return View(data);
             }
@@ -78,7 +78,32 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             return View();
         }
 
-        //For datatable api call
+       
+        [HttpGet]
+        public async Task<IActionResult> CancelRequest(int orderId)
+        {
+            if(orderId != 0)
+            {
+                var order = await unitOfWork.Order.GetFirstOrDefault(x => x.OrderId == orderId && x.OrderStatus == SD.StatusApproved);
+                if (order != null)
+                {
+                    unitOfWork.Order.UpdateStatus(orderId, SD.StatusCancelRequest);
+                    await unitOfWork.Save();
+                    TempData["MsgCancelOrder"] = "Cancel Request Has Been Sent!";
+                    return RedirectToAction("Order", "Customer");
+                }
+                else
+                {
+                    TempData["MsgCancelOrder"] = "Can't cancel the order because the order has been completed";
+                    return RedirectToAction("Order", "Customer");
+                }
+            }
+
+            return RedirectToAction("Order", "Customer");
+
+        }
+
+        #region For datatable Order Customer api call
         [HttpGet]
         public async Task<IActionResult> GetAllOrder()
         {
@@ -88,7 +113,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
             foreach (var item in orderList)
             {
-                item.OrderDetail = (List<SuperMarket_Models.Models.OrderDetail>)await unitOfWork.OrderDetail.GetAll(x => x.OrderId == item.OrderId,includeProperties:"Product");
+                item.OrderDetail = (List<SuperMarket_Models.Models.OrderDetail>)await unitOfWork.OrderDetail.GetAll(x => x.OrderId == item.OrderId, includeProperties: "Product");
             }
 
             return Json(new
@@ -96,15 +121,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 data = orderList,
             });
         }
-        [HttpGet]
-        public async Task<IActionResult> CancelRequest(int id)
-        {
-            
-            
-            return Json(new {
-            
-            });
-        }
+        #endregion
 
     }
 }
