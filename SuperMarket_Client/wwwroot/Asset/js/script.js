@@ -38,6 +38,10 @@ var isApplied = false;
     }
 
     $(document).ready(function () {
+        var selectCoupon = $("#selectCoupon");
+        selectCoupon.on("change", function () {
+            $("#couponField").val(selectCoupon.val());
+        });
         $('#selectBranch_popup').modal({ backdrop: 'static', keyboard: false })  
         var checkSessionBranchId = $("#checkSessionBranchId").val();
         if (checkSessionBranchId == 1) {
