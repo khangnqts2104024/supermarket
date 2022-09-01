@@ -32,7 +32,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             }
 
         }
-        public async Task<IActionResult> CreateSession(int selectBranch)
+        public IActionResult CreateSession(int selectBranch)
         {
             HttpContext.Session.SetInt32("branchId", selectBranch);
             return RedirectToAction("Index");
