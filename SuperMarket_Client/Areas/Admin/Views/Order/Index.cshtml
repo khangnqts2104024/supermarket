@@ -1,0 +1,109 @@
+﻿@using Newtonsoft.Json
+@using SuperMarket_Models.Models
+@using SuperMarket_Utility
+
+@model IEnumerable<Order>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+
+
+<div class="container " style="margin:10px;">
+
+	<div class="card-header">
+		<h3 class="card-title">Order Management</h3>
+	</div>
+	<div class="option-container">
+
+		<a class="option" asp-action="" asp-controller="" asp-area="">
+			All
+		</a>
+		<a class="option" asp-action="Index" asp-controller="Order" asp-area="Admin" asp-route-status ="@SD.StatusApproved">
+			Approved Order
+		</a>
+		<a class="option" asp-action="Index" asp-controller="Order" asp-area="Admin" asp-route-status="@SD.StatusInProcess">
+			Processing Order
+		</a>
+		<a class="option" asp-action="Index" asp-controller="Order" asp-area="Admin" asp-route-status="@SD.StatusCancelRequest">
+			Cancelling Order
+		</a>
+		<a class="option" asp-action="Index" asp-controller="Order" asp-area="Admin" asp-route-status="other">
+			Pedding Order
+		</a>
+
+	</div>
+	<hr />
+	<table id="order" class="display " style="width:100%;">
+		<thead>
+			<tr>
+				<th>OrderId</th>
+				<th>Customer Name</th>
+				<th>Phone</th>
+				<th>OrderTotal</th>
+				<th>OrderDate</th>
+				<th>OrderStatus</th>
+				<th>OrderNotes</th>
+				<th>Action</th>
+
+			</tr>
+		</thead>
+		<tbody >
+			@foreach (var item in @Model)
+			{
+			<tr>
+			<td>@item.OrderId</td>
+			<td>@item.Name</td>
+			<td>@item.Phone</td>
+			<td>@item.OrderTotal</td>
+			<td>@item.OrderDate</td>
+			<td>@item.OrderStatus</td>
+			@if (item.OrderNotes == null)
+			{
+
+			<td>N/A</td>
+			}
+			else
+			{
+			<td>@item.OrderNotes</td>
+			}
+			<td><a asp-action="OrderDetails" asp-controller="Order" asp-area="Admin" asp-route-OrderId="@item.OrderId">Details</a></td>
+			</tr>
+
+			}
+
+		</tbody>
+		<tfoot>
+			<tr>
+				<th>OrderId</th>
+				<th>Customer Name</th>
+				<th>Phone</th>
+				<th>OrderTotal</th>
+				<th>OrderDate</th>
+				<th>OrderStatus</th>
+				<th>OrderNotes</th>
+				<th>Action</th>
+			</tr>
+		</tfoot>
+	</table>
+
+</div>
+
+
+
+@section Scripts
+	{
+	<script>
+
+		$(document).ready(function() {
+			$('#order').DataTable();
+
+
+		});
+
+		
+		
+
+
+
+	</script>
+
+}

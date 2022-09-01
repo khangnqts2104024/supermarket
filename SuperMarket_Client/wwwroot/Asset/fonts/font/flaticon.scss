@@ -1,0 +1,225 @@
+$flaticon-font: "flaticon";
+
+@font-face {
+    font-family: $flaticon-font;
+    src: url("./flaticon.ttf?61d418aa666ff779acb1b0aecbfd558b") format("truetype"),
+url("./flaticon.woff?61d418aa666ff779acb1b0aecbfd558b") format("woff"),
+url("./flaticon.woff2?61d418aa666ff779acb1b0aecbfd558b") format("woff2"),
+url("./flaticon.eot?61d418aa666ff779acb1b0aecbfd558b#iefix") format("embedded-opentype"),
+url("./flaticon.svg?61d418aa666ff779acb1b0aecbfd558b#flaticon") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+$flaticon-map: (
+    "phone-call": "\f101",
+    "email": "\f102",
+    "user": "\f103",
+    "heart": "\f104",
+    "search": "\f105",
+    "star": "\f106",
+    "shuffle": "\f107",
+    "chevron": "\f108",
+    "left-arrow": "\f109",
+    "down-arrow": "\f10a",
+    "up-arrow": "\f10b",
+    "whatsapp": "\f10c",
+    "chat": "\f10d",
+    "shopping-cart": "\f10e",
+    "email-1": "\f10f",
+    "play": "\f110",
+    "harvest": "\f111",
+    "vegetable": "\f112",
+    "plastic-bottle": "\f113",
+    "bread-1": "\f114",
+    "boiled-egg": "\f115",
+    "milk-1": "\f116",
+    "meat": "\f117",
+    "fish": "\f118",
+    "bell": "\f119",
+    "discount": "\f11a",
+    "hot-sale": "\f11b",
+    "fast": "\f11c",
+    "returning": "\f11d",
+    "support": "\f11e",
+    "customer": "\f11f",
+    "customer-1": "\f120",
+    "vegetarian": "\f121",
+    "trophy": "\f122",
+    "filter": "\f123",
+    "setting-lines": "\f124",
+    "controls": "\f125",
+    "check": "\f126",
+    "love": "\f127",
+    "lemon": "\f128",
+    "carrot": "\f129",
+    "broccoli": "\f12a",
+    "apple": "\f12b",
+    "salad-1": "\f12c",
+    "play-button-arrowhead": "\f12d",
+    "location": "\f12e",
+    "wall-clock": "\f12f",
+    "map": "\f130",
+    "shop": "\f131",
+    "cookie": "\f132",
+);
+
+.flaticon-phone-call:before {
+    content: map-get($flaticon-map, "phone-call");
+}
+.flaticon-email:before {
+    content: map-get($flaticon-map, "email");
+}
+.flaticon-user:before {
+    content: map-get($flaticon-map, "user");
+}
+.flaticon-heart:before {
+    content: map-get($flaticon-map, "heart");
+}
+.flaticon-search:before {
+    content: map-get($flaticon-map, "search");
+}
+.flaticon-star:before {
+    content: map-get($flaticon-map, "star");
+}
+.flaticon-shuffle:before {
+    content: map-get($flaticon-map, "shuffle");
+}
+.flaticon-chevron:before {
+    content: map-get($flaticon-map, "chevron");
+}
+.flaticon-left-arrow:before {
+    content: map-get($flaticon-map, "left-arrow");
+}
+.flaticon-down-arrow:before {
+    content: map-get($flaticon-map, "down-arrow");
+}
+.flaticon-up-arrow:before {
+    content: map-get($flaticon-map, "up-arrow");
+}
+.flaticon-whatsapp:before {
+    content: map-get($flaticon-map, "whatsapp");
+}
+.flaticon-chat:before {
+    content: map-get($flaticon-map, "chat");
+}
+.flaticon-shopping-cart:before {
+    content: map-get($flaticon-map, "shopping-cart");
+}
+.flaticon-email-1:before {
+    content: map-get($flaticon-map, "email-1");
+}
+.flaticon-play:before {
+    content: map-get($flaticon-map, "play");
+}
+.flaticon-harvest:before {
+    content: map-get($flaticon-map, "harvest");
+}
+.flaticon-vegetable:before {
+    content: map-get($flaticon-map, "vegetable");
+}
+.flaticon-plastic-bottle:before {
+    content: map-get($flaticon-map, "plastic-bottle");
+}
+.flaticon-bread-1:before {
+    content: map-get($flaticon-map, "bread-1");
+}
+.flaticon-boiled-egg:before {
+    content: map-get($flaticon-map, "boiled-egg");
+}
+.flaticon-milk-1:before {
+    content: map-get($flaticon-map, "milk-1");
+}
+.flaticon-meat:before {
+    content: map-get($flaticon-map, "meat");
+}
+.flaticon-fish:before {
+    content: map-get($flaticon-map, "fish");
+}
+.flaticon-bell:before {
+    content: map-get($flaticon-map, "bell");
+}
+.flaticon-discount:before {
+    content: map-get($flaticon-map, "discount");
+}
+.flaticon-hot-sale:before {
+    content: map-get($flaticon-map, "hot-sale");
+}
+.flaticon-fast:before {
+    content: map-get($flaticon-map, "fast");
+}
+.flaticon-returning:before {
+    content: map-get($flaticon-map, "returning");
+}
+.flaticon-support:before {
+    content: map-get($flaticon-map, "support");
+}
+.flaticon-customer:before {
+    content: map-get($flaticon-map, "customer");
+}
+.flaticon-customer-1:before {
+    content: map-get($flaticon-map, "customer-1");
+}
+.flaticon-vegetarian:before {
+    content: map-get($flaticon-map, "vegetarian");
+}
+.flaticon-trophy:before {
+    content: map-get($flaticon-map, "trophy");
+}
+.flaticon-filter:before {
+    content: map-get($flaticon-map, "filter");
+}
+.flaticon-setting-lines:before {
+    content: map-get($flaticon-map, "setting-lines");
+}
+.flaticon-controls:before {
+    content: map-get($flaticon-map, "controls");
+}
+.flaticon-check:before {
+    content: map-get($flaticon-map, "check");
+}
+.flaticon-love:before {
+    content: map-get($flaticon-map, "love");
+}
+.flaticon-lemon:before {
+    content: map-get($flaticon-map, "lemon");
+}
+.flaticon-carrot:before {
+    content: map-get($flaticon-map, "carrot");
+}
+.flaticon-broccoli:before {
+    content: map-get($flaticon-map, "broccoli");
+}
+.flaticon-apple:before {
+    content: map-get($flaticon-map, "apple");
+}
+.flaticon-salad-1:before {
+    content: map-get($flaticon-map, "salad-1");
+}
+.flaticon-play-button-arrowhead:before {
+    content: map-get($flaticon-map, "play-button-arrowhead");
+}
+.flaticon-location:before {
+    content: map-get($flaticon-map, "location");
+}
+.flaticon-wall-clock:before {
+    content: map-get($flaticon-map, "wall-clock");
+}
+.flaticon-map:before {
+    content: map-get($flaticon-map, "map");
+}
+.flaticon-shop:before {
+    content: map-get($flaticon-map, "shop");
+}
+.flaticon-cookie:before {
+    content: map-get($flaticon-map, "cookie");
+}
