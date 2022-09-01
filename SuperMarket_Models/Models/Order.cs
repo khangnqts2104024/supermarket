@@ -51,5 +51,6 @@ namespace SuperMarket_Models.Models
         [ValidateNever]
         public Branch? Branch { get; set; }
 
+
     }
 }  
