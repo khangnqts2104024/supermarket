@@ -31,7 +31,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
     
           
             var orderC= await unitOfWork.Order.GetAll(o=>o.OrderStatus.Equals(SD.StatusCompleted));
-            var orderR = await unitOfWork.Order.GetAll(o => o.OrderStatus.Equals(SD.statusRefunded));
+            var orderR = await unitOfWork.Order.GetAll(o => o.OrderStatus.Equals(SD.StatusRefunded));
             var orders = await unitOfWork.Order.GetAll(o => o.OrderDate < DateTime.Parse("01-01-2023") && o.OrderDate >= DateTime.Parse("01-01-2022"));
             //chart 1(completed/refunded)
             List<int> ratioReport = new List<int>();
