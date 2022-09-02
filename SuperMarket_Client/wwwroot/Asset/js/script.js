@@ -896,6 +896,43 @@ var isApplied = false;
 
             });
         });
+        //Add To Cart Home Page
+        $(".addToCartHome").on("click", function (e) {
+            e.preventDefault();
+            let id = $(this).data("productid");
+            $.ajax({
+                url: "/Customer/Product/Details?id=" + id,
+                type:"GET",
+                success: function (responseDetailGet) {
+                    console.log(responseDetailGet);
+                    $.ajax({
+                        url: "/Customer/Product/Details",
+                        type: "POST",
+                        data: responseDetailGet,
+                        success: function (response) {
+                            if (response.statusCode == 200 || response.statusCode == 201) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                                reloadCart();
+                                $("#Count").val(response.count);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: response.message,
+                                })
+                            }
+
+                        }
+                    });
+                }
+            });
+        })
+
         //Add To Cart
         $("#formAddCart").on('submit', function (e) {
             let userLogged = $("#manage").val();
