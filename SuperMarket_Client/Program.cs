@@ -24,7 +24,6 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddSession();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 //add newtonsoftJson
-
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";

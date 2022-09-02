@@ -24,7 +24,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProduct()
         {
-            var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock");
+            var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category.Brand,Brand_Category.Category");
             return Json(new { data = data });
         }
 		//[HttpGet]
@@ -176,7 +176,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
 
 
             }
-            return View();
+            return null;
         }
         public async Task<IActionResult> ProcessCreateProduct()
         {
@@ -215,6 +215,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             var finalSideImgLsit = JsonConvert.DeserializeObject<List<ImageProduct>>(TempData["finalSideImgLsit"].ToString());
             await unitOfWork.ImageProduct.Add(fianlMainImg);
             await unitOfWork.ImageProduct.AddRange(finalSideImgLsit);
+            unitOfWork.Save();
             return RedirectToAction("CreateProduct", "Product", new { msg = "Product is created succesfully" });
         }
         [HttpGet]

@@ -37,8 +37,13 @@
 		var fileUpload = document.getElementById("fileUpLoad");
 
 		function PreviewMainImg() {
-            previewArea.innerHTML = "";
-			var temp = window.URL.createObjectURL(fileUpload.files[0]);
-			previewArea.innerHTML += imgdefault + " src='" + temp + "'" + "/>";
+			if (fileUpload.files[0].size > 3000000) {
+				alert("Picture must be lower than 3mb");
+				fileUpload.value = "";
+			} else {
+				previewArea.innerHTML = "";
+				var temp = window.URL.createObjectURL(fileUpload.files[0]);
+				previewArea.innerHTML += imgdefault + " src='" + temp + "'" + "/>";
+			}
 		}
 	</script>
