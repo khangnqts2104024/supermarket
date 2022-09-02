@@ -5,7 +5,7 @@
 
 
 <a class="cart_btn" href="#"><span class="flaticon-shopping-cart icon"><span id="CartCount" class="badge bgc-thm">@ViewBag.CartCount</span></span> <span class="price">@ViewBag.totalCart.ToString("c")</span></a>
-<ul class="dropdown_content">
+<ul class="dropdown_content" style="overflow:scroll">
     @foreach (var item in Model)
     {
         <li class="list_content">
@@ -16,8 +16,9 @@
             </a>
         </li>
     }
-    <li class="list_content">
-        <h5>Subtotal: <span class="text-thm fw400 float-end">@ViewBag.totalCart.ToString("c")</span></h5>
+        
+    <li><h5>Subtotal: <span class="text-thm fw400 float-end">@ViewBag.totalCart.ToString("c")</span></h5></li>
+    <li class="list_content" style="display:flex">
         <a asp-area="Customer" asp-controller="Cart" asp-action="Index" class="btn btn-thm cart_btns">VIEW CART</a>
         <a asp-area="Customer" asp-controller="Cart" asp-action="CheckOut" class="btn btn-thm2 checkout_btns">CHECKOUT</a>
     </li>

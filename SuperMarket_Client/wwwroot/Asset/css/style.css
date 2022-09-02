@@ -5876,8 +5876,8 @@ form.listing_page_v9{
   border: 2px solid #006766;
 }
 .popular_listing_sliders .tab-content .tab-pane {
-  display: block;
-  height:0;
+    display: block;
+    height: 0;
 }
 .popular_listing_sliders .tab-content .active {
   height:auto;
@@ -5902,70 +5902,7 @@ form.listing_page_v9{
   -o-transition: all 0.6s ease;
   transition: all 0.6s ease;
 }
-.popular_listing_sliders.home4_style .nav-tabs .nav-link{
-  color: #121212;
-  font-size: 14px;
-  margin: 8px;
-  padding: 0;
-  text-transform: capitalize;
-}
-.popular_listing_sliders.home4_style .nav-tabs .nav-link span{
-  font-size: 18px;
-  font-weight: normal;
-  vertical-align: middle;
-}
-.popular_listing_sliders.home4_style .nav-tabs .nav-link:focus,
-.popular_listing_sliders.home4_style .nav-tabs .nav-link:focus-visible,
-.popular_listing_sliders.home4_style .nav-tabs .nav-link:visited,
-.popular_listing_sliders.home4_style .nav-tabs .nav-link.active{
-  border: 1px solid transparent;
-  background-color: transparent;
-  color: #86BC42;
-  padding: 0;
-}
-.popular_listing_sliders.home4_style .nav-tabs .nav-link.active span{
-  color: #86BC42;
-}
-.popular_listing_sliders.home5_style2 .nav-tabs .nav-link{
-  border: none;
-  margin: 0 30px;
-  padding: 0;
-  text-align: center;
-}
-.popular_listing_sliders.home5_style2 .nav-tabs .nav-link .icon{
-  background-color: transparent;
-  border: none;
-  border-radius: 50%;
-  display: block;
-  height: 80px;
-  line-height: 80px;
-  width: 80px;
-}
-.popular_listing_sliders.home5_style2 .nav-tabs .nav-link.active .icon{
-  background-color: #86BC42;
-}
-.popular_listing_sliders.home5_style2 .nav-tabs .nav-link.active .icon span{
-  color: #fff;
-}
-.popular_listing_sliders.home5_style2 .nav-tabs .nav-link .icon span{
-  color: #86BC42;
-  font-size: 40px;
-  font-weight: 400;  
-}
-.popular_listing_sliders.home5_style2 .nav-tabs .nav-link:focus,
-.popular_listing_sliders.home5_style2 .nav-tabs .nav-link:hover, 
-.popular_listing_sliders.home5_style2 .nav-tabs .nav-link.active{
-  background-color: transparent;
-  border: transparent;
-  color: #121212;
-}
-.popular_listing_sliders.home7_style .nav-tabs .nav-link{
-  margin: 0;
-}
-.popular_listing_sliders.home9_style .nav-tabs .nav-link:hover{
-  background-color: transparent;
-  border: 1px solid transparent;
-}
+
 .popular_listing_sliders .nav-tabs .nav-link:hover,
 .popular_listing_sliders .nav-tabs .nav-link:focus,
 .popular_listing_sliders .nav-tabs .nav-link:focus-visible,
@@ -5975,43 +5912,6 @@ form.listing_page_v9{
   border: 1px solid #41544A;
   border-radius: 30px;
   color: #ffffff;
-}
-.popular_listing_sliders.home9_style .nav-tabs .nav-link{
-  margin: 0;
-  padding: 0;
-}
-.home9_style .best_selling_item .wrapper .media{
-  padding: 20px;
-}
-.popular_listing_sliders.home9_style .nav-tabs .nav-link:focus,
-.popular_listing_sliders.home9_style .nav-tabs .nav-link:focus-visible,
-.popular_listing_sliders.home9_style .nav-tabs .nav-link:visited,
-.popular_listing_sliders.home9_style .nav-tabs .nav-link.active{
-  background-color: transparent;
-  border: 1px solid transparent;
-}
-.popular_listing_sliders.home9_style .nav-tabs .nav-link.active .best_selling_item .wrapper{
-  background-color: #fff;
-  border: 1px solid #86BC42;
-}
-.popular_listing_sliders.home9_style .nav-tabs .nav-link.active .best_selling_item .wrapper:before{
-  background-color: #86BC42;
-  content: "";
-  height: 13px;
-  left: -7px;
-  position: absolute;
-  top: 45%;
-  width: 13px;
-  -webkit-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  transform: rotate(45deg);
-  z-index: -1;
-}
-.popular_listing_sliders.home9_shop_contents{
-  border: 1px solid #ebebeb;
-  border-radius: 4px;
-  padding: 30px;
 }
 /*== Property Cities ==*/
 .properti_city{
@@ -22497,4 +22397,3 @@ input.quantity-num[type="number"]::-webkit-outer-spin-button {
 .small-ratings i {
     color: #cecece;
 }
-
