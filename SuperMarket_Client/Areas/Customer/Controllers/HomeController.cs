@@ -18,10 +18,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             try
             {
-                var getSS = HttpContext.Session.GetInt32("branchId");
                 var data = await unitOfWork.Product.GetAll(includeProperties: "ImageProduct,Brand_Category.Category");
                 ViewBag.CategoryList = await unitOfWork.Category.GetAll();
-                ViewBag.getSS = getSS;
                 return View(data);
             }
             catch (Exception)
@@ -31,12 +29,17 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
             }
 
+
         }
         public IActionResult CreateSession(int selectBranch)
         {
-            HttpContext.Session.SetInt32("branchId", selectBranch);
+            var branch = await unitOfWork.Branch.GetFirstOrDefault(x=>x.BranchId == selectBranch);
+            if(branch != null)
+            {
+                HttpContext.Session.SetInt32("branchId", selectBranch);
+                HttpContext.Session.SetString("branchName", branch.BranchName);
+            }
             return RedirectToAction("Index");
-
         }
 
 

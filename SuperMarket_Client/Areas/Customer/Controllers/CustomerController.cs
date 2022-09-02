@@ -7,7 +7,6 @@ using System.Security.Claims;
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
-
     [Authorize]
 
     public class CustomerController : Controller

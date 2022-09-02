@@ -4,7 +4,7 @@ var globalRating = 0;
 var isApplied = false;
 
 (function ($) {
-
+  
     /* Formatting function for row details - modify as you need */
     function format(data) {
         // `d` is the original data object for the row
@@ -38,6 +38,19 @@ var isApplied = false;
     }
 
     $(document).ready(function () {
+        var selectCoupon = $("#selectCoupon");
+        selectCoupon.on("change", function () {
+            $("#couponField").val(selectCoupon.val());
+        });
+        $('#selectBranch_popup').modal({ backdrop: 'static', keyboard: false })  
+        var checkSessionBranchId = $("#checkSessionBranchId").val();
+        if (checkSessionBranchId == 1) {
+            $('#selectBranch_popup').modal('show');
+        }
+        $("#showModal").on("click", function () {
+            $('#selectBranch_popup').modal('show');
+        })
+
         var table = $('#OrderDataTable').DataTable({
             ajax: '/Customer/Customer/GetAllOrder',
             columns: [
@@ -97,10 +110,6 @@ var isApplied = false;
             rating_product[i].checked = false;
         }
         $("#" + id).prop("checked", true);
-
-
-
-
     });
 
     $("#submitReview").on("click", function (e) {
@@ -230,11 +239,15 @@ var isApplied = false;
             animationSpeed: 'fast', //slow, medium, fast
             accoridonExpAll: false //Expands all the accordion menu on click
         });
+
+        
     });
 
-    function newslatter_popup() {
-        $('#mailchimp_newslatter_popup').modal('show');
+    function selectBranch_popup() {
+        $('#selectBranch_popup').modal('show');
     }
+
+   
 
     function mobileNavToggle() {
         if ($('#main-nav-bar .navbar-nav .sub-menu').length) {
@@ -2099,7 +2112,7 @@ var isApplied = false;
         // add your functions
         counterNumber();
         preloaderLoad();
-        newslatter_popup();
+        //selectBranch_popup();
 
     });
     // window on Scroll function
