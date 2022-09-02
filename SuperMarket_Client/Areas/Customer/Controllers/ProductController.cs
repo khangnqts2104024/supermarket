@@ -60,6 +60,20 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             }
             objVM.FeedbackCount = objVM.Feedback_RatingList.Count();
 
+            bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
+
+            if (isAjax)
+            {
+                return Json(new {
+                    branchId = (int)branchId,
+                    Feedback_RatingList = objVM.Feedback_RatingList,
+                    Product = objVM.Product,
+                    Count = 1,
+                    ProductId = objVM.ProductId,
+                    FeedbackCount = objVM.FeedbackCount,
+                    RatingPointAverage = objVM.RatingPointAverage
+                });
+            }
 
             return View(objVM);
         }
