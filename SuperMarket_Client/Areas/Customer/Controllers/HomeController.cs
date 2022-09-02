@@ -31,7 +31,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
 
         }
-        public IActionResult CreateSession(int selectBranch)
+        public async Task<IActionResult> CreateSession(int selectBranch)
         {
             var branch = await unitOfWork.Branch.GetFirstOrDefault(x=>x.BranchId == selectBranch);
             if(branch != null)
