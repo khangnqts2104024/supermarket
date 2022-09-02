@@ -1,7 +1,10 @@
 ﻿@using Microsoft.AspNetCore.Identity
-
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+
 
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
@@ -12,12 +15,8 @@
 	<meta name="keywords" content="agriculture, bakery, ecommerce, farm, food, food shop, grocery market, natural product, organic, organic farm, organic food, organic market, organic store, shop, shopping">
 	<meta name="CreativeLayers" content="ATFN">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
 	<!-- css file -->
 	<link rel="stylesheet" href="~/Asset/css/bootstrap.min.css">
-
-
-
 
 	<link rel="stylesheet" href="~/Asset/css/style.css">
 
@@ -25,7 +24,6 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 	@*DataTable*@
 	<link rel="stylesheet" href="//cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css" />
-
 	<!-- Responsive stylesheet -->
 	<link rel="stylesheet" href="~/Asset/css/responsive.css">
 	<!-- Title -->
@@ -43,60 +41,56 @@
 
 	<div class="wrapper ovh">
 		<div class="preloader"></div>
-
+	
 		@{
-			if (ViewBag.getSS != null)
+			if(this.ViewContext.RouteData.Values["controller"] != null)
 			{
-					<div class="popup_onload_modal" id="Branch_Modal" hidden>
-						@await Component.InvokeAsync("BranchList")
-					</div>
-			}
+				var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
+				if (@Context.Session.GetInt32("branchId") == null && controllerName != "Customer")
+				{
+										<div class="popup_onload_modal">
+											@await Component.InvokeAsync("BranchList")
+										</div>
+										<input type="hidden" id="checkSessionBranchId" value="1" />
 
-			else
-
-			{
-					<div class="popup_onload_modal" id="Branch_Modal">
-						@await Component.InvokeAsync("BranchList")
-					</div>
+				}
 			}
 		}
+							
+	<div class="popup_onload_modal">
+		@await Component.InvokeAsync("BranchList")
+	</div>
+		
 
 		<!-- header top -->
 		<div class="header_top bgc-thm2 dn-992">
 			<div class="container">
-				<div class="row">
-					<div class="col-lg-3 col-xl-3">
+				<div class="row" >
+					<div class="col-lg-6 col-xl-6">
 						<div class="ht_contact_widget">
 							<ul class="m0">
-								<li class="list-inline-item"><a href="#"><span class="flaticon-phone-call mr5"></span> (+035) 527-1710-70</a></li>
-								<li class="list-inline-item"><a href="#"><span class="flaticon-email mr5"></span> order@freshen.com</a></li>
+								@if(Context.Session.GetString("branchName") != null){
+									<li class="list-inline-item" style="color:white"><span class="flaticon-phone-call mr5"></span> You are ordering at @Context.Session.GetString("branchName")</li>
+									<li style="color:red;" class="list-inline-item"><a href="#" style="color:red;"  class="text-white" data-toggle="modal" data-target="#selectBranch_popup" id="showModal">*Change branch</a></li>
+								}
 							</ul>
 						</div>
 					</div>
-					<div class="col-lg-4 col-xl-4">
-						<div class="ht_contact_widget text-center">
-							<a class="text-white" href="#">Free shipping for orders over $59. $5.00 USPS Shipping on $25+ !</a>
-						</div>
-					</div>
-					<div class="col-lg-2 col-xl-2">
-						<div class="ht_contact_widget text-center">
-							<a class="text-white" data-bs-toggle="modal" data-bs-target="#mailchimp_newslatter_popup" id="showModal">
-								Choose the branch
-							</a>
-						</div>
-					</div>
-					<div class="col-lg-3 col-xl-3">
+					
+				
+					<div class="col-lg-6 col-xl-6">
 						<div class="ht_language_widget text-end">
 							<ul class="m0">
 								<partial name="_LoginPartial" />
 							</ul>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>
 
-
+		
 
 		<!-- header middle -->
 		<div class="header_middle pt25 pb25 dn-992">
@@ -104,7 +98,9 @@
 				<div class="row">
 					<div class="col-lg-2 col-xl-3">
 						<div class="header_top_logo_home1">
-							<img src="~/Asset/images/logoSuperMarket.png" alt="logoSuperMarket.png">
+							<a href="/">
+								<img src="~/Asset/images/logoSuperMarket.png" alt="logoSuperMarket.png">
+							</a>
 						</div>
 					</div>
 					<div class="col-lg-7 col-xl-7">
@@ -238,260 +234,34 @@
 					<!-- Responsive Menu Structure-->
 					<ul id="respMenu" class="ace-responsive-menu menu_list_custom_code wa pl330" data-menu-style="horizontal">
 						<li>
-							<a href="#"><span class="title">HOME</span></a>
-							<!-- Level Two-->
-							<ul>
-								<li><a href="index.html">Home V1</a></li>
-								<li><a href="index2.html">Home V2</a></li>
-								<li><a href="index3.html">Home V3</a></li>
-								<li><a href="index4.html">Home V4</a></li>
-								<li><a href="index5.html">Home V5</a></li>
-								<li><a href="index6.html">Home V6</a></li>
-								<li><a href="index7.html">Home V7</a></li>
-								<li><a href="index8.html">Home V8</a></li>
-								<li><a href="index9.html">Home V9</a></li>
-								<li><a href="index10.html">Home V10</a></li>
-							</ul>
+							<a href="/"><span class="title">HOME</span></a>
 						</li>
 						<li class="megamenu_style">
-							<a href="#"><span class="title">SHOP</span></a>
-							<ul class="row dropdown-megamenu">
-								<li class="col mega_menu_list pl30">
-									<h4 class="title">Shop Listing</h4>
-									<ul>
-										<li><a href="page-shop-list-v1.html">Listing v1</a></li>
-										<li><a href="page-shop-list-v2.html">Listing v2</a></li>
-										<li><a href="page-shop-list-v3.html">Listing v3</a></li>
-										<li><a href="page-shop-list-v4.html">Listing v4</a></li>
-										<li><a href="page-shop-list-v5.html">Listing v5</a></li>
-										<li><a href="page-shop-list-v6.html">Listing v6</a></li>
-									</ul>
-								</li>
-								<li class="col mega_menu_list">
-									<h4 class="title">Shop Single</h4>
-									<ul>
-										<li><a href="page-shop-single-simple.html">Simple</a></li>
-										<li><a href="page-shop-single-variable.html">Variable</a></li>
-										<li><a href="page-shop-single-group.html">Group</a></li>
-										<li><a href="page-shop-single-affiliate.html">Affiliate</a></li>
-										<li><a href="page-shop-single-countdown.html">Countdown</a></li>
-										<li><a href="page-shop-single-thumbnail-vertical.html">Thumbnail Vertical</a></li>
-										<li><a href="page-shop-single-right-sidebar.html">Right Sidebar</a></li>
-										<li><a href="page-shop-single-three-columns.html">Three Columns</a></li>
-									</ul>
-								</li>
-								<li class="col mega_menu_list">
-									<h4 class="title">User Dashboard</h4>
-									<ul>
-										<li><a href="page-dashboard.html">Dashboard</a></li>
-										<li><a href="page-dashboard-order.html">Orders</a></li>
-										<li><a href="page-dashboard-wish-list.html">Downloads</a></li>
-										<li><a href="page-dashboard-address.html">Addresses</a></li>
-										<li><a href="page-dashboard-account-details.html">Account Details</a></li>
-										<li><a href="page-dashboard-wish-list.html">Wishlist</a></li>
-										<li><a href="page-login.html">Logout</a></li>
-									</ul>
-								</li>
-								<li class="col mega_menu_list">
-									<h4 class="title">SHOP PAGES</h4>
-									<ul>
-										<li><a href="page-shop-cart.html">Cart</a></li>
-										<li><a href="page-shop-checkout.html">Checkout</a></li>
-										<li><a href="page-shop-complete-order.html">Complete Order</a></li>
-										<li><a href="order-tracking.html">Order Tracking</a></li>
-										<li><a href="page-store-location.html">Store Locator</a></li>
-									</ul>
-								</li>
-								<li class="col mega_menu_list">
-									<div class="banner_one megamenu_style">
-										<div class="thumb"><img src="~/Asset/images/banner/31.jpg" alt="31.jpg"></div>
-										<div class="details style2">
-											<p class="para">Tasty Healthy</p>
-											<h2 class="title">Fresh Vegetables</h2>
-											<a href="page-shop-list-v1.html" class="shop_btn style2">SHOP NOW</a>
-										</div>
-									</div>
-								</li>
-							</ul>
+							<a asp-action="Shop" asp-controller="Product" asp-area="Customer"><span class="title">SHOP</span></a>
+						</li>
+						<li class="megamenu_style">
+							<a href="#"><span class="title">COMPARE</span></a>
 						</li>
 						<li>
 							<a href="#"><span class="title">PAGES</span></a>
 							<ul>
-								<li><a href="page-about.html">About Us</a></li>
-								<li><a href="page-error.html">404 Page</a></li>
-								<li><a href="page-faq.html">Faq</a></li>
-								<li><a href="page-invoices.html">Invoices</a></li>
-								<li><a href="page-login.html">My Account</a></li>
-								<li><a href="page-terms.html">Terms and Conditions</a></li>
-								<li><a href="page-ui-element.html">UI Elements</a></li>
+								<li><a asp-action="Index" asp-controller="Cart" asp-area="Customer">Your Cart</a></li>
+								<li><a asp-action="Order" asp-controller="Customer" asp-area="Customer">Order History</a></li>
 							</ul>
 						</li>
 						<li>
-							<a href="#"><span class="title">BLOG</span></a>
-							<ul>
-								<li><a href="page-blog-grid.html">Blog Grid</a></li>
-								<li><a href="page-blog-grid-sidebar.html">Blog Grid Sidebar</a></li>
-								<li><a href="page-blog-details.html">Blog Details</a></li>
-								<li><a href="page-blog-list.html">Blog List</a></li>
-								<li><a href="page-blog-single.html">Blog Single</a></li>
-								<li><a href="page-blog-single2.html">Blog Single v2</a></li>
-							</ul>
+							<a asp-action="AboutUs" asp-controller="Customer" asp-area="Customer"><span class="title">ABOUT US</span></a>
 						</li>
-						<li><a href="page-contact.html">CONTACT</a></li>
+						<li><a asp-action="Contact" asp-controller="Customer" asp-area="Customer">CONTACT</a></li>
 					</ul>
 					<ul id="respMenu2" class="ace-responsive-menu widget_menu_home2 wa" data-menu-style="horizontal">
 						<li class="list-inline-item list_c">
-							<a href="#"><span class="flaticon-phone-call vam mr7"></span> HOTLINE <span class="text-thm fw400 dn-lg">(42) 500-78-42</span></a>
+							<a href="#"><span class="flaticon-phone-call vam mr7"></span> HOTLINE <span class="text-thm fw400 dn-lg">(+84) 37 340 5298</span></a>
 						</li>
 					</ul>
 				</div>
 			</nav>
 		</header>
-
-		<!-- Main Header Nav For Mobile -->
-		@*<div id="page" class="stylehome1 h0">*@
-		@* <div class="mobile-menu">
-		<div class="header stylehome1">
-		<div class="mobile_menu_bar">
-		<a class="menubar" href="#menu"><span></span></a>
-		</div>
-		<div class="mobile_menu_main_logo"><img class="nav_logo_img img-fluid mt5" src="~/Asset/images/header-middle-logo.svg" alt="header-middle-logo.svg"></div>
-		<div class="mobile_menu_widget_icons">
-		<ul class="cart mt15">
-		<li class="list-inline-item">
-		<a class="cart_btn" href="#"><span class="flaticon-shopping-cart icon"><span class="badge bgc-thm">3</span></span></a>
-		<ul class="dropdown_content">
-		<li class="list_content">
-		<a href="#">
-		<img class="float-start" src="~/Asset/images/shop/s1.png" alt="50x50">
-		<p>Silver Heinz Ketchup 350 ml</p>
-		<small>3 x $7.63</small>
-		<span class="close_icon float-end"><i class="fa fa-plus"></i></span>
-		</a>
-		</li>
-		<li class="list_content">
-		<a href="#">
-		<img class="float-start" src="~/Asset/images/shop/s2.png" alt="50x50">
-		<p>Silver Heinz Ketchup 350 ml</p>
-		<small>3 x $7.63</small>
-		<span class="close_icon float-end"><i class="fa fa-plus"></i></span>
-		</a>
-		</li>
-		<li class="list_content">
-		<a href="#">
-		<img class="float-start" src="~/Asset/images/shop/s3.png" alt="50x50">
-		<p>Silver Heinz Ketchup 350 ml</p>
-		<small>3 x $7.63</small>
-		<span class="close_icon float-end"><i class="fa fa-plus"></i></span>
-		</a>
-		</li>
-		<li class="list_content">
-		<h5>Subtotal: <span class="text-thm fw400 float-end">$907.00</span></h5>
-		<a href="#" class="btn btn-thm cart_btns">VIEW CART</a>
-		<a href="#" class="btn btn-thm2 checkout_btns">CHECKOUT</a>
-		</li>
-		</ul>
-		</li>
-		</ul>
-		</div>
-		</div>
-		</div>*@
-		<!-- /.mobile-menu -->
-		@* <nav id="menu" class="stylehome1">
-		<ul>
-		<li><span>Home</span>
-		<ul>
-		<li><a href="index.html">Home V1</a></li>
-		<li><a href="index2.html">Home V2</a></li>
-		<li><a href="index3.html">Home V3</a></li>
-		<li><a href="index4.html">Home V4</a></li>
-		<li><a href="index5.html">Home V5</a></li>
-		<li><a href="index6.html">Home V6</a></li>
-		<li><a href="index7.html">Home V7</a></li>
-		<li><a href="index8.html">Home V8</a></li>
-		<li><a href="index9.html">Home V9</a></li>
-		<li><a href="index10.html">Home V10</a></li>
-		</ul>
-		</li>
-		<li><span>Shop</span>
-		<ul>
-		<li><span>Shop Listing</span>
-		<ul>
-		<li><a href="page-shop-list-v1.html">Listing v1</a></li>
-		<li><a href="page-shop-list-v2.html">Listing v2</a></li>
-		<li><a href="page-shop-list-v3.html">Listing v3</a></li>
-		<li><a href="page-shop-list-v4.html">Listing v4</a></li>
-		<li><a href="page-shop-list-v5.html">Listing v5</a></li>
-		<li><a href="page-shop-list-v6.html">Listing v6</a></li>
-		</ul>
-		</li>
-		<li><span>Shop Single</span>
-		<ul>
-		<li><a href="page-shop-single-simple.html">Simple</a></li>
-		<li><a href="page-shop-single-variable.html">Variable</a></li>
-		<li><a href="page-shop-single-group.html">Group</a></li>
-		<li><a href="page-shop-single-affiliate.html">Affiliate</a></li>
-		<li><a href="page-shop-single-countdown.html">Countdown</a></li>
-		<li><a href="page-shop-single-thumbnail-vertical.html">Thumbnail Vertical</a></li>
-		<li><a href="page-shop-single-right-sidebar.html">Right Sidebar</a></li>
-		<li><a href="page-shop-single-three-columns.html">Three Columns</a></li>
-		</ul>
-		</li>
-		<li><span>User Dashboard</span>
-		<ul>
-		<li><a href="page-dashboard.html">Dashboard</a></li>
-		<li><a href="page-dashboard-order.html">Orders</a></li>
-		<li><a href="page-dashboard-wish-list.html">Downloads</a></li>
-		<li><a href="page-dashboard-address.html">Addresses</a></li>
-		<li><a href="page-dashboard-account-details.html">Account Details</a></li>
-		<li><a href="page-dashboard-wish-list.html">Wishlist</a></li>
-		<li><a href="page-login.html">Logout</a></li>
-		</ul>
-		</li>
-		<li><span>Shop Pages</span>
-		<ul>
-		<li><a href="page-shop-cart.html">Cart</a></li>
-		<li><a href="page-shop-checkout.html">Checkout</a></li>
-		<li><a href="page-shop-complete-order.html">Complete Order</a></li>
-		<li><a href="order-tracking.html">Order Tracking</a></li>
-		<li><a href="page-store-location.html">Store Locator</a></li>
-		</ul>
-		</li>
-		</ul>
-		</li>
-		<li><span>Pages</span>
-		<ul>
-		<li><span>Shop</span>
-		<ul>
-		<li><a href="page-shop.html">Shop Pages</a></li>
-		<li><a href="page-shop-single.html">Shop Single</a></li>
-		<li><a href="page-shop-cart.html">Cart</a></li>
-		</ul>
-		</li>
-		<li><a href="page-about.html">About Us</a></li>
-		<li><a href="page-faq.html">Faq</a></li>
-		<li><a href="page-login.html">My Account</a></li>
-		<li><a href="page-error.html">404 Page</a></li>
-		<li><a href="page-terms.html">Terms and Conditions</a></li>
-		<li><a href="page-ui-element.html">UI Elements</a></li>
-		</ul>
-		</li>
-		<li><span>Blog</span>
-		<ul>
-		<li><a href="page-blog-grid.html">Blog Grid</a></li>
-		<li><a href="page-blog-grid-sidebar.html">Blog Grid Sidebar</a></li>
-		<li><a href="page-blog-details.html">Blog Details</a></li>
-		<li><a href="page-blog-list.html">Blog List</a></li>
-		<li><a href="page-blog-single.html">Blog Single</a></li>
-		<li><a href="page-blog-single2.html">Blog Single v2</a></li>
-		</ul>
-		</li>
-		<li><a href="page-contact.html">Contact</a></li>
-		<!-- Only for Mobile View -->
-
-		</ul>
-		</nav>*@
-		@*</div>*@
 
 		<!-- ==================================================================================================================== -->
 		<section class="container">
@@ -532,7 +302,11 @@
 				<div class="row mt100">
 					<div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
 						<div class="footer_about_widget">
-							<div class="logo mb40"><img src="~/Asset/images/logoSuperMarket.png" alt="logoSuperMarket.png"></div>
+							<div class="logo mb40">
+								<a href="/">
+									<img src="~/Asset/images/logoSuperMarket.png" alt="logoSuperMarket.png">
+								</a>
+							</div>
 							<p>Collins Street West, Victoria <br> 8007, Australia.</p>
 							<a href="#" class="shop_map_btn">SHOW ON MAP</a>
 						</div>

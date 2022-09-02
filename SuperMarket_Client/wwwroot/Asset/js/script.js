@@ -4,7 +4,7 @@ var globalRating = 0;
 var isApplied = false;
 
 (function ($) {
-
+  
     /* Formatting function for row details - modify as you need */
     function format(data) {
         // `d` is the original data object for the row
@@ -38,6 +38,19 @@ var isApplied = false;
     }
 
     $(document).ready(function () {
+        var selectCoupon = $("#selectCoupon");
+        selectCoupon.on("change", function () {
+            $("#couponField").val(selectCoupon.val());
+        });
+        $('#selectBranch_popup').modal({ backdrop: 'static', keyboard: false })  
+        var checkSessionBranchId = $("#checkSessionBranchId").val();
+        if (checkSessionBranchId == 1) {
+            $('#selectBranch_popup').modal('show');
+        }
+        $("#showModal").on("click", function () {
+            $('#selectBranch_popup').modal('show');
+        })
+
         var table = $('#OrderDataTable').DataTable({
             ajax: '/Customer/Customer/GetAllOrder',
             columns: [
@@ -97,10 +110,6 @@ var isApplied = false;
             rating_product[i].checked = false;
         }
         $("#" + id).prop("checked", true);
-
-
-
-
     });
 
     $("#submitReview").on("click", function (e) {
@@ -230,11 +239,15 @@ var isApplied = false;
             animationSpeed: 'fast', //slow, medium, fast
             accoridonExpAll: false //Expands all the accordion menu on click
         });
+
+        
     });
 
-    function newslatter_popup() {
-        $('#mailchimp_newslatter_popup').modal('show');
+    function selectBranch_popup() {
+        $('#selectBranch_popup').modal('show');
     }
+
+   
 
     function mobileNavToggle() {
         if ($('#main-nav-bar .navbar-nav .sub-menu').length) {
@@ -883,6 +896,43 @@ var isApplied = false;
 
             });
         });
+        //Add To Cart Home Page
+        $(".addToCartHome").on("click", function (e) {
+            e.preventDefault();
+            let id = $(this).data("productid");
+            $.ajax({
+                url: "/Customer/Product/Details?id=" + id,
+                type:"GET",
+                success: function (responseDetailGet) {
+                    console.log(responseDetailGet);
+                    $.ajax({
+                        url: "/Customer/Product/Details",
+                        type: "POST",
+                        data: responseDetailGet,
+                        success: function (response) {
+                            if (response.statusCode == 200 || response.statusCode == 201) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                                reloadCart();
+                                $("#Count").val(response.count);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: response.message,
+                                })
+                            }
+
+                        }
+                    });
+                }
+            });
+        })
+
         //Add To Cart
         $("#formAddCart").on('submit', function (e) {
             let userLogged = $("#manage").val();
@@ -2099,7 +2149,7 @@ var isApplied = false;
         // add your functions
         counterNumber();
         preloaderLoad();
-        newslatter_popup();
+        //selectBranch_popup();
 
     });
     // window on Scroll function

@@ -49,7 +49,8 @@ namespace SuperMarket_Models.Models
         public int BranchId { get; set; }
         [ForeignKey("BranchId")]
         [ValidateNever]
-        public Branch Branch { get; set; }
+        public Branch? Branch { get; set; }
+
 
     }
 }  

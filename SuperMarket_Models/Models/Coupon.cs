@@ -24,6 +24,9 @@ namespace SuperMarket_Models.Models
         public DateTime? ExpiredDate { get; set; }
         [Required]
         public int? Count { get; set; }
+
+        [Required]
+        public string Description { get; set; }
         [NotMapped]
         public virtual List<Product>? Products { set; get; }
     }

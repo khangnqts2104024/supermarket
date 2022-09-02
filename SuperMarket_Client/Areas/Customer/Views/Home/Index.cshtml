@@ -46,53 +46,21 @@
 					@foreach (Category item in @ViewBag.CategoryList)
 					{
 						<div class="item">
-						<a href="page-shop-list-v6.html">
-							<div class="iconbox">
-								<div class="icon"><img src="@item.CategoryImg" alt="food-grocery.png"></div>
-								<div class="details">
-									<h5 class="title">@item.CategoryName</h5>
+							<a href="page-shop-list-v6.html">
+								<div class="iconbox">
+									<div class="icon"><img src="@item.CategoryImg" alt="food-grocery.png"></div>
+									<div class="details">
+										<h5 class="title">@item.CategoryName</h5>
+									</div>
 								</div>
-							</div>
-						</a>
-					</div>
+							</a>
+						</div>
 					}
-					
-					
+
+
 				</div>
 			</div>
 		</div>
-		@*<div class="row mt70">
-			<div class="col-lg-8 col-xl-6">
-				<div class="banner_one">
-					<div class="thumb style1"><img src="images/banner/1.jpg" alt="1.jpg"></div>
-					<div class="details">
-						<p class="para">Fresh Fruit</p>
-						<h2 class="title">Fresh Summer With Just $200.99</h2>
-						<a href="page-shop-list-v1.html" class="shop_btn">SHOP NOW</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-4 col-xl-3">
-				<div class="banner_one">
-					<div class="thumb"><img src="images/banner/2.jpg" alt="2.jpg"></div>
-					<div class="details style2">
-						<p class="para">Seasonal Sale</p>
-						<h2 class="title">Up To Breads <span class="text-thm2">50% Off</span></h2>
-						<a href="page-shop-list-v1.html" class="shop_btn style2">SHOP NOW</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-lg-6 col-xl-3">
-				<div class="banner_one">
-					<div class="thumb"><img src="images/banner/3.jpg" alt="3.jpg"></div>
-					<div class="details style2">
-						<p class="para">Tasty Healthy</p>
-						<h2 class="title">Fresh <span class="text-thm2">Vegetables</span></h2>
-						<a href="page-shop-list-v1.html" class="shop_btn style2">SHOP NOW</a>
-					</div>
-				</div>
-			</div>
-		</div>*@
 	</div>
 </section>
 
@@ -111,29 +79,20 @@
 		@*start cate*@
 		<div class="row">
 			<div class="col-lg-12">
-				<div class="popular_listing_sliders row">
+				<div class="popular_listing_sliders row ">
 					<!-- Nav tabs -->
 					<div class="nav nav-tabs mb30 col-lg-12 justify-content-center" role="tablist">
 						<button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-All"
-								role="tab" aria-controls="nav-home" aria-selected="true">
-							All
+								role="tab" aria-controls="nav-home" aria-selected="true">All
 						</button>
-						<button class="nav-link" id="nav-shopping-tab" data-bs-toggle="tab" data-bs-target="#nav-Meat"
-								role="tab" aria-controls="nav-shopping" aria-selected="false">
-							Meat
-						</button>
-						<button class="nav-link" id="nav-hotels-tab" data-bs-toggle="tab" data-bs-target="#nav-Fruits"
-								role="tab" aria-controls="nav-hotels" aria-selected="false">
-							Fruits
-						</button>
-						<button class="nav-link" id="nav-destination-tab" data-bs-toggle="tab" data-bs-target="#nav-Vegetables"
-								role="tab" aria-controls="nav-destination" aria-selected="false">
-							Vegetables
-						</button>
-						<button class="nav-link" id="nav-bread-tab" data-bs-toggle="tab" data-bs-target="#nav-Bread" role="tab"
-								aria-controls="nav-bread" aria-selected="false">
-							bread
-						</button>
+						@foreach (Category item in @ViewBag.categoryList)
+						{
+							<button class="nav-link" id="nav-tab-@item.CategoryName" data-bs-toggle="tab" data-bs-target="#nav-@item.CategoryName"
+								role="tab" aria-controls="nav-@item.CategoryName" aria-selected="true">
+								@item.CategoryName
+							</button>
+						}
+
 					</div>
 					<!-- Tab panes -->
 					<div class="tab-content col-lg-12" id="nav-tabContent">
@@ -144,7 +103,7 @@
 									<div class="item">
 										<div class="shop_item">
 											<div class="thumb">
-												@foreach(var Image in data.ImageProduct)
+												@foreach (var Image in data.ImageProduct)
 												{
 													if (Image.IsMainImage == true)
 													{
@@ -153,9 +112,7 @@
 												}
 												<div class="thumb_info">
 													<ul class="mb0">
-														<li><a href="page-dashboard-wish-list.html"><span class="flaticon-heart"></span></a></li>
-														<li><a href="page-dashboard-wish-list.html"><span class="flaticon-search"></span></a></li>
-														<li><a href="page-shop-list-v6.html"><span class="flaticon-shuffle"></span></a></li>
+														<li><a class="addToCartHome" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></a></li>
 													</ul>
 												</div>
 											</div>
@@ -173,8 +130,8 @@
 												<div class="sub_title">@data.ProductName <br> @data.Weight</div>
 												<div class="si_footer">
 													<div class="price">$@data.Price</div>
-													<a href="page-shop-cart.html" class="cart_btn btn-thm">
-														<span class="flaticon-shopping-cart mr10"></span>ADD TO CART
+													<a href="/Customer/Product/Details?id=@data.ProductId" class="cart_btn btn-thm">
+														<span class="flaticon-search mr10"></span>VIEW DETAIL
 													</a>
 												</div>
 											</div>
@@ -190,208 +147,58 @@
 
 
 
-
-						<div class="tab-pane fade" id="nav-Meat" role="tabpanel" aria-labelledby="nav-shopping-tab">
-							<div class="popular_listing_slider1">
-								@foreach (var data in Model)
-								{
-									@if (data.Brand_Category.Category.CategoryName == "Meat")
+						@foreach (Category item in @ViewBag.CategoryList)
+						{
+							<div class="tab-pane fade" id="nav-@item.CategoryName" role="tabpanel" aria-labelledby="nav-tab-@item.CategoryName">
+								<div class="popular_listing_slider1">
+									@foreach (var data in Model)
 									{
-										<div class="item">
-										<div class="shop_item">
-											<div class="thumb">
-												@foreach(var Image in data.ImageProduct)
-												{
-														if (Image.IsMainImage == true)
+										@if (data.Brand_Category.Category.CategoryName == item.CategoryName)
+										{
+											<div class="item">
+												<div class="shop_item">
+													<div class="thumb">
+														@foreach (var Image in data.ImageProduct)
 														{
-														<img src="@Image.Url" alt="fp1.png">
-															
+															if (Image.IsMainImage == true)
+															{
+																<img src="@Image.Url" alt="fp1.png">
+
+															}
 														}
-												}
-												<div class="thumb_info">
-													<ul class="mb0">
-														<li><a href="page-dashboard-wish-list.html"><span class="flaticon-heart"></span></a></li>
-														<li><a href="page-dashboard-wish-list.html"><span class="flaticon-search"></span></a></li>
-														<li><a href="page-shop-list-v6.html"><span class="flaticon-shuffle"></span></a></li>
-													</ul>
+														<div class="thumb_info">
+															<ul class="mb0">
+																<li><a class="addToCartHome" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></a></li>
+															</ul>
+														</div>
+													</div>
+													<div class="details text-center">
+														<div class="title">@data.Brand_Category.Category.CategoryName</div>
+														<div class="review">
+															<ul class="mb0">
+																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
+															</ul>
+														</div>
+														<div class="sub_title">@data.ProductName <br> @data.Weight</div>
+														<div class="si_footer">
+															<div class="price">$@data.Price</div>
+															<a href="/Customer/Product/Details?id=@data.ProductId" class="cart_btn btn-thm">
+																<span class="flaticon-search mr10"></span>VIEW DETAIL
+															</a>
+														</div>
+													</div>
 												</div>
 											</div>
-											<div class="details text-center">
-												<div class="title">@data.Brand_Category.Category.CategoryName</div>
-												<div class="review">
-													<ul class="mb0">
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-													</ul>
-												</div>
-												<div class="sub_title">@data.ProductName <br> @data.Weight</div>
-												<div class="si_footer">
-													<div class="price">$@data.Price</div>
-													<a href="page-shop-cart.html" class="cart_btn btn-thm">
-														<span class="flaticon-shopping-cart mr10"></span>ADD TO CART
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									}						
-								}
+										}
+									}
+								</div>
 							</div>
-						</div>
 
-						@*end meat*@
-
-						<div class="tab-pane fade" id="nav-Fruits" role="tabpanel" aria-labelledby="nav-hotels-tab">
-							<div class="popular_listing_slider1">
-								@foreach (var data in Model)
-								{
-									@if (data.Brand_Category.Category.CategoryName == "Fruit")
-									{
-										<div class="item">
-										<div class="shop_item">
-											<div class="thumb">
-												@foreach(var Image in data.ImageProduct)
-												{
-													<img src="@Image.Url" alt="fp1.png">
-												}
-												<div class="thumb_info">
-													<ul class="mb0">
-														<li><a href="page-dashboard-wish-list.html"><span class="flaticon-heart"></span></a></li>
-														<li><a href="page-dashboard-wish-list.html"><span class="flaticon-search"></span></a></li>
-														<li><a href="page-shop-list-v6.html"><span class="flaticon-shuffle"></span></a></li>
-													</ul>
-												</div>
-											</div>
-											<div class="details text-center">
-												<div class="title">@data.Brand_Category.Category.CategoryName</div>
-												<div class="review">
-													<ul class="mb0">
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-													</ul>
-												</div>
-												<div class="sub_title">@data.ProductName <br> @data.Weight</div>
-												<div class="si_footer">
-													<div class="price">$@data.Price</div>
-													<a href="page-shop-cart.html" class="cart_btn btn-thm">
-														<span class="flaticon-shopping-cart mr10"></span>ADD TO CART
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									}						
-								}
-							</div>
-						</div>
-
-
-						@*end fruit*@
-
-
-						<div class="tab-pane fade" id="nav-Vegetables" role="tabpanel" aria-labelledby="nav-destination-tab">
-							<div class="popular_listing_slider1">
-								@foreach (var data in Model)
-								{
-									@if (data.Brand_Category.Category.CategoryName == "Vegetable")
-									{
-										<div class="item">
-										<div class="shop_item">
-											<div class="thumb">
-												@foreach(var Image in data.ImageProduct)
-												{
-													<img src="@Image.Url" alt="fp1.png">
-												}
-												<div class="thumb_info">
-													<ul class="mb0">
-														<li><a href="page-dashboard-wish-list.html"><span class="flaticon-heart"></span></a></li>
-														<li><a href="page-dashboard-wish-list.html"><span class="flaticon-search"></span></a></li>
-														<li><a href="page-shop-list-v6.html"><span class="flaticon-shuffle"></span></a></li>
-													</ul>
-												</div>
-											</div>
-											<div class="details text-center">
-												<div class="title">@data.Brand_Category.Category.CategoryName</div>
-												<div class="review">
-													<ul class="mb0">
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-													</ul>
-												</div>
-												<div class="sub_title">@data.ProductName <br> @data.Weight</div>
-												<div class="si_footer">
-													<div class="price">$@data.Price</div>
-													<a href="page-shop-cart.html" class="cart_btn btn-thm">
-														<span class="flaticon-shopping-cart mr10"></span>ADD TO CART
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									}						
-								}
-							</div>
-						</div>
-
-
-						@*end vege*@
-
-
-						<div class="tab-pane fade" id="nav-Bread" role="tabpanel" aria-labelledby="nav-bread-tab">
-							<div class="popular_listing_slider1">
-								@foreach (var data in Model)
-								{
-									@if (data.Brand_Category.Category.CategoryName == "Bread")
-									{
-										<div class="item">
-										<div class="shop_item">
-											<div class="thumb">
-												@foreach(var Image in data.ImageProduct)
-												{
-													<img src="@Image.Url" alt="fp1.png">
-												}
-												<div class="thumb_info">
-													<ul class="mb0">
-														<li><a href="page-dashboard-wish-list.html"><span class="flaticon-heart"></span></a></li>
-														<li><a href="page-dashboard-wish-list.html"><span class="flaticon-search"></span></a></li>
-														<li><a href="page-shop-list-v6.html"><span class="flaticon-shuffle"></span></a></li>
-													</ul>
-												</div>
-											</div>
-											<div class="details text-center">
-												<div class="title">@data.Brand_Category.Category.CategoryName</div>
-												<div class="review">
-													<ul class="mb0">
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-													</ul>
-												</div>
-												<div class="sub_title">@data.ProductName <br> @data.Weight</div>
-												<div class="si_footer">
-													<div class="price">$@data.Price</div>
-													<a href="page-shop-cart.html" class="cart_btn btn-thm">
-														<span class="flaticon-shopping-cart mr10"></span>ADD TO CART
-													</a>
-												</div>
-											</div>
-										</div>
-									</div>
-									}						
-								}
-							</div>
-						</div>
+						}
 					</div>
 				</div>
 			</div>
@@ -399,7 +206,7 @@
 	</div>
 </section>
 
-				@*end bread*@
+@*end bread*@
 
 <!-- Delivery Divider -->
 <section class="deliver-divider pt0 pb70">

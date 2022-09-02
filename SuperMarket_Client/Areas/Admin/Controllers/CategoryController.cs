@@ -16,12 +16,12 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             this.env = env;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> CreateCategory()
+        public IActionResult CreateCategory()
         {
             return View();
         }
