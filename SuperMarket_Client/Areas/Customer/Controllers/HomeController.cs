@@ -33,12 +33,14 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
         public async Task<IActionResult> CreateSession(int selectBranch)
         {
+
             var branch = await unitOfWork.Branch.GetFirstOrDefault(x=>x.BranchId == selectBranch);
             if(branch != null)
             {
                 HttpContext.Session.SetInt32("branchId", selectBranch);
                 HttpContext.Session.SetString("branchName", branch.BranchName);
             }
+
             return RedirectToAction("Index");
         }
 

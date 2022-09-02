@@ -21,7 +21,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
 
             if (status == null) { model = await unitOfWork.Order.GetAll(includeProperties: "Customer"); }
             else if (status != "other") { model = await unitOfWork.Order.GetAll(o => o.OrderStatus.Equals(status), includeProperties: "Customer"); }
-            else { model = await unitOfWork.Order.GetAll(o => o.OrderStatus.Equals(SD.StatusPending) || o.OrderStatus.Equals(SD.StatusCompleted) || o.OrderStatus.Equals(SD.StatusRefunded), includeProperties: "Customer"); }
+            else { model = await unitOfWork.Order.GetAll(o => o.OrderStatus.Equals(SD.StatusPending) || o.OrderStatus.Equals(SD.StatusCompleted) || o.OrderStatus.Equals(SD.statusRefunded), includeProperties: "Customer"); }
 
 
             return View(model);
@@ -81,7 +81,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             }
             else if (order.OrderStatus == SD.StatusCancelRequest && orderStatus == SD.StatusCancelRequest)
             {
-                unitOfWork.Order.UpdateStatus(OrderId, SD.StatusRefunded);
+                unitOfWork.Order.UpdateStatus(OrderId, SD.statusRefunded);
                 //stock back
                 foreach (var item in order.OrderDetail)
                 {
