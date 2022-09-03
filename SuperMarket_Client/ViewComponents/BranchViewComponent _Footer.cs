@@ -4,12 +4,12 @@ using SuperMarket_DataAccess.Repository.IRepository;
 
 namespace SuperMarket_Client.ViewComponents
 {
-    [ViewComponent(Name = "BranchList")]
+    [ViewComponent(Name = "BranchList_Footer")]
 
-    public class BranchViewComponent:ViewComponent
+    public class Branch_FooterViewComponent:ViewComponent
     {
         private readonly IUnitOfWork unitOfWork;
-        public BranchViewComponent(IUnitOfWork unitOfWork)
+        public Branch_FooterViewComponent(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
 
@@ -17,7 +17,7 @@ namespace SuperMarket_Client.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var List = await unitOfWork.Branch.GetAll();
-            return View("BranchList",List);
+            return View("BranchList_Footer",List);
         }
 
         

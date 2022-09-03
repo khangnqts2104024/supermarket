@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-8 offset-2 sign_up_form">
         <form id="registerForm" class="row" asp-route-returnUrl="@Model.ReturnUrl" method="post">
-            <h2>Create a new account.</h2>
+            <h1>Create A New Account</h1>
             <hr />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -57,7 +57,7 @@
             <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-log btn-thm">Register</button>
         </form>
         <div>
-            <a class="nav-link text-dark btn-fpswd float-end" id="login" asp-area="Identity" asp-page="/Account/Login">Back to Login</a>
+            <a class="nav-link btn btn-link float-end" id="login" asp-area="Identity" asp-page="/Account/Login">Back to Login</a>
         </div>
     </div>
 </div>
