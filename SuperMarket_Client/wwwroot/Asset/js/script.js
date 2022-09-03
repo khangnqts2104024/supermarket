@@ -898,6 +898,11 @@ var isApplied = false;
         });
         //Add To Cart Home Page
         $(".addToCartHome").on("click", function (e) {
+            var checkLoggedIn = $("#LoggedIn").val();
+            if (checkLoggedIn != 1) {
+                window.location.href = domain + "Identity/Account/Login";
+                return false;
+            }
             e.preventDefault();
             let id = $(this).data("productid");
             $.ajax({
