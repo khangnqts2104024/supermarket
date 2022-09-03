@@ -65,7 +65,7 @@ namespace SuperMarket_DataAccess.Migrations
                     Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Latitude = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Longtitude = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BranchImg = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BranchImg = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -99,7 +99,7 @@ namespace SuperMarket_DataAccess.Migrations
                     CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CategoryImg = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CategoryImg = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -116,7 +116,8 @@ namespace SuperMarket_DataAccess.Migrations
                     DiscountPercent = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ExpiredDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Count = table.Column<int>(type: "int", nullable: false)
+                    Count = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -296,7 +297,8 @@ namespace SuperMarket_DataAccess.Migrations
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrderNotes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CouponId = table.Column<int>(type: "int", nullable: true),
-                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BranchId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -306,6 +308,12 @@ namespace SuperMarket_DataAccess.Migrations
                         column: x => x.CustomerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "BranchId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orders_Coupons_CouponId",
@@ -551,6 +559,11 @@ namespace SuperMarket_DataAccess.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Orders_BranchId",
+                table: "Orders",
+                column: "BranchId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_CouponId",
                 table: "Orders",
                 column: "CouponId");
@@ -628,13 +641,13 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Branches");
-
-            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Branches");
 
             migrationBuilder.DropTable(
                 name: "Coupons");
