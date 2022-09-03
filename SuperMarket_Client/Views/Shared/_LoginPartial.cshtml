@@ -6,6 +6,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
+    <input hidden id="LoggedIn" value="1" />
     <li class="list-inline-item">
         <a id="manage" class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
     </li>

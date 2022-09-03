@@ -112,7 +112,7 @@
 												}
 												<div class="thumb_info">
 													<ul class="mb0">
-														<li><a class="addToCartHome" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></a></li>
+														<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></li>
 													</ul>
 												</div>
 											</div>
@@ -166,9 +166,9 @@
 
 															}
 														}
-														<div class="thumb_info">
+														<div class="thumb_info ">
 															<ul class="mb0">
-																<li><a class="addToCartHome" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></a></li>
+																<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></li>
 															</ul>
 														</div>
 													</div>
@@ -412,11 +412,15 @@
 		</div>
 	</div>
 </section>
+<br />
+<br />
+<br />
+<br />
 
 <!-- Our Partner & Blog -->
-<section class="our-blog pt0 pb60">
+@*<section class="our-blog pt0 pb60">
 	<div class="container">
-		<div class="partner_divider">
+	<div class="partner_divider">
 			<div class="row">
 				<div class="col">
 					<div class="partner_item">
@@ -546,7 +550,7 @@
 		</div>
 	</div>
 </section>
-
+*@
 <!-- How It Works -->
 <section class="whychose_us pt0 pb0">
 	<div class="container">
@@ -560,7 +564,7 @@
 		<div class="row">
 			<div class="col-md-6 col-xl-4">
 				<div class="why_chose_us home1_style">
-					<div class="icon"> <img src="images/why-chose/1.png" alt="1.png"> </div>
+					<div class="icon"> <img src="~/Asset/images/why-chose/1.png" alt="1.png"> </div>
 					<div class="details">
 						<h4 class="title">We drive fast & ship faster</h4>
 						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
@@ -569,7 +573,7 @@
 			</div>
 			<div class="col-md-6 col-xl-4">
 				<div class="why_chose_us home1_style">
-					<div class="icon"> <img src="images/why-chose/2.png" alt="2.png"> </div>
+					<div class="icon"> <img src="~/Asset/images/why-chose/2.png" alt="2.png"> </div>
 					<div class="details">
 						<h4 class="title">We save your more money</h4>
 						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
@@ -578,7 +582,7 @@
 			</div>
 			<div class="col-md-6 col-xl-4">
 				<div class="why_chose_us home1_style">
-					<div class="icon"> <img src="images/why-chose/3.png" alt="3.png"> </div>
+					<div class="icon"> <img src="~/Asset/images/why-chose/3.png" alt="3.png"> </div>
 					<div class="details">
 						<h4 class="title">Daily discount coupons</h4>
 						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
@@ -589,7 +593,7 @@
 	</div>
 </section>
 
-<!-- Instagram Posts -->
+@*<!-- Instagram Posts -->
 <section class="instagram-posts pt0 pb80">
 	<div class="container">
 		<div class="row">
@@ -668,4 +672,4 @@
 	</div>
 </section>
 
-
+*@
