@@ -124,13 +124,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
         #endregion
 
-        [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Contact()
-        {
-            return View();
-        }
-
+        
 
     }
 }
