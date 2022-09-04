@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿
 using Microsoft.AspNetCore.Mvc;
+using MimeKit;
+using MimeKit.Text;
 using SuperMarket_DataAccess.Repository.IRepository;
+using SuperMarket_Utility;
 
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
@@ -49,6 +52,28 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             return View();
         }
+
+        [HttpGet]
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Contact(string fullname, string email, string phone, string message)
+        {
+            string html = "<h3>" + fullname + "</h3>" +
+                "<p>" + email + "</p>" +
+                "<p>Phone: " + phone + "</p>" +
+                "<p> Message: " + message + "</p>";
+
+            string subject = "Customer have a question!";
+            EmailSender emailSender = new EmailSender();
+            await emailSender.UserSendEmailAsync(subject, html);
+          
+            return View();
+        }
+
 
         [HttpGet]
         public IActionResult CartListViewComponent()
