@@ -50,6 +50,7 @@ namespace SuperMarket_Utility
                     await emailClient.SendAsync(emailToSend);
                     await emailClient.DisconnectAsync(true);
                 }
+                
             }
             catch (Exception)
             {

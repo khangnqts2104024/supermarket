@@ -38,6 +38,7 @@ var isApplied = false;
     }
 
     $(document).ready(function () {
+
         var selectCoupon = $("#selectCoupon");
         selectCoupon.on("change", function () {
             $("#couponField").val(selectCoupon.val());

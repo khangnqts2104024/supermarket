@@ -46,13 +46,12 @@
 			if(this.ViewContext.RouteData.Values["controller"] != null)
 			{
 				var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
-				if (@Context.Session.GetInt32("branchId") == null && controllerName != "Customer")
+				if (@Context.Request.Cookies["branchId"] == null && controllerName != "Customer")
 				{
-												<div class="popup_onload_modal">
-													@await Component.InvokeAsync("BranchList")
-												</div>
-												<input type="hidden" id="checkSessionBranchId" value="1" />
-
+					<div class="popup_onload_modal">
+						@await Component.InvokeAsync("BranchList")
+					</div>
+					<input type="hidden" id="checkSessionBranchId" value="1" />
 				}
 			}
 		}
@@ -69,8 +68,8 @@
 					<div class="col-lg-6 col-xl-6">
 						<div class="ht_contact_widget">
 							<ul class="m0">
-								@if(Context.Session.GetString("branchName") != null){
-									<li class="list-inline-item" style="color:white"><span class="flaticon-phone-call mr5"></span> You are ordering at @Context.Session.GetString("branchName")</li>
+								@if(Context.Request.Cookies["branchId"] != null){
+									<li class="list-inline-item" style="color:white"><span class="flaticon-phone-call mr5"></span> You are ordering at @Context.Request.Cookies["branchName"]</li>
 									<li style="color:red;" class="list-inline-item"><a href="#" style="color:red;"  class="text-white" data-toggle="modal" data-target="#selectBranch_popup" id="showModal">*Change branch</a></li>
 								}
 							</ul>
@@ -189,7 +188,6 @@
 										}
 
 										else
-
 										{
 											<a class="cart_btn1" href="#"><span class="flaticon-shopping-cart icon"></span> </a>
 										}
@@ -252,7 +250,7 @@
 						<li>
 							<a asp-action="AboutUs" asp-controller="Home" asp-area="Customer"><span class="title">ABOUT US</span></a>
 						</li>
-						<li><a asp-action="Contact" asp-controller="Home" asp-area="Customer">CONTACT</a></li>
+						<li><a asp-action="Index" asp-controller="StoreLocator" asp-area="Customer">CONTACT</a></li>
 					</ul>
 					<ul id="respMenu2" class="ace-responsive-menu widget_menu_home2 wa" data-menu-style="horizontal">
 						<li class="list-inline-item list_c">
@@ -335,7 +333,7 @@
 						<div class="footer_qlink_widget">
 							<h4>INFORMATION</h4>
 							<ul class="list-unstyled">
-								<li><a href="#">Contact</a></li>
+								<li><a asp-action="Index" asp-controller="StoreLocator" asp-area="Customer">Contact</a></li>
 								<li><a href="#">AboutUs</a></li>
 							</ul>
 						</div>
