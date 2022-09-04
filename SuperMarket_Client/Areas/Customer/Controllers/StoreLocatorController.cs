@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SuperMarket_DataAccess.Repository.IRepository;
 using SuperMarket_Models.Models;
+using SuperMarket_Utility;
 
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
@@ -65,6 +66,22 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             return View(shortestbranch);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Contact(string fullname, string email, string phone, string message)
+        {
+            string html = "<h3>" + fullname + "</h3>" +
+                "<p>" + email + "</p>" +
+                "<p>Phone: " + phone + "</p>" +
+                "<p> Message: " + message + "</p>";
+
+            string subject = "Customer have a question!";
+            EmailSender emailSender = new EmailSender();
+            await emailSender.UserSendEmailAsync(subject, html);
+            TempData["MsgSuccess"] = "Your Mail Has Been Sent!";
+            return View();
+        }
+
+
         public async Task<Branch> FindShortestBranch()
         {
             var branch = await unitOfWork.Branch.GetAll();
@@ -75,7 +92,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 {
                     string latituteUser = JObject.Parse(result)["latitude"].ToString();
                     string longitudeUser = JObject.Parse(result)["longitude"].ToString();
-                    if (!string.IsNullOrEmpty(latituteUser) && string.IsNullOrEmpty(longitudeUser))
+                    if (!string.IsNullOrEmpty(latituteUser) && !string.IsNullOrEmpty(longitudeUser))
                     {
                         Location currentUserLocation = new Location()
                         {
