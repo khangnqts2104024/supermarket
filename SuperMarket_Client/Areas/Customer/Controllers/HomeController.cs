@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MimeKit;
 using MimeKit.Text;
 using SuperMarket_DataAccess.Repository.IRepository;
+using SuperMarket_Models.Models;
 using SuperMarket_Utility;
 
 namespace SuperMarket_Client.Areas.Customer.Controllers
@@ -17,19 +18,35 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
             try
             {
-               var id = HttpContext.Request.Cookies["branchId"];
-                var data = await unitOfWork.Product.GetAll(includeProperties: "ImageProduct,Brand_Category.Category");
-                ViewBag.CategoryList = await unitOfWork.Category.GetAll();
-                return View(data);
+
+                if(id == null)
+                {
+                    var data = await unitOfWork.Product.GetAll(includeProperties: "ImageProduct,Brand_Category.Category");
+                    ViewBag.CategoryList = await unitOfWork.Category.GetAll();
+                    return View(data);
+                }
+                else
+                {
+                    var finalData = new List<Product>();
+                    var data=await unitOfWork.Stock.GetAll(x=>x.BranchId==id);
+                    ViewBag.CategoryList = await unitOfWork.Category.GetAll();
+
+                    foreach (var item in data)
+                    {
+                        var temp = await unitOfWork.Product.GetAll(x => x.ProductId == item.ProductId, includeProperties: "ImageProduct,Brand_Category.Category");
+                        finalData.AddRange(temp);
+                    }
+                    return View(finalData);
+                }
             }
             catch (Exception)
             {
 
-                return ViewBag.Error="Error";
+                return NotFound();
 
             }
 
@@ -49,7 +66,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 Response.Cookies.Append("branchName", branch.BranchName, cookieOptions);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("Index", new {id=selectBranch});
         }
 
 
@@ -61,7 +78,10 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             return ViewComponent("CartList");
         }
-
+        public IActionResult AboutUs()
+        {
+            return View();
+        }
 
     }
 
