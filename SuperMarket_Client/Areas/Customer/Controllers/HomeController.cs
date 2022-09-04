@@ -55,7 +55,10 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             return ViewComponent("CartList");
         }
-
+        public IActionResult AboutUs()
+        {
+            return View();
+        }
 
     }
 
