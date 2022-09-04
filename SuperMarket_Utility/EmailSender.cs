@@ -14,14 +14,14 @@ namespace SuperMarket_Utility
         {
             var message = new MailMessage();
             message.To.Add(email);
-            message.From = new MailAddress("ktkstore2022@gmail.com"); 
+            message.From = new MailAddress("khoathdts2104013@fpt.edu.vn"); 
             message.Subject = subject;
             message.Body = htmlMessage;
             var smtpClient = new SmtpClient();
             smtpClient.Host = "smtp.gmail.com";
             smtpClient.Port = 587;
             smtpClient.UseDefaultCredentials = false;
-            smtpClient.Credentials = new System.Net.NetworkCredential("ktkstore2022@gmail.com", "Admin123@");
+            smtpClient.Credentials = new System.Net.NetworkCredential("khoathdts2104013@fpt.edu.vn", "dangkhoa123@");
             smtpClient.EnableSsl = true;
             smtpClient.Send(message);
 
