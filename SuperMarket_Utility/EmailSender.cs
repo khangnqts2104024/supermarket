@@ -8,7 +8,7 @@ namespace SuperMarket_Utility
     public class EmailSender : IEmailSender
     {
 
-        public async Task SendEmailAsync(string email = null, string subject, string htmlMessage)
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             var emailToSend = new MimeMessage();
             emailToSend.From.Add(MailboxAddress.Parse("ktkstore2022@gmail.com"));
@@ -30,6 +30,7 @@ namespace SuperMarket_Utility
 
         public async Task UserSendEmailAsync(string subject, string htmlMessage)
         {
+
             try
             {
                 var emailToSend = new MimeMessage();
@@ -40,6 +41,7 @@ namespace SuperMarket_Utility
                 {
                     Text = htmlMessage
                 };
+
 
                 using (var emailClient = new SmtpClient())
                 {
