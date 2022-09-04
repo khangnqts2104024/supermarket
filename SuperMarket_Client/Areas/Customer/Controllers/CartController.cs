@@ -400,45 +400,58 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 message = "User login required!"
             });
 
+
         }
 
       
         [HttpGet]
         public async Task<IActionResult> CompleteOrder(int id)
         {
-            if(id == 0)
+            try
             {
-                return RedirectToAction("Index", "Home");
-            }
-            var order = await unitOfWork.Order.GetFirstOrDefault(x => x.OrderId == id, includeProperties: "Coupon");
-            var orderDetails = await unitOfWork.OrderDetail.GetAll(x => x.OrderId == id, includeProperties: "Product");
-            //
-            //var useCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(order.CouponId));
-            //
-            OrderVM orderVM = new OrderVM()
-            {
-                Order = order,
-                OrderDetails = orderDetails
-            };
-            //check the stripe status to make sure payment is actually successful
-            if (orderVM.Order != null && orderVM.OrderDetails != null)
-            {
-                var service = new SessionService();
-                //get a session for options based on SessionService
-                Session session = service.Get(orderVM.Order.SessionId);
-                if (session.PaymentStatus.ToLower() == "paid")
+                if (id == 0)
                 {
-                    unitOfWork.Order.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
-                    IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
-                    //khang
-                    if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }
-                    //
-                    unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
-                    HttpContext.Session.Remove("paymentIntent");
-                    await unitOfWork.Save();
+                    return RedirectToAction("Index", "Home");
                 }
+                var order = await unitOfWork.Order.GetFirstOrDefault(x => x.OrderId == id, includeProperties: "Coupon");
+                var orderDetails = await unitOfWork.OrderDetail.GetAll(x => x.OrderId == id, includeProperties: "Product");
+                //
+                //var useCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(order.CouponId));
+                //
+                OrderVM orderVM = new OrderVM()
+                {
+                    Order = order,
+                    OrderDetails = orderDetails
+                };
+                //check the stripe status to make sure payment is actually successful
+                if (orderVM.Order != null && orderVM.OrderDetails != null)
+                {
+                    var service = new SessionService();
+                    //get a session for options based on SessionService
+                    Session session = service.Get(orderVM.Order.SessionId);
+                    if (session.PaymentStatus.ToLower() == "paid")
+                    {
+                        unitOfWork.Order.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                        IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
+                        //khang
+                        if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }
+                        //
+                        unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+                        HttpContext.Session.Remove("paymentIntent");
+                        await unitOfWork.Save();
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Error");
+                    }
+                }
+                return View(orderVM);
             }
-            return View(orderVM);
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "Error");
+            }
+           
         }
 
         public async Task<decimal> GetOrderTotal()

@@ -1,4 +1,9 @@
-﻿@if(@TempData["MsgCancelOrder"] != null)
+﻿@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@if(@TempData["MsgCancelOrder"] != null)
 {
    <p id="msgCancel"> @TempData["MsgCancelOrder"]</p>
     @section Scripts{
@@ -19,13 +24,13 @@
             <h3 class="mb25 ttu fwb">orders</h3>
             <div class="ed_menu_list">
               <ul>
-                <li><a href="page-dashboard.html">Dashboard</a></li>
-                <li><a class="active" asp-action="Order" asp-controller="Customer" asp-area="Customer">Orders</a></li>
-                <li><a href="page-dashboard-wish-list.html">Downloads</a></li>
-                <li><a href="page-dashboard-address.html">Addresses</a></li>
-                <li><a href="page-dashboard-account-details.html">Account Details</a></li>
-                <li><a href="page-dashboard-wish-list.html">Wishlist</a></li>
-                <li><a href="page-login.html">Logout</a></li>
+                <li><a asp-action="Index" asp-controller="Customer" asp-area="Customer">Dashboard</a></li>
+				<li><a asp-action="Order" asp-controller="Customer" asp-area="Customer">Orders History</a></li>
+				<li>
+                    <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "Customer" })">
+                        <button style="padding:0;" id="logout" type="submit" class="nav-link btn btn-link">Logout</button>
+                    </form>
+                </li>
               </ul>
             </div>
           </div>

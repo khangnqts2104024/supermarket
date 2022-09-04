@@ -15,7 +15,6 @@ namespace SuperMarket_DataAccess.Data
         {
             base.OnModelCreating(modelBuilder);
         }
-        public DbSet<Bill> Bills { get; set; }
         public DbSet<Feedback_Rating> Feedback_Ratings { get; set; }
         public DbSet<Branch> Branches { get; set; }
         public DbSet<Brand> Brands { get; set; }
