@@ -44,7 +44,7 @@ namespace SuperMarket_Models.Models
         public DateTime ManufactureDate { get; set; }
         [Required]
         public DateTime ExpiryDate { get; set; }
-        public double Weight { get; set; }
+        public string Weight { get; set; }
         public int BrandCateId { get; set; }
         [ForeignKey("BrandCateId")]
         [ValidateNever]
