@@ -31,13 +31,13 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 else
                 {
                     var finalData = new List<Product>();
-                    var data=await unitOfWork.Stock.GetAll(x=>x.BranchId==id);
+                    var data=await unitOfWork.Stock.GetAll(x=>x.BranchId==id&&x.Count!=0);
                     ViewBag.CategoryList = await unitOfWork.Category.GetAll();
 
                     foreach (var item in data)
                     {
-                        var temp = await unitOfWork.Product.GetAll(x => x.ProductId == item.ProductId, includeProperties: "ImageProduct,Brand_Category.Category");
-                        finalData.AddRange(temp);
+                        var temp = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == item.ProductId, includeProperties: "ImageProduct,Brand_Category.Category,Stock");
+                        finalData.Add(temp);
                     }
                     return View(finalData);
                 }
@@ -45,7 +45,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             catch (Exception)
             {
 
-                return NotFound();
+                return View("404");
 
             }
 
