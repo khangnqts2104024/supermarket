@@ -35,6 +35,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             var brandList = await unitOfWork.Brand.GetAll();
             ViewBag.categoryList=categoryList;
             ViewBag.brandList = brandList;
+
             return View(data);
 
         }

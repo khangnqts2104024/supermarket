@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -16,7 +17,8 @@ namespace SuperMarket_Models.Models
         public int Id { get; set; }
         public int ProductId { get; set; }
         [ForeignKey("ProductId")]
-        [ValidateNever]
+        [ValidateNever]  
+        [JsonIgnore]
         public Product Product { get; set; }
         public string CustomerId { get; set; }
         [ForeignKey("CustomerId")]

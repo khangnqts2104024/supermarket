@@ -501,25 +501,35 @@
         //search product in model(jvs).
         function searchProduct(e) {
             var sproduct = [];
+
             $("#main").html(sproduct.join(""));
             if (e.value != "") {
                 var search = jsObject.filter(p => p.ProductName.includes(e.value));
             }
             //console.log(search);
             search.forEach(info => {
+                let PUrl;
+                let img = info.ImageProduct.find(i => i != null);
+            if (img != null) {PUrl = img.Url; }
+            else { PUrl = "anh.jpg"; }
+          
                 sproduct.push(
                     // html code for product
 
                     ` <a id="myLink" title="" href="" data-product="${info.ProductId}" onclick="chooseproduct(this);return false;" class="list-group-item">
                                                                                             <div class="card">
-                                                                                                <div>
+                                                                                                <div class="d-flex align-content-start flex-wrap">
+                                                                                                    <div style="height:100px;width:100px;" class="thumb img-thumbnail"> <img src="/Images/${PUrl}" alt="" style="width:100%"></div>
+                                                                                                   
+                                                                                                   <div class="info-product" style="margin:10px;">
                                                                                                     <div>
                                                                                                         <h3 style="color:blue" >${info.ProductName}</h3>
                                                                                                     </div>
 
-                                                                                                    <div >
+                                                                                                    <div>
                                                                                                         <p class="comment">About: ${info.Title} </p>
                                                                                                     </div>
+                                                                                                   </div>
                                                                                                 </div>
                                                                                             </div>
                                                                                             </a>`
@@ -527,7 +537,7 @@
                     // end
                 )
             });
-            $("#main").html(sproduct.join(""));
+          $("#main").html(sproduct.join(""));
             //console.log($("#main"))
         }
 
@@ -536,14 +546,14 @@
             var cProduct = [];
             var PUrl;
             var img = product.ImageProduct.find(i => i != null);
-            if (img != null) { PUrl = img.Url; }
+            if (img != null) {PUrl = img.Url; }
             else { PUrl = "anh.jpg"; }
-            console.log(PUrl);
+    
             cProduct.push(` <a class="text-center close-link" href=""  data-index="${index}" onclick="closeCompareProduct(this);return false;">
                                                                                                     <i class="fa fa-close" style="font-size:24px"></i>
                                                                                                 </a>
                                                                                                 <div class="cpproduct-container  d-flex flex-column border-white justify-content-center " >
-                                                                                                    <img src="${PUrl}" alt="" style="height: 150px;width:100%">
+                                                                                                    <img src="/Images/${PUrl}" alt="" style="height: 150px;width:100%">
                                                                                                     <div class="flex-fill d-flex align-items-center content flex-column "><div><h5  style="color:blue">${product.ProductName} </h5></div>
                                                                                                     <div <u> ${product.Title}</u></div> </div>
                                                                                                 </div>
