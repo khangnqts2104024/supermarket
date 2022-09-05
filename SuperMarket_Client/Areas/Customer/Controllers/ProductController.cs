@@ -19,11 +19,21 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? cateID)
         {
-            var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category,Brand_Category.Brand,Brand_Category.Category");
+            IEnumerable<Product> data;
+            if (cateID != null) {
+                data = await unitOfWork.Product.GetAll(p => p.Brand_Category.CategoryId.Equals(cateID), includeProperties: "Brand_Category,ImageProduct,Brand_Category.Brand,Brand_Category.Category");
+            }
+            else 
+            {
+                data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category,ImageProduct,Brand_Category.Brand,Brand_Category.Category"); 
+            }
+            
             var categoryList = await unitOfWork.Category.GetAll();
+            var brandList = await unitOfWork.Brand.GetAll();
             ViewBag.categoryList=categoryList;
+            ViewBag.brandList = brandList;
             return View(data);
         }
 
@@ -209,7 +219,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
         public async Task<IActionResult> CompareProduct(int? CategoryId, int? productId)
         {
-            if (CategoryId == null) { CategoryId = 1; }
+            if (CategoryId == null) { CategoryId = 9; }
             
            
             var ListCategory = await unitOfWork.Category.GetAll();
