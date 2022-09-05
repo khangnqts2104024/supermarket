@@ -29,8 +29,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //check branchId is exists in Session
-            var branchId = HttpContext.Session.GetInt32("branchId");
+            //check branchId is exists in Cookie
+            var branchId =int.Parse(HttpContext.Request.Cookies["branchId"]);
             //redirect to Home if user not login and not set branchId
             if (User.Identity != null && branchId !=null)
             {
@@ -95,8 +95,9 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> Plus(int cartId, int itemCount)
         {
-            //check branchId is exists in Session
-            var branchId = HttpContext.Session.GetInt32("branchId");
+            //check branchId is exists in Cookie
+            var branchId = int.Parse(HttpContext.Request.Cookies["branchId"]);
+
             var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CartId == cartId, includeProperties: "Product");
             if (cartFromDb != null)
             {
@@ -278,7 +279,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(ShoppingCartVM shoppingCartVM,int? cpId)
         {
-            var branchId = HttpContext.Session.GetInt32("branchId");
+            var branchId = int.Parse(HttpContext.Request.Cookies["branchId"]);
             var paymentIntentSession = HttpContext.Session.GetString("paymentIntent");
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -312,7 +313,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 //
                 shoppingCartVM.Order.OrderStatus = SD.StatusPending;
                 shoppingCartVM.Order.PaymentStatus = SD.StatusPending;
-                shoppingCartVM.Order.BranchId = (int)branchId;
+                shoppingCartVM.Order.BranchId = branchId;
                 await unitOfWork.Order.Add(shoppingCartVM.Order);
                 await unitOfWork.Save();
 
