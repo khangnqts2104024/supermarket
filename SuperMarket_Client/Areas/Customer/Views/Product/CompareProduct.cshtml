@@ -357,14 +357,7 @@
                                     </td>
                                     <td data-index="2" data-field="Weight"></td>
                                 </tr>
-                                <tr>
-                                    <th>ExpiryDate</th>
-                                    <td data-index="0" data-field="ExpiryDate">
-                                    </td>
-                                    <td data-index="1" data-field="ExpiryDate">
-                                    </td>
-                                    <td data-index="2" data-field="ExpiryDate"></td>
-                                </tr>
+                         
 
                                 <tr>
                                     <th>Description</th>
@@ -401,7 +394,7 @@
         //set default product if exits
         $(document).ready(function() {
             //var test = $('[data-show="product"]')
-            console.log(jsObject);
+     
 
             product = defaultProduct;
             index = 0;
@@ -496,8 +489,6 @@
                     comparecolumn[i].innerHTML = product.Price;
                 } else if (comparecolumn[i].getAttribute("data-field") === "Weight") {
                     comparecolumn[i].innerHTML = product.Weight;
-                } else if (comparecolumn[i].getAttribute("data-field") === "ExpiryDate") {
-                    comparecolumn[i].innerHTML = product.ExpiryDate;
                 } else if (comparecolumn[i].getAttribute("data-field") === "Description") {
                     comparecolumn[i].innerHTML = product.Description;
                 } else if (comparecolumn[i].getAttribute("data-field") === "ProductId") {
