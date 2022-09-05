@@ -77,6 +77,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             return View();
         }
 
+        
+
        
         [HttpGet]
         public async Task<IActionResult> CancelRequest(int orderId)
@@ -121,6 +123,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             });
         }
         #endregion
+
+        
 
     }
 }

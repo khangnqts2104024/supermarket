@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Product>
+﻿@model IEnumerable<Stock>
 @{
 	ViewData["Title"] = "Home Page";
 }
@@ -103,7 +103,7 @@
 									<div class="item">
 										<div class="shop_item">
 											<div class="thumb">
-												@foreach (var Image in data.ImageProduct)
+												@foreach (var Image in data.Product.ImageProduct)
 												{
 													if (Image.IsMainImage == true)
 													{
@@ -112,12 +112,12 @@
 												}
 												<div class="thumb_info">
 													<ul class="mb0">
-														<li><a class="addToCartHome" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></a></li>
+														<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></li>
 													</ul>
 												</div>
 											</div>
 											<div class="details text-center">
-												<div class="title">@data.Brand_Category.Category.CategoryName</div>
+												<div class="title">@data.Product.Brand_Category.Category.CategoryName</div>
 												<div class="review">
 													<ul class="mb0">
 														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
@@ -127,9 +127,13 @@
 														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
 													</ul>
 												</div>
-												<div class="sub_title">@data.ProductName <br> @data.Weight</div>
+												<div class="sub_title">@data.Product.Title </div>
 												<div class="si_footer">
-													<div class="price">$@data.Price</div>
+													<div class="price">$@data.Product.Price</div>
+													<div class="sell_stock mt20">
+														<div class="sell float-start">Weight: <span class="fwb">@data.Product.Weight</span></div>
+														<div class="stock float-end">Available: <span class="fwb">@data.Count</span></div>
+													</div>
 													<a href="/Customer/Product/Details?id=@data.ProductId" class="cart_btn btn-thm">
 														<span class="flaticon-search mr10"></span>VIEW DETAIL
 													</a>
@@ -153,12 +157,12 @@
 								<div class="popular_listing_slider1">
 									@foreach (var data in Model)
 									{
-										@if (data.Brand_Category.Category.CategoryName == item.CategoryName)
+										@if (data.Product.Brand_Category.Category.CategoryName == item.CategoryName)
 										{
 											<div class="item">
 												<div class="shop_item">
 													<div class="thumb">
-														@foreach (var Image in data.ImageProduct)
+														@foreach (var Image in data.Product.ImageProduct)
 														{
 															if (Image.IsMainImage == true)
 															{
@@ -166,14 +170,14 @@
 
 															}
 														}
-														<div class="thumb_info">
+														<div class="thumb_info ">
 															<ul class="mb0">
-																<li><a class="addToCartHome" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></a></li>
+																<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></li>
 															</ul>
 														</div>
 													</div>
 													<div class="details text-center">
-														<div class="title">@data.Brand_Category.Category.CategoryName</div>
+														<div class="title">@data.Product.Brand_Category.Category.CategoryName</div>
 														<div class="review">
 															<ul class="mb0">
 																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
@@ -183,9 +187,13 @@
 																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
 															</ul>
 														</div>
-														<div class="sub_title">@data.ProductName <br> @data.Weight</div>
+														<div class="sub_title">@data.Product.ProductName </div>
 														<div class="si_footer">
-															<div class="price">$@data.Price</div>
+															<div class="price">$@data.Product.Price</div>
+															<div class="sell_stock mt20">
+																<div class="sell float-start">Weight: <span class="fwb">@data.Product.Weight</span></div>
+																<div class="stock float-end">Available: <span class="fwb">@data.Count</span></div>
+															</div>
 															<a href="/Customer/Product/Details?id=@data.ProductId" class="cart_btn btn-thm">
 																<span class="flaticon-search mr10"></span>VIEW DETAIL
 															</a>
@@ -214,7 +222,7 @@
 		<div class="row">
 			<div class="col-lg-12">
 				<div class="online_delivery text-center">
-					<div class="delivery_bike"><img src="images/shop-items/delivery.png" alt="delivery.png"></div>
+					<div class="delivery_bike"><img src="~/Images/shop-items/shipper.png"></div>
 					<h3 class="title text-thm2">
 						<span class="flaticon-whatsapp text-thm vam mr15"></span>WHATSAPP ORDERING
 						SERVICE – PLACE YOUR ORDERS AT <span class="text-thm">392 96 32</span>
@@ -412,140 +420,11 @@
 		</div>
 	</div>
 </section>
+<br />
+<br />
+<br />
+<br />
 
-<!-- Our Partner & Blog -->
-<section class="our-blog pt0 pb60">
-	<div class="container">
-		<div class="partner_divider">
-			<div class="row">
-				<div class="col">
-					<div class="partner_item">
-						<img src="images/partners/1.png" alt="1.png">
-					</div>
-				</div>
-				<div class="col">
-					<div class="partner_item">
-						<img src="images/partners/2.png" alt="2.png">
-					</div>
-				</div>
-				<div class="col">
-					<div class="partner_item">
-						<img src="images/partners/3.png" alt="3.png">
-					</div>
-				</div>
-				<div class="col">
-					<div class="partner_item">
-						<img src="images/partners/4.png" alt="4.png">
-					</div>
-				</div>
-				<div class="col">
-					<div class="partner_item">
-						<img src="images/partners/5.png" alt="5.png">
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-lg-6 offset-lg-3">
-				<div class="main-title text-center">
-					<h2>Our Blog</h2>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-md-6 col-xl-4">
-				<div class="for_blog">
-					<div class="thumb">
-						<div class="post_time"><span class="mont">APRIL</span><br><span class="date">08</span></div>
-						<img class="img-whp" src="images/blog/1.jpg" alt="1.jpg">
-					</div>
-					<div class="details">
-						<div class="tc_content">
-							<div class="tag bgc-thm">
-								<a class="text-white" href="page-blog-details.html">LIFE STYLE, FARM</a>
-							</div>
-							<h4 class="title">How To Make A Fresh Juice Blended For Your <br> Family?</h4>
-							<div class="bp_meta">
-								<ul>
-									<li class="list-inline-item">
-										<a href="page-blog-details.html">
-											<span class="flaticon-user fz15 mr10"></span> By Admin
-										</a>
-									</li>
-									<li class="list-inline-item">
-										<a href="page-blog-details.html">
-											<span class="flaticon-chat fz15 mr10"></span> 16 Comments
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6 col-xl-4">
-				<div class="for_blog">
-					<div class="thumb">
-						<div class="post_time"><span class="mont">APRIL</span><br><span class="date">08</span></div>
-						<img class="img-whp" src="images/blog/2.jpg" alt="2.jpg">
-					</div>
-					<div class="details">
-						<div class="tc_content">
-							<div class="tag bgc-thm">
-								<a class="text-white" href="page-blog-details.html">LIFE STYLE, FARM</a>
-							</div>
-							<h4 class="title">Creative Water Features And Exterior <br> Design</h4>
-							<div class="bp_meta">
-								<ul>
-									<li class="list-inline-item">
-										<a href="page-blog-details.html">
-											<span class="flaticon-user fz15 mr10"></span> By Admin
-										</a>
-									</li>
-									<li class="list-inline-item">
-										<a href="page-blog-details.html">
-											<span class="flaticon-chat fz15 mr10"></span> 16 Comments
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="col-md-6 col-xl-4">
-				<div class="for_blog">
-					<div class="thumb">
-						<div class="post_time"><span class="mont">APRIL</span><br><span class="date">08</span></div>
-						<img class="img-whp" src="images/blog/3.jpg" alt="3.jpg">
-					</div>
-					<div class="details">
-						<div class="tc_content">
-							<div class="tag bgc-thm">
-								<a class="text-white" href="page-blog-details.html">LIFE STYLE, FARM</a>
-							</div>
-							<h4 class="title">What are organic? All You Need to <br> Know</h4>
-							<div class="bp_meta">
-								<ul>
-									<li class="list-inline-item">
-										<a href="page-blog-details.html">
-											<span class="flaticon-user fz15 mr10"></span> By Admin
-										</a>
-									</li>
-									<li class="list-inline-item">
-										<a href="page-blog-details.html">
-											<span class="flaticon-chat fz15 mr10"></span> 16 Comments
-										</a>
-									</li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
 
 <!-- How It Works -->
 <section class="whychose_us pt0 pb0">
@@ -560,7 +439,7 @@
 		<div class="row">
 			<div class="col-md-6 col-xl-4">
 				<div class="why_chose_us home1_style">
-					<div class="icon"> <img src="images/why-chose/1.png" alt="1.png"> </div>
+					<div class="icon"> <img src="~/Asset/images/why-chose/1.png" alt="1.png"> </div>
 					<div class="details">
 						<h4 class="title">We drive fast & ship faster</h4>
 						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
@@ -569,7 +448,7 @@
 			</div>
 			<div class="col-md-6 col-xl-4">
 				<div class="why_chose_us home1_style">
-					<div class="icon"> <img src="images/why-chose/2.png" alt="2.png"> </div>
+					<div class="icon"> <img src="~/Asset/images/why-chose/2.png" alt="2.png"> </div>
 					<div class="details">
 						<h4 class="title">We save your more money</h4>
 						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
@@ -578,7 +457,7 @@
 			</div>
 			<div class="col-md-6 col-xl-4">
 				<div class="why_chose_us home1_style">
-					<div class="icon"> <img src="images/why-chose/3.png" alt="3.png"> </div>
+					<div class="icon"> <img src="~/Asset/images/why-chose/3.png" alt="3.png"> </div>
 					<div class="details">
 						<h4 class="title">Daily discount coupons</h4>
 						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
@@ -588,84 +467,4 @@
 		</div>
 	</div>
 </section>
-
-<!-- Instagram Posts -->
-<section class="instagram-posts pt0 pb80">
-	<div class="container">
-		<div class="row">
-			<div class="col-xl-6 offset-xl-3">
-				<div class="main-title text-center">
-					<h2>Follow me on instagram</h2>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="instagram_slider">
-					<div class="item">
-						<div class="gallery_item">
-							<img class="img-fluid img-circle-rounded w100" src="images/blog/insta1.jpg" alt="lg1.jpg">
-							<div class="gallery_overlay">
-								<a class="icon popup-img" href="images/blog/insta1.jpg">
-									<span class="fab fa-instagram"></span>
-								</a>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="gallery_item">
-							<img class="img-fluid img-circle-rounded w100" src="images/blog/insta2.jpg" alt="insta2.jpg">
-							<div class="gallery_overlay">
-								<a class="icon popup-img" href="images/blog/insta2.jpg">
-									<span class="fab fa-instagram"></span>
-								</a>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="gallery_item">
-							<img class="img-fluid img-circle-rounded w100" src="images/blog/insta3.jpg" alt="insta3.jpg">
-							<div class="gallery_overlay">
-								<a class="icon popup-img" href="images/blog/insta3.jpg">
-									<span class="fab fa-instagram"></span>
-								</a>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="gallery_item">
-							<img class="img-fluid img-circle-rounded w100" src="images/blog/insta4.jpg" alt="insta4.jpg">
-							<div class="gallery_overlay">
-								<a class="icon popup-img" href="images/blog/insta4.jpg">
-									<span class="fab fa-instagram"></span>
-								</a>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="gallery_item">
-							<img class="img-fluid img-circle-rounded w100" src="images/blog/insta5.jpg" alt="insta5.jpg">
-							<div class="gallery_overlay">
-								<a class="icon popup-img" href="images/blog/insta5.jpg">
-									<span class="fab fa-instagram"></span>
-								</a>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="gallery_item">
-							<img class="img-fluid img-circle-rounded w100" src="images/blog/insta1.jpg" alt="insta1.jpg">
-							<div class="gallery_overlay">
-								<a class="icon popup-img" href="images/blog/insta1.jpg">
-									<span class="fab fa-instagram"></span>
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
-
 

@@ -916,26 +916,14 @@ address {
 .ht_language_widget ul li:first-child{
   margin-right: 20px;
 }
-.header_middle_advnc_search{
-  position: relative;
+.header_middle_advnc_search {
+    position: relative;
+
 }
 .header_middle_advnc_search .search_form_wrapper{
-  border-radius: 4px;
-  border: 1px solid #ebebeb;
+
 }
-.header_middle_advnc_search.home2 .search_form_wrapper{
-  background-color: #fff;
-}
-.header_middle_advnc_search.home4 .search_form_wrapper{
-  background-color: #fff;
-  border: none;
-  border-radius: 0;
-  margin-right: 2px;
-}
-.advscrh_frm_btn.home4 .search-btn{
-  background-color: #41544A;
-  border-radius: 0;
-}
+
 .advscrh_frm_btn .search-btn{
   background-color: #86BC42;
   border-radius: 0 4px 4px 0;
@@ -945,26 +933,15 @@ address {
   text-align: center;
   width: 50px;
 }
-.advscrh_frm_btn .search-btn.home3{
-  background-color: #CF3E3B;
-}
-.advscrh_frm_btn.home7_style .search-btn{
-  background-color: #849D6A;
-}
+
+
 .header_middle{
   display: inline-block;
   position: relative;
   width: 100%;
 }
-.header_top.home2{
-  background-color: #000000;
-  height: 80px;
-  position: relative;
-  z-index: 9;
-}
-.header_top.home3{
-  height: 70px;
-}
+
+
 .header_top.home3 .container-fluid{
   padding: 0 70px;
   position: relative;
@@ -20158,7 +20135,7 @@ canvas#myChart{
   background-color: #fff;
   border: 1px solid #EBEBEB;
   border-radius: 4px;
-  height: 553px;
+/*  height: 553px;*/
   opacity: 0;
   position: relative;
   top: 0px;
@@ -22397,3 +22374,4 @@ input.quantity-num[type="number"]::-webkit-outer-spin-button {
 .small-ratings i {
     color: #cecece;
 }
+

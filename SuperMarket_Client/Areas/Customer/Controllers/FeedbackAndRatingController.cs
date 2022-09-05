@@ -31,7 +31,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     message = "Please Login to Review",
                 });
             }
-            var branchId = HttpContext.Session.GetInt32("branchId");
+            int? branchId = int.Parse(HttpContext.Request.Cookies["branchId"]);
             if(branchId != 0)
             {
                 var product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == productId);

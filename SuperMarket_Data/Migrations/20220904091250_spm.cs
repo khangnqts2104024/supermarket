@@ -60,12 +60,12 @@ namespace SuperMarket_DataAccess.Migrations
                 {
                     BranchId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BranchName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
-                    Address = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Latitude = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Longtitude = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    BranchImg = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    BranchName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Address = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Latitude = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Longtitude = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BranchImg = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -99,7 +99,7 @@ namespace SuperMarket_DataAccess.Migrations
                     CategoryName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CategoryImg = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    CategoryImg = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -116,7 +116,8 @@ namespace SuperMarket_DataAccess.Migrations
                     DiscountPercent = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     ExpiredDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Count = table.Column<int>(type: "int", nullable: false)
+                    Count = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -230,27 +231,6 @@ namespace SuperMarket_DataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Bills",
-                columns: table => new
-                {
-                    BillId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    BillAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Bills", x => x.BillId);
-                    table.ForeignKey(
-                        name: "FK_Bills_AspNetUsers_CustomerId",
-                        column: x => x.CustomerId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Brand_Categories",
                 columns: table => new
                 {
@@ -296,7 +276,8 @@ namespace SuperMarket_DataAccess.Migrations
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     OrderNotes = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CouponId = table.Column<int>(type: "int", nullable: true),
-                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    CustomerId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    BranchId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -306,6 +287,12 @@ namespace SuperMarket_DataAccess.Migrations
                         column: x => x.CustomerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Orders_Branches_BranchId",
+                        column: x => x.BranchId,
+                        principalTable: "Branches",
+                        principalColumn: "BranchId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Orders_Coupons_CouponId",
@@ -511,11 +498,6 @@ namespace SuperMarket_DataAccess.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bills_CustomerId",
-                table: "Bills",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Brand_Categories_BrandId",
                 table: "Brand_Categories",
                 column: "BrandId");
@@ -549,6 +531,11 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "IX_OrderDetails_ProductId",
                 table: "OrderDetails",
                 column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_BranchId",
+                table: "Orders",
+                column: "BranchId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_CouponId",
@@ -604,9 +591,6 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Bills");
-
-            migrationBuilder.DropTable(
                 name: "Feedback_Ratings");
 
             migrationBuilder.DropTable(
@@ -628,13 +612,13 @@ namespace SuperMarket_DataAccess.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Branches");
-
-            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Branches");
 
             migrationBuilder.DropTable(
                 name: "Coupons");

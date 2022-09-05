@@ -29,18 +29,19 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            //check branchId is exists in Session
-            var branchId = HttpContext.Session.GetInt32("branchId");
+            //check branchId is exists in Cookie
+            var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"], out int result);
             //redirect to Home if user not login and not set branchId
-            if (User.Identity != null && branchId !=null)
+            if (User.Identity != null && result != 0)
             {
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
                 ShoppingCartVM shoppingCartVM = new ShoppingCartVM()
                 {
-                    ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product"),
+                    ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product.ImageProduct"),
                     Order = new()
                 };
+                
 
                 //return View if cart is empty
                 if(shoppingCartVM.ListCart.Count() == 0)
@@ -56,7 +57,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 List<ShoppingCart>? indexListCart = new List<ShoppingCart>(shoppingCartVM.ListCart);
                 foreach (var item in indexListCart)
                 {
-                    var IsOutStock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == branchId && x.ProductId == item.ProductId && x.Count < item.Count);
+                    var IsOutStock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == result && x.ProductId == item.ProductId && x.Count < item.Count);
                     if (IsOutStock != null)
                     {
                         //add item to list then remove out from cart.
@@ -66,6 +67,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         await unitOfWork.Save();
                     }
                 }
+
 
                 if(shoppingCartVM.ListCart.Count() > 0)
                 {
@@ -95,12 +97,13 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> Plus(int cartId, int itemCount)
         {
-            //check branchId is exists in Session
-            var branchId = HttpContext.Session.GetInt32("branchId");
+            //check branchId is exists in Cookie
+            var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"],out int result);
+
             var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CartId == cartId, includeProperties: "Product");
             if (cartFromDb != null)
             {
-                var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == branchId && x.ProductId == cartFromDb.ProductId);
+                var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == result && x.ProductId == cartFromDb.ProductId);
 
                 if (itemCount == stock.Count)
                 {
@@ -278,7 +281,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> Checkout(ShoppingCartVM shoppingCartVM,int? cpId)
         {
-            var branchId = HttpContext.Session.GetInt32("branchId");
+            var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"], out int result);
+
             var paymentIntentSession = HttpContext.Session.GetString("paymentIntent");
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -312,7 +316,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 //
                 shoppingCartVM.Order.OrderStatus = SD.StatusPending;
                 shoppingCartVM.Order.PaymentStatus = SD.StatusPending;
-                shoppingCartVM.Order.BranchId = (int)branchId;
+                shoppingCartVM.Order.BranchId = result;
                 await unitOfWork.Order.Add(shoppingCartVM.Order);
                 await unitOfWork.Save();
 
@@ -400,45 +404,58 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 message = "User login required!"
             });
 
+
         }
 
       
         [HttpGet]
         public async Task<IActionResult> CompleteOrder(int id)
         {
-            if(id == 0)
+            try
             {
-                return RedirectToAction("Index", "Home");
-            }
-            var order = await unitOfWork.Order.GetFirstOrDefault(x => x.OrderId == id, includeProperties: "Coupon");
-            var orderDetails = await unitOfWork.OrderDetail.GetAll(x => x.OrderId == id, includeProperties: "Product");
-            //
-            //var useCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(order.CouponId));
-            //
-            OrderVM orderVM = new OrderVM()
-            {
-                Order = order,
-                OrderDetails = orderDetails
-            };
-            //check the stripe status to make sure payment is actually successful
-            if (orderVM.Order != null && orderVM.OrderDetails != null)
-            {
-                var service = new SessionService();
-                //get a session for options based on SessionService
-                Session session = service.Get(orderVM.Order.SessionId);
-                if (session.PaymentStatus.ToLower() == "paid")
+                if (id == 0)
                 {
-                    unitOfWork.Order.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
-                    IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
-                    //khang
-                    if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }
-                    //
-                    unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
-                    HttpContext.Session.Remove("paymentIntent");
-                    await unitOfWork.Save();
+                    return RedirectToAction("Index", "Home");
                 }
+                var order = await unitOfWork.Order.GetFirstOrDefault(x => x.OrderId == id, includeProperties: "Coupon");
+                var orderDetails = await unitOfWork.OrderDetail.GetAll(x => x.OrderId == id, includeProperties: "Product");
+                //
+                //var useCoupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponId.Equals(order.CouponId));
+                //
+                OrderVM orderVM = new OrderVM()
+                {
+                    Order = order,
+                    OrderDetails = orderDetails
+                };
+                //check the stripe status to make sure payment is actually successful
+                if (orderVM.Order != null && orderVM.OrderDetails != null)
+                {
+                    var service = new SessionService();
+                    //get a session for options based on SessionService
+                    Session session = service.Get(orderVM.Order.SessionId);
+                    if (session.PaymentStatus.ToLower() == "paid")
+                    {
+                        unitOfWork.Order.UpdateStatus(id, SD.StatusApproved, SD.PaymentStatusApproved);
+                        IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
+                        //khang
+                        if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }
+                        //
+                        unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
+                        HttpContext.Session.Remove("paymentIntent");
+                        await unitOfWork.Save();
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Error");
+                    }
+                }
+                return View(orderVM);
             }
-            return View(orderVM);
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "Error");
+            }
+           
         }
 
         public async Task<decimal> GetOrderTotal()

@@ -16,13 +16,22 @@ namespace SuperMarket_Models.Models
 
         public int BranchId { get; set; }
         [MaxLength(150)]
-        public string? BranchName { get; set; }
+        [Required]
+        public string BranchName { get; set; }
         [MaxLength(250)]
-        public string? Address { get; set; }
+        [Required]
+
+        public string Address { get; set; }
         [MaxLength(20)]
-        public string? Phone { get; set; }
-        public string? Latitude { get; set; }
-        public string? Longtitude { get; set; }
+        [Required]
+
+        public string Phone { get; set; }
+        [Required]
+
+        public string Latitude { get; set; }
+        [Required]
+
+        public string Longtitude { get; set; }
         
         public string? BranchImg { get; set; }
 

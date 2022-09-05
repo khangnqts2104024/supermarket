@@ -38,6 +38,7 @@ var isApplied = false;
     }
 
     $(document).ready(function () {
+
         var selectCoupon = $("#selectCoupon");
         selectCoupon.on("change", function () {
             $("#couponField").val(selectCoupon.val());
@@ -243,9 +244,7 @@ var isApplied = false;
         
     });
 
-    function selectBranch_popup() {
-        $('#selectBranch_popup').modal('show');
-    }
+   
 
    
 
@@ -898,6 +897,11 @@ var isApplied = false;
         });
         //Add To Cart Home Page
         $(".addToCartHome").on("click", function (e) {
+            var checkLoggedIn = $("#LoggedIn").val();
+            if (checkLoggedIn != 1) {
+                window.location.href = domain + "Identity/Account/Login";
+                return false;
+            }
             e.preventDefault();
             let id = $(this).data("productid");
             $.ajax({

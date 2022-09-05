@@ -24,7 +24,6 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddSession();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 //add newtonsoftJson
-
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
@@ -54,6 +53,8 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
 
-    pattern: "{area=Customer}/{controller=Product}/{action=Index}/{id?}");
+
+    pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
+
     
 app.Run();

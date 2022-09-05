@@ -1,0 +1,85 @@
+﻿	@model SuperMarket_Models.Models.Branch
+
+<div class="container">
+<div>
+	<h2>Closest Location Recommendation: </h2>
+</div>
+<div class="mb30">
+	<span style="color:red;font-size:30px;"  id="branchNameClosest"> @Model.BranchName</span>
+</div>  
+
+
+<!-- Store Locator -->
+  <iframe src="https://my.atlistmaps.com/map/2517e2e6-e937-413b-afa1-51359e82830e?share=true" allow="geolocation" width="100%" height="800" frameborder="0" scrolling="no" allowfullscreen></iframe>
+
+  @{
+    if(TempData["MsgSuccess"] != null)
+    {
+               @section Scripts{
+                <script type="text/javascript">
+
+                   Swal.fire({
+                      icon: 'success',
+                      title: "Your Email has been sent",
+                      showConfirmButton: false,
+                      timer: 1500
+                    })
+
+                </script>
+                }
+    } 
+     
+}
+ 
+
+  <!-- Our Contact -->
+  <section class="our-contact bgc-f5 p0">
+    <div class="container-fluid p0">
+      <div class="row">
+        <div class="col-lg-7" style="background-color:rgb(71,113,227)" >
+          <div class="h700" style="display: flex;align-items: center;justify-content: center;" id="map-canvas">
+              <p style="font-size:100px; " class="text-center text-light">Contact Us</p>
+          </div>
+        </div>
+        <div class="col-lg-5">
+          <div class="form_grid">
+            <div class="wrapper">
+              <h3 class="mb30">Have Questions? Get in touch!</h3>
+              <form class="contact_form" asp-action="Contact" asp-controller="StoreLocator" asp-area="Customer" method="post" novalidate>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Full Name</label>
+                          <input class="form-control" name="fullname" type="text">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Email</label>
+                          <input class="form-control email" name="email" type="email">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="form-label">Phone</label>
+                          <input class="form-control" name="phone" type="text">
+                        </div>
+                      </div>
+                      <div class="col-sm-12">
+                        <div class="form-group">
+                          <label class="form-label">Message</label>
+                          <textarea name="message" class="form-control" rows="6"></textarea>
+                        </div> 
+                        <div class="form-group mb0">
+                          <button type="submit" class="btn btn-thm">GET IN TOUCH</button>
+                        </div>
+                      </div>
+                    </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

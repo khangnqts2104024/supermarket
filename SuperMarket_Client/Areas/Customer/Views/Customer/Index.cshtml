@@ -1,4 +1,8 @@
 ﻿@model SuperMarket_Models.Models.Customer
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 <!-- Our Dashbord -->
 <div>
 	<section class="our-dashbord dashbord">
@@ -9,11 +13,13 @@
 						<h3 class="mb25 ttu fwb">My account</h3>
 						<div class="ed_menu_list">
 							<ul>
-								<li><a href="page-dashboard.html">Dashboard</a></li>
-								<li><a asp-action="Order" asp-controller="Customer" asp-area="Customer">Orders</a></li>
-								<li><a href="page-dashboard-address.html">Addresses</a></li>
-								<li><a class="active" href="page-dashboard-account-details.html">Account Details</a></li>
-								<li><a href="page-login.html">Logout</a></li>
+								<li><a asp-action="Index" asp-controller="Customer" asp-area="Customer">Dashboard</a></li>
+								<li><a asp-action="Order" asp-controller="Customer" asp-area="Customer">Orders History</a></li>
+								<li>
+									<form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "Customer" })">
+										<button style="padding:0;" id="logout" type="submit" class="nav-link btn btn-link">Logout</button>
+									</form>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -25,14 +31,7 @@
 								<div class="dropdown">
 									<button onclick="myFunction()" class="dropbtn"><i class="fa fa-bars pr10"></i> Dashboard Navigation</button>
 									<ul id="myDropdown" class="dropdown-content">
-										<li><a href="page-dashboard.html">Dashboard</a></li>
-										<li><a href="page-dashboard-order.html">Orders</a></li>
-										<li><a href="page-dashboard-wish-list.html">Downloads</a></li>
-										<li><a href="page-dashboard-address.html">Addresses</a></li>
-										<li><a class="active" href="page-dashboard-account-details.html">Account Details</a></li>
-										<li><a href="page-dashboard-wish-list.html">Wishlist</a></li>
-										<li><a href="page-login.html">Logout</a></li>
-									</ul>
+										
 								</div>
 							</div>
 						</div>

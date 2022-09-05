@@ -21,6 +21,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
         public async Task<IActionResult> Index(int? cateID)
         {
+
             IEnumerable<Product> data;
             if (cateID != null) {
                 data = await unitOfWork.Product.GetAll(p => p.Brand_Category.CategoryId.Equals(cateID), includeProperties: "Brand_Category,ImageProduct,Brand_Category.Brand,Brand_Category.Category");
@@ -35,13 +36,14 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             ViewBag.categoryList=categoryList;
             ViewBag.brandList = brandList;
             return View(data);
+
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-
-            int? branchId = HttpContext.Session.GetInt32("branchId");
+            
+            int? branchId = int.Parse(HttpContext.Request.Cookies["branchId"]);
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if (id == 0 || branchId == null)
@@ -53,7 +55,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             {
                branchId = (int)branchId,
                Feedback_RatingList = (List<Feedback_Rating>)await unitOfWork.Feedback_Rating.GetAll(x=>x.ProductId == id,includeProperties:"Product,Customer"),
-               Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock.Branch"),
+               Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock.Branch,ImageProduct"),
                Count = 1,
                ProductId = id,
             };
