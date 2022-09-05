@@ -127,9 +127,13 @@
 														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
 													</ul>
 												</div>
-												<div class="sub_title">@data.ProductName <br> @data.Weight</div>
+												<div class="sub_title">@data.Title </div>
 												<div class="si_footer">
 													<div class="price">$@data.Price</div>
+													<div class="sell_stock mt20">
+														<div class="sell float-start">Weight: <span class="fwb">@data.Weight</span></div>
+														<div class="stock float-end">Available: <span class="fwb">10</span></div>
+													</div>
 													<a href="/Customer/Product/Details?id=@data.ProductId" class="cart_btn btn-thm">
 														<span class="flaticon-search mr10"></span>VIEW DETAIL
 													</a>
@@ -183,9 +187,13 @@
 																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
 															</ul>
 														</div>
-														<div class="sub_title">@data.ProductName <br> @data.Weight</div>
+														<div class="sub_title">@data.ProductName </div>
 														<div class="si_footer">
 															<div class="price">$@data.Price</div>
+															<div class="sell_stock mt20">
+																<div class="sell float-start">Weight: <span class="fwb">@data.Weight</span></div>
+																<div class="stock float-end">Available: <span class="fwb">10</span></div>
+															</div>
 															<a href="/Customer/Product/Details?id=@data.ProductId" class="cart_btn btn-thm">
 																<span class="flaticon-search mr10"></span>VIEW DETAIL
 															</a>

@@ -21,17 +21,14 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category,Brand_Category.Brand,Brand_Category.Category");
-            var categoryList = await unitOfWork.Category.GetAll();
-            ViewBag.categoryList=categoryList;
-            return View(data);
+            return View();
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
-
-            int? branchId = HttpContext.Session.GetInt32("branchId");
+            
+            int? branchId = int.Parse(HttpContext.Request.Cookies["branchId"]);
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if (id == 0 || branchId == null)
