@@ -19,6 +19,10 @@ namespace SuperMarket_Models.ViewModels
         [NotMapped]
         [ValidateNever]
         public SelectList ListCoupon { get;set;}
-        
+
+     
+
+
+
     }
 }

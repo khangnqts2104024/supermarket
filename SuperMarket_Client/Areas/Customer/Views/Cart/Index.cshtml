@@ -73,7 +73,17 @@ if ($.trim($("#itemOutStock").html()) != '') {
                                                         <th scope="row">
                                                             <ul class="cart_list">
                                                                 <li class="list-inline-item" style="height:56px;line-height:56px;" ><a class="close_img" href="#"><img src="images/shop/close.png" alt=""></a></li>
-                                                                <li class="list-inline-item pr10" style="height:56px;line-height:56px;"><a href="#"><img src="images/shop/cart1.png" alt="cart1.png"></a></li>
+                                                                @if(item.Product.ImageProduct != null)
+                                                                {
+                                                                    @foreach (var a in item.Product.ImageProduct)
+                                                                    {
+                                                                        if (a.IsMainImage)
+                                                                        {
+                                                                            <li class="list-inline-item pr10" style="height:56px;line-height:56px;"><a href="#"><img src="@a.Url" alt="cart1.png"></a></li>
+                                                                        }
+                                                                    }
+                                                                }
+                                                                
                                                                 <li class="list-inline-item" style="height:56px;line-height:56px;"><a class="cart_title" href="#">@item.Product.ProductName</a></li>
                                                             </ul>
                                                         </th>

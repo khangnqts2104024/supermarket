@@ -1,0 +1,15 @@
+﻿@model IEnumerable<SuperMarket_Models.Models.Stock>
+<ul>
+	@foreach (var item in Model)
+	{
+	<li>
+		<div class="thumb">
+			<img src="@item.Product.ImageProduct" alt="sf1.png">
+		</div>
+		<div class="info-product">
+			<div class="item_title">@item.Product.Title</div>
+			<div class="price"><span class="sale">@item.Product.Price.ToString("c")</span></div>
+		</div>
+	</li>
+	}
+</ul>

@@ -6,7 +6,6 @@ using SuperMarket_Models.Models;
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    [BranchActionFilter]
     public class HomeController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -16,23 +15,13 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
             try
             {
-                var branchId = int.Parse(HttpContext.Request.Cookies["branchId"]);
-                if(branchId == null)
-                {
-                    var data = await unitOfWork.Product.GetAll(includeProperties: "ImageProduct,Brand_Category.Category");
-                    ViewBag.CategoryList = await unitOfWork.Category.GetAll();
-                    return View(data);
-                }
-                else
-                {
-                    var stockList = await unitOfWork.Stock.GetAll(x=>x.BranchId == branchId && x.Count >0,includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
+                    var stockList = await unitOfWork.Stock.GetAll(x=>x.BranchId == id && x.Count >0,includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
                     ViewBag.CategoryList = await unitOfWork.Category.GetAll();
                     return View(stockList);
-                }
             }
             catch (Exception)
             {

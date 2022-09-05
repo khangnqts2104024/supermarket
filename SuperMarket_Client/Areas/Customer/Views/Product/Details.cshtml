@@ -25,73 +25,50 @@
 			<div class="row">
 				<div class="col-lg-6">
 					<div class="single_product_grid">
-            <div class="single_product_slider">
-              <div class="item">
-                <div class="sps_content">
-                  <div class="thumb">
-                    <div class="single_product">
-                      <div class="single_item">
-                        <div class="thumb"><img class="img-fluid" src="images/shop/ss1.png" alt="ss1.png"></div>
-                      </div>
-                      <a class="product_popup popup-img" href="images/shop/ss1.png"><span class="flaticon-search"></span></a>
+                    <div class="single_product_slider">
+                        @foreach (var item in Model.Product.ImageProduct)
+                        {
+                            if (item.IsMainImage)
+                            {
+                                <div class="item">
+                                <div class="sps_content">
+                                  <div class="thumb">
+                                    <div class="single_product">
+                                      <div class="single_item">
+                                        <div class="thumb"><img class="img-fluid" src="@item.Url" alt="ss1.png"></div>
+                                      </div>
+                                      <a class="product_popup popup-img" href="@item.Url"><span class="flaticon-search"></span></a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            }
+                        }
+
+                        @foreach (var item in Model.Product.ImageProduct)
+                        {
+                                <div class="item">
+                                <div class="sps_content">
+                                  <div class="thumb">
+                                    <div class="single_product">
+                                      <div class="single_item">
+                                        <div class="thumb"><img class="img-fluid" src="@item.Url" alt="ss1.png"></div>
+                                      </div>
+                                      <a class="product_popup popup-img" href="@item.Url"><span class="flaticon-search"></span></a>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                        }
+                     
+                      
+                     
                     </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="sps_content">
-                  <div class="thumb">
-                    <div class="single_product">
-                      <div class="single_item">
-                        <div class="thumb"><img class="img-fluid" src="images/shop/ss2.png" alt="ss2.png"></div>
-                      </div>
-                      <a class="product_popup popup-img" href="images/shop/ss2.png"><span class="flaticon-search"></span></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="sps_content">
-                  <div class="thumb">
-                    <div class="single_product">
-                      <div class="single_item">
-                        <div class="thumb"><img class="img-fluid" src="images/shop/ss3.png" alt="ss3.png"></div>
-                      </div>
-                      <a class="product_popup popup-img" href="images/shop/ss3.png"><span class="flaticon-search"></span></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="sps_content">
-                  <div class="thumb">
-                    <div class="single_product">
-                      <div class="single_item">
-                        <div class="thumb"><img class="img-fluid" src="images/shop/ss4.png" alt="ss4.png"></div>
-                      </div>
-                      <a class="product_popup popup-img" href="images/shop/ss4.png"><span class="flaticon-search"></span></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="item">
-                <div class="sps_content">
-                  <div class="thumb">
-                    <div class="single_product">
-                      <div class="single_item">
-                        <div class="thumb"><img class="img-fluid" src="images/shop/ss5.png" alt="ss5.png"></div>
-                      </div>
-                      <a class="product_popup popup-img" href="images/shop/ss5.png"><span class="flaticon-search"></span></a>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-					</div>
-				</div>
+		        </div>
+			</div>
 				<div class="col-lg-6">
 					<div class="shop_single_product_details">
-            <div class="shop_item_stock mb30">
+                        <div class="shop_item_stock mb30">
                         @if(@Model.StockCount > 0)
                         {
                             <span class="stock"> <span id="stockCount">@Model.StockCount</span> IN STOCK</span>
@@ -139,10 +116,7 @@
 
                         <p id="messageLimitedQuantity" style="color:red;" class="mb20"></p>
 
-                    <ul class="wishlist_compare">
-                        <li class="list-inline-item"><a href="#" class="favorite_icon"><span class="flaticon-heart"></span> Add to Wishlist</a></li>
-                        <li class="list-inline-item"><a href="#" class="favorite_icon"><span class="flaticon-shuffle"></span> Compare</a></li>
-                    </ul>
+                   
 
                      
 		            <ul class="sspd_sku mb30">
@@ -188,7 +162,7 @@
                     <div class="shop_item_ai_info">
                       <ul class="mb0">
                         <li><a href="#">Weight <span class="float-end">@Model.Product.Weight</span></a></li>
-                        <li><a href="#">Brand <span class="float-end">>@Model.Product.Brand_Category.Brand.BrandName</span></a></li>
+                        <li><a href="#">Brand <span class="float-end">@Model.Product.Brand_Category.Brand.BrandName</span></a></li>
                       </ul>
                     </div>
                   </div>
