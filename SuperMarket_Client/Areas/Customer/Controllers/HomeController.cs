@@ -19,9 +19,20 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             try
             {
-                    var stockList = await unitOfWork.Stock.GetAll(x=>x.BranchId == id && x.Count >0,includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
+                if(id == null)
+                {
+                    var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"], out int result);
+                    var stockList = await unitOfWork.Stock.GetAll(x => x.BranchId == result && x.Count > 0, includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
                     ViewBag.CategoryList = await unitOfWork.Category.GetAll();
                     return View(stockList);
+                }
+                else
+                {
+                    var stockList = await unitOfWork.Stock.GetAll(x => x.BranchId == id && x.Count > 0, includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
+                    ViewBag.CategoryList = await unitOfWork.Category.GetAll();
+                    return View(stockList);
+                }
+                
             }
             catch (Exception)
             {
