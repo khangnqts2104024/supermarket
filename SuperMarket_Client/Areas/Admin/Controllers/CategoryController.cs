@@ -38,7 +38,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 {
                     foreach (var item in data)
                     {
-                        if (item.CategoryName == obj.CategoryName)
+                        if (item.CategoryName.ToLower() == obj.CategoryName.ToLower())
                         {
                             count++;
                         }
@@ -119,7 +119,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             {
                 foreach (var item in data)
                 {
-                    if (item.CategoryName==obj.CategoryName)
+                    if (item.CategoryName.ToLower()==obj.CategoryName.ToLower())
                     {
                         return RedirectToAction("UpdateCategory", new { msg = "Category name has been Used. Try another." });
                     }

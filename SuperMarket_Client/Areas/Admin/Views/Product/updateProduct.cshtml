@@ -4,9 +4,9 @@
 }
 <h3>@ViewData["Title"]</h3>
 <div>
+<span>@ViewBag.msg</span>
 	<div class="col-md-8 offset-2">
 		<form asp-action="Update" class="row" enctype="multipart/form-data">
-			<span>@ViewBag.msg</span>
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<input type="hidden" asp-for="ProductId" />
 			<div class="form-group py-2 col-6">

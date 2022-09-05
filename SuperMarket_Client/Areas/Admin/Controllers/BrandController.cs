@@ -55,8 +55,10 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 {
                     foreach (var item in data)
                     {
-                        item.BrandName.Contains(obj.BrandName);
-                        count++;
+                        if (item.BrandName.ToLower() == obj.BrandName.ToLower())
+                        {
+                            count++;
+                        }
                     }
                     if (count > 0)
                     {
@@ -153,7 +155,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 }
                 foreach (var item in data)
                 {
-                    if (item.BrandName==obj.BrandName)
+                    if (item.BrandName.ToLower()==obj.BrandName.ToLower())
                     {
                         return RedirectToAction("UpdateBrand", new { msg = "Brand name has been Used. Try another." });
                     }
@@ -191,7 +193,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 {
                     foreach (var item in data)
                     {
-                        if (item.BrandName==obj.BrandName)
+                        if (item.BrandName.ToLower()==obj.BrandName.ToLower())
                         {
                             return RedirectToAction("UpdateBrand", new { msg = "Brand name has been Used. Try another." });
                         }
