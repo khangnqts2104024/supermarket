@@ -3,13 +3,20 @@
 	@foreach (var item in Model)
 	{
 	<li>
-		<div class="thumb">
-			<img src="@item.Product.ImageProduct" alt="sf1.png">
-		</div>
-		<div class="info-product">
-			<div class="item_title">@item.Product.Title</div>
-			<div class="price"><span class="sale">@item.Product.Price.ToString("c")</span></div>
-		</div>
+		<a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductId">
+			@foreach (var a in item.Product.ImageProduct)
+				{
+					@if(a.IsMainImage){
+						<div class="thumb">
+				<img src="@a.Url" alt="sf1.png">
+			</div>
+					}
+				}
+			<div class="info-product">
+				<div class="item_title">@item.Product.Title</div>
+				<div class="price"><span class="sale">@item.Product.Price.ToString("c")</span></div>
+			</div>
+		</a>
 	</li>
 	}
 </ul>

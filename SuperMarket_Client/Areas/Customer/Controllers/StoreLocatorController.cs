@@ -97,7 +97,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         Location currentUserLocation = new Location()
                         {
                             Latitude = double.Parse(latituteUser),
-                            Longitude = Double.Parse(longitudeUser)
+                            Longitude = double.Parse(longitudeUser)
                         };
                         List<Location> storeLocation = new List<Location>();
                         List<double> distances = new List<double>();
@@ -114,7 +114,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                             storeLocation.Add(brachLocation);
                         }
 
-                        var shortestDistance = storeLocation.Max(x => x.DistanceToUser);
+                        var shortestDistance = storeLocation.Min(x => x.DistanceToUser);
                         var selectbranch = storeLocation.FirstOrDefault(x => x.DistanceToUser == shortestDistance);
                         if(selectbranch != null)
                         {
