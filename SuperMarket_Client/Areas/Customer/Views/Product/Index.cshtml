@@ -120,7 +120,7 @@
 								<a class="page-link previous" tabindex="-1" aria-disabled="true"> <span class="fa fa-arrow-left"></span></a>
 							</li>
 							<span id="listPagesContainer">
-					ss
+				
 							</span>
 							<li class="page-item">
 								<a class="page-link next"><span class="fa fa-arrow-right"></span></a>
@@ -145,6 +145,7 @@
 
 		$(document).ready(function() {
 			var productData = @Html.Raw(JsonConvert.SerializeObject(@Model));
+			 
 			loaddata(productData);
 
 
@@ -219,7 +220,7 @@
             for (let i = 0; i < tickedBrand.length; i++) { tickedBrand[i].setAttribute("data-check", ""); }
 
             picker.setAttribute("data-check", "ticked");
-			picker.setAttribute("class", "active");
+			//picker.setAttribute("class", "active");
 		
 			//get brand;
 			let priceList = $('[data-price]');
@@ -253,6 +254,7 @@
 					break;
                 default:
                     if (chosenBrand != 0) { productData = PData.filter(p => p.Brand_Category.BrandId == parseInt(chosenBrand)); }
+
                     else { productData = PData; }
 					
 			}
@@ -271,8 +273,8 @@
 			var start = 0;
 			var end = perPage;
 			var totalPage = Math.ceil(product.length / perPage);
-
-
+         
+          
 
 			//nut nam duoi ham render
 			const btnNext = document.querySelector('.next');
@@ -314,7 +316,7 @@
 				html = ``;
 				const content = product.map((item, index) => {
 					if (index >= start && index < end) {
-
+                        console.log(item);
 						let PUrl = "anh.jpg";
 						let img = item.ImageProduct.find(i => i != null);
 						if (img != null) { PUrl = img.Url; }
@@ -374,7 +376,18 @@
 			//const btnPrevious = document.querySelector('.previous');
 			//btn Next
 			btnNext.addEventListener('click', () => {
-				if (currentPage < totalPage) { currentPage++; }
+
+					const numberPages = document.querySelectorAll('#listPagesContainer li');
+
+				if (currentPage < totalPage) { currentPage++; 
+
+				 for (let j = 0; j < numberPages.length; j++) {
+					 //if(numberPages[j])			
+					 numberPages[j].setAttribute("class", "page-item");
+						 }
+				numberPages[currentPage-1].setAttribute("class", "page-item active");
+
+				}
 				else { currentPage = totalPage; }
 
 				getItem(currentPage);
@@ -383,9 +396,22 @@
 			})
 			//btnPev
 			btnPrevious.addEventListener('click', () => {
-				if (currentPage > 1) { currentPage--; }
+
+
+				const numberPages = document.querySelectorAll('#listPagesContainer li');
+				
+
+				if (currentPage > 1) { currentPage-- ;
+					//
+						 for (let j = 0; j < numberPages.length; j++) {
+					 //if(numberPages[j])			
+					 numberPages[j].setAttribute("class", "page-item");
+						 }
+				numberPages[currentPage-1].setAttribute("class", "page-item active");
+				}
 				else { currentPage = 1; }
 				getItem(currentPage);
+
 				renderProduct();
 			})
 
@@ -401,7 +427,7 @@
 
 				let listPages = '';
 				listPages += `
-													<li class="page-item"><a class="page-link" >1</a></li>`;
+								<li class="page-item active"><a class="page-link" >1</a></li>`;
 				for (let i = 2; i <= totalPage; i++) {
 					listPages += `<li class="page-item"><a class="page-link" >${i}</a></li>`;
 				}
@@ -416,9 +442,13 @@
 				const numberPages = document.querySelectorAll('#listPagesContainer li');
 
 				for (let i = 0; i < numberPages.length; i++) {
+					
 					numberPages[i].addEventListener('click', () => {
+                        for (let j = 0; j < numberPages.length; j++) { numberPages[j].setAttribute("class", "page-item");}
+
 						currentPage = i + 1;
 						getItem(currentPage);
+                        numberPages[i].setAttribute("class", "page-item active");
 						renderProduct();
 
 					});
