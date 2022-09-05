@@ -103,14 +103,14 @@
 						</div>
 					</div>
 					<div class="col-lg-7 col-xl-7">
-						<div class="header_middle_advnc_search ">
+						<div class="header_middle_advnc_search">
 							<div class="search_form_wrapper">
 								<div class="row">
-									<div class="col-auto">
+									<div class="col-auto pr0">
 										<div class="top-search">
 											<form action="#" method="get" class="form-search" accept-charset="utf-8">
 												<div class="box-search pre_line">
-													<input class="form_control" type="text" name="search" placeholder="I'm shopping for...">
+													<input class="form_control" type="text" style="border-radius: 4px;border: 1px solid #ebebeb;" name="search" placeholder="I'm shopping for...">
 													<div class="search-suggestions">
 														<div class="box-suggestions">
 															<ul>
@@ -148,7 +148,7 @@
 											</form><!-- /.form-search -->
 										</div><!-- /.top-search -->
 									</div>
-									<div class="col-auto">
+									<div class="col-auto p0">
 										<div class="advscrh_frm_btn">
 											<button type="submit" class="btn search-btn"><span class="flaticon-search"></span></button>
 										</div>
@@ -171,7 +171,12 @@
 
 										else
 										{
-											<a class="cart_btn1" href="#"><span class="flaticon-shopping-cart icon"></span> </a>
+											<a class="cart_btn1" href="#"><span class="flaticon-shopping-cart icon"><span id="CartCount" class="badge bgc-thm">0</span></span> <span class="price">$0</span></a>
+											<ul class="dropdown_content">
+												<li style="border:0"><h5>Subtotal: <span class="text-thm fw400 float-end">$0</span></h5></li>
+												<li style="border:0" class="text-center"><img width="100" src="/Asset/images/cart/empty_cart.png" /></li>
+												<li style="border:0" class="text-center">Your Cart Is Empty</li>
+											</ul>
 										}
 
 									</li>
