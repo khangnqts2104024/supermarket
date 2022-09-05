@@ -1,14 +1,12 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-using MimeKit;
-using MimeKit.Text;
 using SuperMarket_DataAccess.Repository.IRepository;
 using SuperMarket_Models.Models;
-using SuperMarket_Utility;
 
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
+    [BranchActionFilter]
     public class HomeController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -18,12 +16,12 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
-        public async Task<IActionResult> Index(int? id)
+        public async Task<IActionResult> Index()
         {
             try
             {
-
-                if(id == null)
+                var branchId = int.Parse(HttpContext.Request.Cookies["branchId"]);
+                if(branchId == null)
                 {
                     var data = await unitOfWork.Product.GetAll(includeProperties: "ImageProduct,Brand_Category.Category");
                     ViewBag.CategoryList = await unitOfWork.Category.GetAll();
@@ -31,22 +29,15 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 }
                 else
                 {
-                    var finalData = new List<Product>();
-                    var data=await unitOfWork.Stock.GetAll(x=>x.BranchId==id&&x.Count!=0);
+                    var stockList = await unitOfWork.Stock.GetAll(x=>x.BranchId == branchId && x.Count >0,includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
                     ViewBag.CategoryList = await unitOfWork.Category.GetAll();
-
-                    foreach (var item in data)
-                    {
-                        var temp = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == item.ProductId, includeProperties: "ImageProduct,Brand_Category.Category,Stock");
-                        finalData.Add(temp);
-                    }
-                    return View(finalData);
+                    return View(stockList);
                 }
             }
             catch (Exception)
             {
 
-                return View("404");
+                return RedirectToAction("Index", "Error"); 
 
             }
 
