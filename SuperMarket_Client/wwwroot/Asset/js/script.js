@@ -244,9 +244,7 @@ var isApplied = false;
         
     });
 
-    function selectBranch_popup() {
-        $('#selectBranch_popup').modal('show');
-    }
+   
 
    
 

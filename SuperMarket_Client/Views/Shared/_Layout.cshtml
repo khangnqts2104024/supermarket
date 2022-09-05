@@ -113,35 +113,10 @@
 													<input class="form_control" type="text" style="border-radius: 4px;border: 1px solid #ebebeb;" name="search" placeholder="I'm shopping for...">
 													<div class="search-suggestions">
 														<div class="box-suggestions">
-															<ul>
-																<li>
-																	<div class="thumb">
-																		<img src="~/Asset/images/listing/sf1.png" alt="sf1.png">
-																	</div>
-																	<div class="info-product">
-																		<div class="item_title">Silver Heinz Ketchup 350 ml</div>
-																		<div class="price"><span class="sale">$50.00</span></div>
-																	</div>
-																</li>
-																<li>
-																	<div class="thumb">
-																		<img src="~/Asset/images/listing/sf2.png" alt="sf2.png">
-																	</div>
-																	<div class="info-product">
-																		<div class="item_title">Silver Heinz Ketchup 350 ml</div>
-																		<div class="price"><span class="sale">$24.00</span></div>
-																	</div>
-																</li>
-																<li>
-																	<div class="thumb">
-																		<img src="~/Asset/images/listing/sf3.png" alt="sf3.png">
-																	</div>
-																	<div class="info-product">
-																		<div class="item_title">Silver Heinz Ketchup 350 ml</div>
-																		<div class="price"><span class="sale">$90.00</span></div>
-																	</div>
-																</li>
-															</ul>
+															@if (Context.Request.Cookies["branchId"] != null)
+																{
+																	@await Component.InvokeAsync("RecommendSearch")
+																}
 														</div><!-- /.box-suggestions -->
 													</div><!-- /.search-suggestions -->
 												</div><!-- /.box-search -->
@@ -168,7 +143,6 @@
 												@await Component.InvokeAsync("CartList")
 											</div>
 										}
-
 										else
 										{
 											<a class="cart_btn1" href="#"><span class="flaticon-shopping-cart icon"><span id="CartCount" class="badge bgc-thm">0</span></span> <span class="price">$0</span></a>

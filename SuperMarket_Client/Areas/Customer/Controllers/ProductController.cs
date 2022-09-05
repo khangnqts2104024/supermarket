@@ -40,7 +40,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             {
                branchId = (int)branchId,
                Feedback_RatingList = (List<Feedback_Rating>)await unitOfWork.Feedback_Rating.GetAll(x=>x.ProductId == id,includeProperties:"Product,Customer"),
-               Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock.Branch"),
+               Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock.Branch,ImageProduct"),
                Count = 1,
                ProductId = id,
             };
