@@ -585,8 +585,9 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Weight")
-                        .HasColumnType("float");
+                    b.Property<string>("Weight")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProductId");
 
@@ -759,7 +760,7 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("SuperMarket_Models.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("Feedback_Ratings")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -876,6 +877,8 @@ namespace SuperMarket_DataAccess.Migrations
 
             modelBuilder.Entity("SuperMarket_Models.Models.Product", b =>
                 {
+                    b.Navigation("Feedback_Ratings");
+
                     b.Navigation("ImageProduct");
 
                     b.Navigation("Stock");

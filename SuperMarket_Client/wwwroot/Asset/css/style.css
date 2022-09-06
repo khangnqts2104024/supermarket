@@ -21597,7 +21597,7 @@ canvas#myChart{
   border: 1px solid #86BC42;
   opacity: 1;
 }
-.single_product_slider.owl-theme .owl-dots .owl-dot:first-child span{
+/*.single_product_slider.owl-theme .owl-dots .owl-dot:first-child span{
   background-image: url(/Asset/images/shop/ss1.png);
   background-position: center center;
   background-size: cover;
@@ -21621,7 +21621,7 @@ canvas#myChart{
   background-image: url(/Asset/images/shop/ss5.png);
   background-position: center center;
   background-size: cover;
-}
+}*/
 .single_product_slider.vertical_style .sps_content{
   margin-left: 100px;
 }
@@ -22375,3 +22375,85 @@ input.quantity-num[type="number"]::-webkit-outer-spin-button {
     color: #cecece;
 }
 
+/*
+TEST THUMBNAIL CAROUSEL*/
+#slider-wrapper {
+    max-width: 540px;
+    width: auto;
+    height: auto;
+    margin: 50px auto;
+    padding: 15px;
+}
+
+#image-slider {
+    width: auto;
+    height: auto;
+    position: relative;
+    overflow: hidden;
+    margin: auto;
+    display: block;
+    border: 1px solid #ebebeb;
+}
+
+    #image-slider ul {
+        width: 100%;
+        height: 500px;
+        position: relative;
+    }
+
+#image-slider ul li {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 540px;
+    width: 100%;
+    height: 100%;
+}
+
+#image-slider ul li img {
+    width: 100%;
+    height: auto;
+
+}
+
+#image-slider ul li.active-img {
+    left: 0;
+}
+
+.next-img {
+    z-index: 9999;
+}
+
+#thumbnail {
+    cursor: default;
+    margin-top: 3px;
+    height: auto;
+    display: table;
+    width: 100%;
+}
+
+    #thumbnail ul {
+        width: 100%;
+        height: 100%;
+    }
+
+    #thumbnail li {
+        list-style: none;
+        float: left;
+        cursor: pointer;
+        min-width: 1px;
+    }
+
+        #thumbnail li img {
+            padding: 0;
+            float: left;
+            margin: 0px 1.5px;
+            max-height: 100px;
+            height: 100px;
+           /*border: 1px solid black;*/
+        }
+
+        #thumbnail li:first-child img {
+            margin-right: 0px;
+            margin-left: 0px;
+        }	
