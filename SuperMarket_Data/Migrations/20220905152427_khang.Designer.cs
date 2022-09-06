@@ -12,8 +12,8 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220904091250_spm")]
-    partial class spm
+    [Migration("20220905152427_khang")]
+    partial class khang
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -587,8 +587,9 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Weight")
-                        .HasColumnType("float");
+                    b.Property<string>("Weight")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ProductId");
 
@@ -761,7 +762,7 @@ namespace SuperMarket_DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("SuperMarket_Models.Models.Product", "Product")
-                        .WithMany()
+                        .WithMany("Feedback_Ratings")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -878,6 +879,8 @@ namespace SuperMarket_DataAccess.Migrations
 
             modelBuilder.Entity("SuperMarket_Models.Models.Product", b =>
                 {
+                    b.Navigation("Feedback_Ratings");
+
                     b.Navigation("ImageProduct");
 
                     b.Navigation("Stock");

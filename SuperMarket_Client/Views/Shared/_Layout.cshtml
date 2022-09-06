@@ -108,7 +108,7 @@
 								<div class="row">
 									<div class="col-auto pr0">
 										<div class="top-search">
-											<form action="#" method="get" class="form-search" accept-charset="utf-8">
+											<form id="formSearch" asp-action="SearchByName" asp-controller="Product" asp-area="Customer" method="get" class="form-search" accept-charset="utf-8">
 												<div class="box-search pre_line">
 													<input class="form_control" autocomplete="off" type="text" style="border-radius: 4px;border: 1px solid #ebebeb;" name="search" placeholder="I'm shopping for...">
 													<div class="search-suggestions">
@@ -125,7 +125,7 @@
 									</div>
 									<div class="col-auto p0">
 										<div class="advscrh_frm_btn">
-											<button type="submit" class="btn search-btn"><span class="flaticon-search"></span></button>
+											<button form="formSearch"type="submit" class="btn search-btn"><span class="flaticon-search"></span></button>
 										</div>
 									</div>
 								</div>
