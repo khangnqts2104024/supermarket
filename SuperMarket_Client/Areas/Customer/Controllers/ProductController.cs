@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using SuperMarket_DataAccess.Repository.IRepository;
 using SuperMarket_Models.Models;
 using SuperMarket_Models.ViewModels;
+using System.Linq;
 using System.Security.Claims;
 
 namespace SuperMarket_Client.Areas.Customer.Controllers
@@ -44,17 +45,17 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         public async Task<IActionResult> Details(int id)
         {
             
-            int? branchId = int.Parse(HttpContext.Request.Cookies["branchId"]);
+            var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"],out int result);
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (id == 0 || branchId == null)
+            if (id == 0 || result == 0)
             {
                 return RedirectToAction("Index", "Home", new { Area = "Customer" });
             }
          
             Cart_Feedback_RatingVM objVM = new Cart_Feedback_RatingVM()
             {
-               branchId = (int)branchId,
+               branchId = result,
                Feedback_RatingList = (List<Feedback_Rating>)await unitOfWork.Feedback_Rating.GetAll(x=>x.ProductId == id,includeProperties:"Product,Customer"),
                Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock.Branch,ImageProduct"),
                Count = 1,
@@ -68,7 +69,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
             if (objVM.Product != null)
             {
-                var stockByBranchID = objVM.Product.Stock.FirstOrDefault(x => x.BranchId == branchId && x.ProductId == id);
+                var stockByBranchID = objVM.Product.Stock.FirstOrDefault(x => x.BranchId == result && x.ProductId == id);
                 objVM.StockCount = (int)stockByBranchID.Count;
             }
             objVM.FeedbackCount = objVM.Feedback_RatingList.Count();
@@ -78,7 +79,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             if (isAjax)
             {
                 return Json(new {
-                    branchId = (int)branchId,
+                    branchId = result,
                     Feedback_RatingList = objVM.Feedback_RatingList,
                     Product = objVM.Product,
                     Count = 1,
@@ -87,7 +88,16 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     RatingPointAverage = objVM.RatingPointAverage
                 });
             }
-
+            var ratingList = await unitOfWork.Feedback_Rating.GetAll();
+            var relatedProduct = await unitOfWork.Stock.GetAll(x => x.Product.Brand_Category.CategoryId == objVM.Product.Brand_Category.CategoryId && x.BranchId == result && x.Count>0 && x.ProductId != objVM.ProductId, includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
+            if (ratingList != null)
+            {
+                foreach (var item in relatedProduct)
+                {
+                    item.RatingPointAverage = CalculateRatingPointAverage((List<Feedback_Rating>)ratingList, item.Product.ProductId);
+                }
+            }
+            objVM.RelatedProduct = relatedProduct.ToList();
             return View(objVM);
         }
       

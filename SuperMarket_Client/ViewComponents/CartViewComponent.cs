@@ -19,7 +19,7 @@ namespace SuperMarket_Client.ViewComponents
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            List<ShoppingCart> cartList = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x=>x.CustomerId == claim.Value,includeProperties:"Product");
+            List<ShoppingCart> cartList = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x=>x.CustomerId == claim.Value,includeProperties:"Product.ImageProduct");
             decimal totalCart = 0;
             if(cartList.Count() == 0)
             {
