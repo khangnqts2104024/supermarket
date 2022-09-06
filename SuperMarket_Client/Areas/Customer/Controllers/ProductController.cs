@@ -33,12 +33,12 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 {
 
 
-                    data = await unitOfWork.Stock.GetAll(s => s.BranchId.Equals(branchId) && s.Product.Brand_Category.CategoryId.Equals(cateID), includeProperties: "Product.Brand_Category,Product.ImageProduct,Product.Brand_Category.Brand,Product.Brand_Category.Category");
+                    data = await unitOfWork.Stock.GetAll(s => s.BranchId.Equals(branchId) && s.Product.Brand_Category.CategoryId.Equals(cateID), includeProperties: "Product.Brand_Category,Product.ImageProduct,Product.Brand_Category.Brand,Product.Brand_Category.Category,Product.Feedback_Ratings");
                 }
                 else
                 {
 
-                    data = await unitOfWork.Stock.GetAll(s => s.BranchId.Equals(branchId), includeProperties: "Product.Brand_Category,Product.ImageProduct,Product.Brand_Category.Brand,Product.Brand_Category.Category");
+                    data = await unitOfWork.Stock.GetAll(s => s.BranchId.Equals(branchId), includeProperties: "Product.Brand_Category,Product.ImageProduct,Product.Brand_Category.Brand,Product.Brand_Category.Category,Product.Feedback_Ratings");
 
                 }
             }
@@ -291,7 +291,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             IEnumerable<Stock> data;
             if (branchId != null && search!=null)
             {
-                data = await unitOfWork.Stock.GetAll(s => s.BranchId.Equals(branchId) && s.Product.ProductName.ToLower().Contains(search.ToLower()), includeProperties: "Product.Brand_Category,Product.ImageProduct,Product.Brand_Category.Brand,Product.Brand_Category.Category");
+                data = await unitOfWork.Stock.GetAll(s => s.BranchId.Equals(branchId) && s.Product.ProductName.ToLower().Contains(search.ToLower()), includeProperties: "Product.Brand_Category,Product.ImageProduct,Product.Brand_Category.Brand,Product.Brand_Category.Category,Product.Feedback_Ratings");
             }
 
 
