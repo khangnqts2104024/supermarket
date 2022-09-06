@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SuperMarket_DataAccess.Migrations
 {
-    public partial class spm : Migration
+    public partial class khang : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -314,7 +314,7 @@ namespace SuperMarket_DataAccess.Migrations
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ManufactureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ExpiryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Weight = table.Column<double>(type: "float", nullable: false),
+                    Weight = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     BrandCateId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

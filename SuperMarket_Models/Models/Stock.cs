@@ -20,6 +20,7 @@ namespace SuperMarket_Models.Models
         public int? ProductId { get; set; }
         [ForeignKey("ProductId")]
         [ValidateNever]
+   
         public Product? Product { get; set; }
 
         //FK
