@@ -33,9 +33,6 @@
 				Update Date
 			</th>
 			<th>
-				Category
-			</th>
-			<th>
 
 			</th>
 		</tr>
@@ -53,15 +50,14 @@
 					"url": "/Admin/Brand/GetAllBrand"
 				},
 				"columns": [
-					{ "data": "brand.brandName", "width": "15%" },
-					{ "data": "brand.origin", "width": "15%" },
-					{ "data": "brand.address", "width": "15%" },
-					{ "data": "brand.phone", "width": "15%" },
-					{ "data": "brand.createdDate", "width": "15%" },
-					{ "data": "brand.updateDate", "width": "15%" },
-					{ "data": "category.categoryName", "width": "15%" },
+					{ "data": "brandName", "width": "15%" },
+					{ "data": "origin", "width": "15%" },
+					{ "data": "address", "width": "15%" },
+					{ "data": "phone", "width": "15%" },
+					{ "data": "createdDate", "width": "15%" },
+					{ "data": "updateDate", "width": "15%" },
 					{
-						"data": "brand.brandId",
+						"data": "brandId",
 						"render": function(data) {
 							return `<div class="w-75 btn-group" role="group">
 
