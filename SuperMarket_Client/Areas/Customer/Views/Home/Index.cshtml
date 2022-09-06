@@ -112,20 +112,23 @@
 												}
 												<div class="thumb_info">
 													<ul class="mb0">
-														<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></li>
+														<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span style="font-size:20px;" class="flaticon-shopping-cart"></span></li>
 													</ul>
 												</div>
 											</div>
 											<div class="details text-center">
 												<div class="title">@data.Product.Brand_Category.Category.CategoryName</div>
 												<div class="review">
-													<ul class="mb0">
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-													</ul>
+													<div class="small-ratings">
+														@for (var i = 0; i < @data.RatingPointAverage; i++)
+														{
+															<i class="fa fa-star rating-color"></i>
+														}
+														@for (int i = 0; i < 5-@data.RatingPointAverage; i++)
+														{
+															<i class="fa fa-star"></i>
+														}
+													</div>
 												</div>
 												<div class="sub_title">@data.Product.Title </div>
 												<div class="si_footer">
@@ -147,10 +150,6 @@
 
 
 						@*End all*@
-
-
-
-
 						@foreach (Category item in @ViewBag.CategoryList)
 						{
 							<div class="tab-pane fade" id="nav-@item.CategoryName" role="tabpanel" aria-labelledby="nav-tab-@item.CategoryName">
@@ -166,26 +165,28 @@
 														{
 															if (Image.IsMainImage == true)
 															{
-																<img src="@Image.Url" alt="fp1.png">
-
+																<img  src="@Image.Url" alt="fp1.png">
 															}
 														}
-														<div class="thumb_info ">
+														<div class="thumb_info" >
 															<ul class="mb0">
-																<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></li>
+																<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span style="font-size:20px;" class="flaticon-shopping-cart"></span></li>
 															</ul>
 														</div>
 													</div>
 													<div class="details text-center">
 														<div class="title">@data.Product.Brand_Category.Category.CategoryName</div>
 														<div class="review">
-															<ul class="mb0">
-																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-															</ul>
+															<div class="small-ratings">
+																@for (var i = 0; i < @data.RatingPointAverage; i++)
+																{
+																	<i class="fa fa-star rating-color"></i>
+																}
+																@for (int i = 0; i < 5-@data.RatingPointAverage; i++)
+																{
+																	<i class="fa fa-star"></i>
+																}
+															</div>
 														</div>
 														<div class="sub_title">@data.Product.ProductName </div>
 														<div class="si_footer">
@@ -205,7 +206,6 @@
 									}
 								</div>
 							</div>
-
 						}
 					</div>
 				</div>
@@ -225,7 +225,7 @@
 					<div class="delivery_bike"><img src="~/Images/shop-items/shipper.png"></div>
 					<h3 class="title text-thm2">
 						<span class="flaticon-whatsapp text-thm vam mr15"></span>WHATSAPP ORDERING
-						SERVICE – PLACE YOUR ORDERS AT <span class="text-thm">392 96 32</span>
+						SERVICE – PLACE YOUR ORDERS AT <span class="text-thm">037 340 5298</span>
 					</h3>
 				</div>
 			</div>
@@ -233,174 +233,6 @@
 	</div>
 </section>
 
-<!-- Delivery Divider -->
-<section class="deliver-divider pt30 pb70">
-	<div class="container">
-		<div class="row justify-content-center">
-			<div class="col-lg-8 col-xl-6">
-				<div class="main-title df db-414 tac-414 justify-content-center">
-					<h2 class="">Deal of the Day</h2>
-					<div class="deal_countdown">
-						<ul class="deal_counter bgc-thm" id="timer">
-							<li class="list-inline-item"><span class="title">Ends in:</span></li>
-							<li class="list-inline-item hours"></li>
-							<li class="list-inline-item"><span class="seperator">:</span></li>
-							<li class="list-inline-item minutes"></li>
-							<li class="list-inline-item"><span class="seperator">:</span></li>
-							<li class="list-inline-item seconds"></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="recent_property_slider_home1">
-					<div class="item">
-						<div class="shop_item style2">
-							<div class="thumb">
-								<img src="images/shop-items/d1.png" alt="d1.png">
-							</div>
-							<div class="details text-center">
-								<div class="title">FRUITS</div>
-								<div class="review">
-									<ul class="mb0">
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-									</ul>
-								</div>
-								<div class="sub_title">Pineapple (Tropical Gold) <br> 1 lb</div>
-								<div class="si_footer">
-									<div class="price">$1.80</div>
-									<div class="line mt25"></div>
-									<div class="sell_stock mt20">
-										<div class="sell float-start">Sold: <span class="fwb">20</span></div>
-										<div class="stock float-end">Available: <span class="fwb">10</span></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="shop_item style2">
-							<div class="thumb">
-								<img src="images/shop-items/d2.png" alt="d2.png">
-							</div>
-							<div class="details text-center">
-								<div class="title">FRUITS</div>
-								<div class="review">
-									<ul class="mb0">
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-									</ul>
-								</div>
-								<div class="sub_title">Pineapple (Tropical Gold) <br> 1 lb</div>
-								<div class="si_footer">
-									<div class="price">$1.80</div>
-									<div class="line mt25"></div>
-									<div class="sell_stock mt20">
-										<div class="sell float-start">Sold: <span class="fwb">20</span></div>
-										<div class="stock float-end">Available: <span class="fwb">10</span></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="shop_item style2">
-							<div class="thumb">
-								<img src="images/shop-items/d3.png" alt="d3.png">
-							</div>
-							<div class="details text-center">
-								<div class="title">FRUITS</div>
-								<div class="review">
-									<ul class="mb0">
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-									</ul>
-								</div>
-								<div class="sub_title">Pineapple (Tropical Gold) <br> 1 lb</div>
-								<div class="si_footer">
-									<div class="price">$1.80</div>
-									<div class="line mt25"></div>
-									<div class="sell_stock mt20">
-										<div class="sell float-start">Sold: <span class="fwb">20</span></div>
-										<div class="stock float-end">Available: <span class="fwb">10</span></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="shop_item style2">
-							<div class="thumb">
-								<img src="images/shop-items/d4.png" alt="d4.png">
-							</div>
-							<div class="details text-center">
-								<div class="title">FRUITS</div>
-								<div class="review">
-									<ul class="mb0">
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-									</ul>
-								</div>
-								<div class="sub_title">Pineapple (Tropical Gold) <br> 1 lb</div>
-								<div class="si_footer">
-									<div class="price">$1.80</div>
-									<div class="line mt25"></div>
-									<div class="sell_stock mt20">
-										<div class="sell float-start">Sold: <span class="fwb">20</span></div>
-										<div class="stock float-end">Available: <span class="fwb">10</span></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<div class="item">
-						<div class="shop_item style2">
-							<div class="thumb">
-								<img src="images/shop-items/d1.png" alt="d1.png">
-							</div>
-							<div class="details text-center">
-								<div class="title">FRUITS</div>
-								<div class="review">
-									<ul class="mb0">
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-										<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-									</ul>
-								</div>
-								<div class="sub_title">Pineapple (Tropical Gold) <br> 1 lb</div>
-								<div class="si_footer">
-									<div class="price">$1.80</div>
-									<div class="line mt25"></div>
-									<div class="sell_stock mt20">
-										<div class="sell float-start">Sold: <span class="fwb">20</span></div>
-										<div class="stock float-end">Available: <span class="fwb">10</span></div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
 
 <!-- Delivery Divider -->
 <section class="deliver-divider bg-img1">

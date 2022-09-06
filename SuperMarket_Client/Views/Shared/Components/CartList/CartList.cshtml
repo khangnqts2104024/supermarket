@@ -9,8 +9,14 @@
     @foreach (var item in Model)
     {
         <li class="list_content">
-            <a href="#">
-                <img class="float-start" src="~/Asset/images/shop/s1.png" alt="50x50">
+            <a href="/Customer/Product/Details?id=@item.ProductId">
+               @foreach (var image in item.Product.ImageProduct)
+                {
+                    if (image.IsMainImage)
+                    {
+                         <img class="float-start" src="@image.Url" alt="50x50">
+                    }
+                }
                 <p>@item.Product.Title</p>
                 <small>@item.Count x @item.Product.Price</small>
             </a>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SuperMarket_DataAccess.Repository.IRepository;
 using SuperMarket_Models.Models;
+using SuperMarket_Models.ViewModels;
 
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
@@ -19,16 +20,37 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         {
             try
             {
-                if(id == null)
+                ProductController productController = new ProductController(unitOfWork);
+
+
+
+                if (id == null)
                 {
                     var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"], out int result);
                     var stockList = await unitOfWork.Stock.GetAll(x => x.BranchId == result && x.Count > 0, includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
+                    var ratingList = await unitOfWork.Feedback_Rating.GetAll();
+                    if(ratingList != null)
+                    {
+                        foreach (var item in stockList)
+                        {
+                            item.RatingPointAverage = productController.CalculateRatingPointAverage((List<Feedback_Rating>)ratingList, item.Product.ProductId);
+                        }
+                    }
+                    
                     ViewBag.CategoryList = await unitOfWork.Category.GetAll();
                     return View(stockList);
                 }
                 else
                 {
                     var stockList = await unitOfWork.Stock.GetAll(x => x.BranchId == id && x.Count > 0, includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
+                    var ratingList = await unitOfWork.Feedback_Rating.GetAll();
+                    if (ratingList != null)
+                    {
+                        foreach (var item in stockList)
+                        {
+                            item.RatingPointAverage = productController.CalculateRatingPointAverage((List<Feedback_Rating>)ratingList, item.Product.ProductId);
+                        }
+                    }
                     ViewBag.CategoryList = await unitOfWork.Category.GetAll();
                     return View(stockList);
                 }
