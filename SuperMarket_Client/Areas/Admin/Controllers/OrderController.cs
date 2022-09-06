@@ -45,7 +45,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
 
             if (order.OrderStatus == SD.StatusApproved && orderStatus == SD.StatusApproved)
             {
-              
+              //minus stock
                 foreach (var item in order.OrderDetail)
                 {
                     var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.BranchId.Equals(order.BranchId) && s.ProductId.Equals(item.ProductId));
@@ -83,13 +83,13 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             {
                 unitOfWork.Order.UpdateStatus(OrderId, SD.StatusRefunded);
                 //stock back
-                foreach (var item in order.OrderDetail)
-                {
-                    var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.BranchId.Equals(order.BranchId) && s.ProductId.Equals(item.ProductId));
+                //foreach (var item in order.OrderDetail)
+                //{
+                //    var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.BranchId.Equals(order.BranchId) && s.ProductId.Equals(item.ProductId));
 
-                    unitOfWork.Stock.IncrementStock(stock, item.Count);
-                }
-                await unitOfWork.Save();
+                //    unitOfWork.Stock.IncrementStock(stock, item.Count);
+                //}
+                //await unitOfWork.Save();
                 ViewBag.notice = "Confirm Refund Success!";
                 return View("OrderDetails", order);
             }

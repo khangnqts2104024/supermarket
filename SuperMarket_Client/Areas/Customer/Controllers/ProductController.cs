@@ -257,7 +257,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
         //khang ss/
         //${item.Brand_Category.CategoryId}
-        [HttpGet]
+     
         public async Task<IActionResult> CompareProduct(int? CategoryId, int? productId)
         {
             if (CategoryId == null) { CategoryId = 1; }

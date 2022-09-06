@@ -73,5 +73,48 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
 
           
         }
+
+
+        [HttpGet()]
+        public async Task<IActionResult> UpdateStock(int id)
+        {
+
+
+            //get stock
+            var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.StockId.Equals(id), includeProperties: "Product,Branch");
+
+            if (stock != null)
+            {
+               
+
+                return View(stock);
+            }
+            else
+            {
+                return View("404");
+            }
+
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateStock(Stock stock, int number)
+        {
+
+            var model = await unitOfWork.Stock.GetFirstOrDefault(s => s.StockId.Equals(stock.StockId));
+            if (model != null)
+            {
+                unitOfWork.Stock.UpdateStock(model, number);
+                await unitOfWork.Save();
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                return View("404");
+            }
+
+
+        }
+
+
     }
 }
