@@ -556,7 +556,9 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
 
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var check=await unitOfWork.Stock.GetFirstOrDefault(x=>x.ProductId==id);
+            var check=await unitOfWork.Stock.GetFirstOrDefault(x=>x.ProductId==id && x.Count!=0);
+            string wwwRootPath = env.WebRootPath;
+
             if (check != null)
             {
                 return Json(new { success = false });
@@ -564,7 +566,20 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             else
             {
                 var data = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id);
+                var img=await unitOfWork.ImageProduct.GetAll(x=>x.ProductId==id);
+                foreach (var item in img)
+                {
+                    var oldImgPath = Path.Combine(wwwRootPath, item.Url.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImgPath))
+                    {
+                        System.IO.File.Delete(oldImgPath);
+                    }
+                    unitOfWork.ImageProduct.Remove(item);
+                }
+                await unitOfWork.Save();
                 unitOfWork.Product.Remove(data);
+                var temp = await unitOfWork.Stock.GetAll(x => x.ProductId == id);
+                unitOfWork.Stock.RemoveRange(temp);
                 await unitOfWork.Save();
                 return Json(new { success = true });
             }
