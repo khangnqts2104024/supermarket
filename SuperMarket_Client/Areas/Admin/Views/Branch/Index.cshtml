@@ -1,24 +1,19 @@
-﻿@model IEnumerable<Brand>
+﻿@model IEnumerable<Branch>
 @{
-	ViewData["Title"] = "Brand Manage";
+	ViewData["Title"] = "Branch Manage";
 }
 <h3>@ViewData["Title"]</h3>
 
-<a class="btn btn-outline-primary" href="/Admin/Brand/CreateBrand">Create Brand</a> |
+<a class="btn btn-outline-primary" href="/Admin/Branch/CreateBranch">Create Branch</a> | 
 <a class="btn btn-outline-primary" href="/Admin/Home/Index">Back to Home</a>
-
-
 <hr />
 
-<table class="table" id="ProductTable">
+<table class="table" id="BranchTable">
 	<thead>
 		<tr>
 
 			<th>
-				Brand Name
-			</th>
-			<th>
-				Origin
+				Branch Name
 			</th>
 			<th>
 				Address
@@ -27,10 +22,10 @@
 				Phone
 			</th>
 			<th>
-				Created date
+				Latitude
 			</th>
 			<th>
-				Update Date
+				Longtitude
 			</th>
 			<th>
 
@@ -45,26 +40,25 @@
 			loadDataTable();
 		});
 		function loadDataTable() {
-			dataTable = $("#ProductTable").DataTable({
+			dataTable = $("#BranchTable").DataTable({
 				"ajax": {
-					"url": "/Admin/Brand/GetAllBrand"
+					"url": "/Admin/Branch/GetAllBranch"
 				},
 				"columns": [
-					{ "data": "brandName", "width": "15%" },
-					{ "data": "origin", "width": "15%" },
+					{ "data": "branchName", "width": "15%" },
 					{ "data": "address", "width": "15%" },
 					{ "data": "phone", "width": "15%" },
-					{ "data": "createdDate", "width": "15%" },
-					{ "data": "updateDate", "width": "15%" },
+					{ "data": "latitude", "width": "15%" },
+					{ "data": "longtitude", "width": "15%" },
 					{
-						"data": "brandId",
+						"data": "branchId",
 						"render": function(data) {
 							return `<div class="w-75 btn-group" role="group">
 
 												</a>
-												<a onClick=DeleteBrand('/Admin/Brand/DeleteBrand/${data}')  class="btn btn-outline-primary" />Delete
+												<a onClick=Delete('/Admin/Branch/DeleteBranch/${data}')  class="btn btn-outline-primary" />Delete
 												</a>
-												<a href="/Admin/Brand/UpdateBrand?id=${data}"  class="btn btn-outline-primary" />Update
+												<a href="/Admin/Branch/UpdateBranch?id=${data}"  class="btn btn-outline-primary" />Update
 												</a>
 												</div>`
 						},
@@ -73,7 +67,7 @@
 				]
 			});
 		}
-		function DeleteBrand(url) {
+		function Delete(url) {
 			Swal.fire({
 				title: 'Are you sure?',
 				text: "You won't be able to revert this!",
@@ -93,7 +87,7 @@
 								Swal.fire({
 									position: 'top-end',
 									icon: 'success',
-									title: 'Product has been deleted',
+									title: data.msg,
 									showConfirmButton: false,
 									timer: 1500
 								})
@@ -101,7 +95,7 @@
 								Swal.fire({
 									icon: 'error',
 									title: 'Oops...',
-									text: 'Check out if stock still available, you can not delete product.',
+									text: data.msg
 								})
 							}
 						}
@@ -111,4 +105,3 @@
 		}
 	</script>
 }
-
