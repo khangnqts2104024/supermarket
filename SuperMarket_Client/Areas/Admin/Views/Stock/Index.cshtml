@@ -35,7 +35,11 @@
                             <td>@item.Brand_Category.Category.CategoryName</td>
                             <td>@stock.Branch.BranchName</td>
                             <td>@stock.Count</td>
-                            <td ><a class="btn btn-success" asp-action="AddStock" asp-area="Admin" asp-controller="Stock" asp-route-id="@stock.StockId">Add More Stock of Product</a></td>
+                            <td >
+                                <a class="btn btn-success" asp-action="AddStock" asp-area="Admin" asp-controller="Stock" asp-route-id="@stock.StockId"><i class="fa fa-plus-square" aria-hidden="true"></i></a>
+                                <a class="btn btn-warning" asp-action="UpdateStock" asp-area="Admin" asp-controller="Stock" asp-route-id="@stock.StockId"><i class="fa fa-wrench" aria-hidden="true"></i></a>
+                            </td>
+                            
                         </tr>
                     }
                 }

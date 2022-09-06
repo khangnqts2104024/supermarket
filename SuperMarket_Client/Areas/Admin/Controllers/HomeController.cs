@@ -20,6 +20,13 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         {
             return View();
         }
+
+        public IActionResult OtherPages() { 
+        
+        
+        return View();
+        
+        }
         public async Task<IActionResult> Report()
         {
            
