@@ -24,47 +24,59 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6">
-					<div class="single_product_grid">
-                    <div class="single_product_slider">
-                        @foreach (var item in Model.Product.ImageProduct)
-                        {
-                            if (item.IsMainImage)
-                            {
-                                <div class="item">
-                                <div class="sps_content">
-                                  <div class="thumb">
-                                    <div class="single_product">
-                                      <div class="single_item">
-                                        <div class="thumb"><img class="img-fluid" src="@item.Url" alt="ss1.png"></div>
-                                      </div>
-                                      <a class="product_popup popup-img" href="@item.Url"><span class="flaticon-search"></span></a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            }
-                        }
+					@*<div class="single_product_grid">
+                        <div class="single_product_slider">
+                            
+                     
+                        </div>
+		        </div>*@
 
-                        @foreach (var item in Model.Product.ImageProduct)
-                        {
-                                <div class="item">
-                                <div class="sps_content">
-                                  <div class="thumb">
-                                    <div class="single_product">
-                                      <div class="single_item">
-                                        <div class="thumb"><img class="img-fluid" src="@item.Url" alt="ss1.png"></div>
-                                      </div>
-                                      <a class="product_popup popup-img" href="@item.Url"><span class="flaticon-search"></span></a>
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                        }
-                     
-                      
-                     
+                <div id="slider-wrapper">
+
+
+                    <div id="image-slider">
+                        <ul>
+                            @foreach (var item in Model.Product.ImageProduct)
+                            {
+                                   @if(item.IsMainImage){
+                                    <li class="active-img">
+                                        <img  src="@item.Url" alt="" />
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <img   src="@item.Url" alt="" />
+                                    </li>
+                                }
+                            }
+                        </ul>
+
                     </div>
-		        </div>
+
+                    <div id="thumbnail">
+                        <ul>
+                            @foreach (var item in Model.Product.ImageProduct)
+                            {
+                                 @if(item.IsMainImage){
+                                    <li class="active">
+                                        <img src="@item.Url" alt="" />
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <img src="@item.Url" alt="" />
+                                    </li>
+                                }
+                            }
+                            			
+                        </ul>
+                    </div>
+
+
+
+        </div>
 			</div>
 				<div class="col-lg-6">
 					<div class="shop_single_product_details">
