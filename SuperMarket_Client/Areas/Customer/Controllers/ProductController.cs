@@ -23,18 +23,40 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         public async Task<IActionResult> Index(int? cateID)
         {
 
-            IEnumerable<Product> data;
-            if (cateID != null) {
-                data = await unitOfWork.Product.GetAll(p => p.Brand_Category.CategoryId.Equals(cateID), includeProperties: "Brand_Category,ImageProduct,Brand_Category.Brand,Brand_Category.Category");
-            }
-            else 
+            int? branchId = int.Parse(HttpContext.Request.Cookies["branchId"]);
+            IEnumerable<Stock> data;
+            if (branchId != null)
             {
-                data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category,ImageProduct,Brand_Category.Brand,Brand_Category.Category"); 
+
+
+                if (cateID != null)
+                {
+
+
+                    data = await unitOfWork.Stock.GetAll(s => s.BranchId.Equals(branchId) && s.Product.Brand_Category.CategoryId.Equals(cateID), includeProperties: "Product.Brand_Category,Product.ImageProduct,Product.Brand_Category.Brand,Product.Brand_Category.Category");
+                }
+                else
+                {
+
+                    data = await unitOfWork.Stock.GetAll(s => s.BranchId.Equals(branchId), includeProperties: "Product.Brand_Category,Product.ImageProduct,Product.Brand_Category.Brand,Product.Brand_Category.Category");
+
+                }
             }
-            
+
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+
+
+
+
+
+
+
             var categoryList = await unitOfWork.Category.GetAll();
             var brandList = await unitOfWork.Brand.GetAll();
-            ViewBag.categoryList=categoryList;
+            ViewBag.categoryList = categoryList;
             ViewBag.brandList = brandList;
 
             return View(data);
@@ -44,24 +66,28 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int id)
         {
+
             
             var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"],out int result);
+
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             if (id == 0 || result == 0)
             {
                 return RedirectToAction("Index", "Home", new { Area = "Customer" });
             }
-         
+
             Cart_Feedback_RatingVM objVM = new Cart_Feedback_RatingVM()
             {
+
                branchId = result,
                Feedback_RatingList = (List<Feedback_Rating>)await unitOfWork.Feedback_Rating.GetAll(x=>x.ProductId == id,includeProperties:"Product,Customer"),
                Product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock.Branch,ImageProduct"),
                Count = 1,
                ProductId = id,
+
             };
-            objVM.Feedback_RatingList = objVM.Feedback_RatingList.OrderByDescending(x=>x.Id).ToList();
+            objVM.Feedback_RatingList = objVM.Feedback_RatingList.OrderByDescending(x => x.Id).ToList();
 
 
             objVM.RatingPointAverage = CalculateRatingPointAverage(objVM.Feedback_RatingList, id);
@@ -78,8 +104,10 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
             if (isAjax)
             {
+
                 return Json(new {
                     branchId = result,
+
                     Feedback_RatingList = objVM.Feedback_RatingList,
                     Product = objVM.Product,
                     Count = 1,
@@ -100,7 +128,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             objVM.RelatedProduct = relatedProduct.ToList();
             return View(objVM);
         }
-      
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Details(Cart_Feedback_RatingVM objVM)
@@ -158,7 +186,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                                     count = 1,
                                 });
                             }
-                           
+
                             await unitOfWork.ShoppingCart.Add(shoppingCart);
 
                             await unitOfWork.Save();
@@ -179,8 +207,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             });
         }
 
-        
-        public  int CalculateRatingPointAverage(List<Feedback_Rating> ratingListByProductId,int productId)
+
+        public int CalculateRatingPointAverage(List<Feedback_Rating> ratingListByProductId, int productId)
         {
             var result = ratingListByProductId.Where(x => x.ProductId == productId)
                 .GroupBy(x => x.RatingPoint).Select(
@@ -218,36 +246,36 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 numOf5Star = result.FirstOrDefault(x => x.RatingPoint == 5).Count;
             }
             int totalNumberOfRating = ratingListByProductId.Count();
-            if(totalNumberOfRating == 0)
+            if (totalNumberOfRating == 0)
             {
                 totalNumberOfRating = 1;
             }
-            
+
             return (int)(1 * numOf1Star + 2 * numOf2Star + 3 * numOf3Star + 4 * numOf4Star + 5 * numOf5Star) / totalNumberOfRating;
-        }    
+        }
 
-   
+
         //khang ss/
-
-
+        //${item.Brand_Category.CategoryId}
+        [HttpGet]
         public async Task<IActionResult> CompareProduct(int? CategoryId, int? productId)
         {
-            if (CategoryId == null) { CategoryId = 9; }
-            
-           
+            if (CategoryId == null) { CategoryId = 1; }
+
+
             var ListCategory = await unitOfWork.Category.GetAll();
-                   ViewBag.listCate = new SelectList(ListCategory, "CategoryId", "CategoryName");
-        
-                var cate= await unitOfWork.Category.GetFirstOrDefault(c => c.CategoryId.Equals(CategoryId));
-                 ViewBag.CateName = cate.CategoryName;
-         var product = await unitOfWork.Product.GetFirstOrDefault(p => p.ProductId.Equals(productId), includeProperties: "Brand_Category.Brand,ImageProduct");
+            ViewBag.listCate = new SelectList(ListCategory, "CategoryId", "CategoryName");
+
+            var cate = await unitOfWork.Category.GetFirstOrDefault(c => c.CategoryId.Equals(CategoryId));
+            ViewBag.CateName = cate.CategoryName;
+            var product = await unitOfWork.Product.GetFirstOrDefault(p => p.ProductId.Equals(productId), includeProperties: "Brand_Category.Brand,ImageProduct");
 
             if (product != null)
             {
                 ViewBag.dProduct = product;
             }
             else { ViewBag.dProduct = null; }
-                
+
 
             var model = await unitOfWork.Product.GetAll(p => p.Brand_Category.CategoryId.Equals(CategoryId), includeProperties: "Brand_Category.Brand,ImageProduct");
 
@@ -256,14 +284,28 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
 
 
+        [HttpGet]
+        public async Task<IActionResult> SearchByName(string? search)
+        {
+            int? branchId = int.Parse(HttpContext.Request.Cookies["branchId"]);
+            IEnumerable<Stock> data;
+            if (branchId != null && search!=null)
+            {
+                data = await unitOfWork.Stock.GetAll(s => s.BranchId.Equals(branchId) && s.Product.ProductName.ToLower().Contains(search.ToLower()), includeProperties: "Product.Brand_Category,Product.ImageProduct,Product.Brand_Category.Brand,Product.Brand_Category.Category");
+            }
 
 
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
 
+            var categoryList = await unitOfWork.Category.GetAll();
+            var brandList = await unitOfWork.Brand.GetAll();
+            ViewBag.categoryList = categoryList;
+            ViewBag.brandList = brandList;
 
-
-
-
-
-
+            return View("Index",data);
+        }
     }
 }
