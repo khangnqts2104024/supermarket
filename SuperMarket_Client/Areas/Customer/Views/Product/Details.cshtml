@@ -24,16 +24,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-lg-6">
-					@*<div class="single_product_grid">
-                        <div class="single_product_slider">
-                            
-                     
-                        </div>
-		        </div>*@
-
                 <div id="slider-wrapper">
-
-
                     <div id="image-slider">
                         <ul>
                             @foreach (var item in Model.Product.ImageProduct)
@@ -51,7 +42,6 @@
                                 }
                             }
                         </ul>
-
                     </div>
 
                     <div id="thumbnail">
@@ -70,7 +60,6 @@
                                     </li>
                                 }
                             }
-                            			
                         </ul>
                     </div>
 
@@ -263,191 +252,72 @@
 		</div>
 	</section>
 
-  <!-- Our Shopping Product -->
-  <section class="our-shop bt1">
-    <div class="container">
-      <div class="row justify-content-center">
-        <div class="col-lg-8">
-          <div class="main-title text-center">
-            <h2>RELATED PRODUCTS</h2>
-          </div>
+
+
+    <!-- Our Shopping Product -->
+    <section class="our-shop bt1">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="main-title text-center">
+                        <h2>RELATED PRODUCTS</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="recent_property_slider_home5">
+                        @foreach (var item in Model.RelatedProduct)
+                        {
+                            <div class="item">
+                                <div class="shop_item">
+                                    <div class="thumb">
+                                        @foreach (var image in item.Product.ImageProduct)
+                                        {
+                                            if (image.IsMainImage)
+                                            {
+                                                <img src="@image.Url" alt="fp17.png">
+                                                break;
+                                            }
+                                        }
+                                        <div class="thumb_info">
+                                            <ul class="mb0">
+                                                <li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@item.ProductId><span style="font-size:20px;" class="flaticon-shopping-cart"></span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="details text-center">
+                                        <div class="title">@item.Product.Brand_Category.Category.CategoryName</div>
+                                        <div class="review">
+                                            <div class="small-ratings">
+                                                @for (var i = 0; i < @item.RatingPointAverage; i++)
+                                                {
+                                                    <i class="fa fa-star rating-color"></i>
+                                                }
+                                                @for (int i = 0; i < 5 - @item.RatingPointAverage; i++)
+                                                {
+                                                    <i class="fa fa-star"></i>
+                                                }
+                                            </div>
+                                            <div class="sub_title">@item.Product.Title <br> @item.Product.Weight</div>
+                                            <div class="si_footer">
+                                                <div class="price">@item.Product.Price.ToString("c")</div>
+                                                <a href="/Customer/Product/Details?id=@item.ProductId" class="cart_btn btn-thm">
+                                                    <span class="flaticon-search mr10"></span>VIEW DETAIL
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-12">
-          <div class="recent_property_slider_home5">
-            <div class="item">
-              <div class="shop_item">
-                <div class="thumb">
-                  <div class="offer_badge">
-                    <ul class="mb0">
-                      <li><a class="offr_tag" href="#"><span>HOT</span></a></li>
-                      <li><a class="comison_rate" href="#"><span>-4 %</span></a></li>
-                    </ul>
-                  </div>
-                  <img src="images/shop-items/fp17.png" alt="fp17.png">
-                  <div class="thumb_info">
-                    <ul class="mb0">
-                      <li><a href="page-dashboard-wish-list.html"><span class="flaticon-heart"></span></a></li>
-                      <li><a href="page-dashboard-wish-list.html"><span class="flaticon-search"></span></a></li>
-                      <li><a href="page-shop-list-v6.html"><span class="flaticon-shuffle"></span></a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="details text-center">
-                  <div class="title">VEGETABLES</div>
-                  <div class="review">
-                    <ul class="mb0">
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                    </ul>
-                  </div>
-                  <div class="sub_title">Organic Rocket <br> 1 lb</div>
-                  <div class="si_footer">
-                    <div class="price">$2.00</div>
-                    <a href="page-shop-cart.html" class="cart_btn btn-thm"><span class="flaticon-shopping-cart mr10"></span>ADD TO CART</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="shop_item">
-                <div class="thumb">
-                  <img src="images/shop-items/fp6.png" alt="fp6.png">
-                  <div class="thumb_info">
-                    <ul class="mb0">
-                      <li><a href="page-dashboard-wish-list.html"><span class="flaticon-heart"></span></a></li>
-                      <li><a href="page-dashboard-wish-list.html"><span class="flaticon-search"></span></a></li>
-                      <li><a href="page-shop-list-v6.html"><span class="flaticon-shuffle"></span></a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="details text-center">
-                  <div class="title">FRUITS</div>
-                  <div class="review">
-                    <ul class="mb0">
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                    </ul>
-                  </div>
-                  <div class="sub_title">Silver Heinz Ketchup <br> 350 ml</div>
-                  <div class="si_footer">
-                    <div class="price">$7.63</div>
-                    <a href="page-shop-cart.html" class="cart_btn btn-thm"><span class="flaticon-shopping-cart mr10"></span>ADD TO CART</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="shop_item">
-                <div class="thumb">
-                  <img src="images/shop-items/fp10.png" alt="fp10.png">
-                  <div class="thumb_info">
-                    <ul class="mb0">
-                      <li><a href="page-dashboard-wish-list.html"><span class="flaticon-heart"></span></a></li>
-                      <li><a href="page-dashboard-wish-list.html"><span class="flaticon-search"></span></a></li>
-                      <li><a href="page-shop-list-v6.html"><span class="flaticon-shuffle"></span></a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="details text-center">
-                  <div class="title">VEGETABLES</div>
-                  <div class="review">
-                    <ul class="mb0">
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                    </ul>
-                  </div>
-                  <div class="sub_title">Organic Rocket <br> 1 lb</div>
-                  <div class="si_footer">
-                    <div class="price">$2.00</div>
-                    <a href="page-shop-cart.html" class="cart_btn btn-thm"><span class="flaticon-shopping-cart mr10"></span>ADD TO CART</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="shop_item">
-                <div class="thumb">
-                  <img src="images/shop-items/fp15.png" alt="fp15.png">
-                  <div class="thumb_info">
-                    <ul class="mb0">
-                      <li><a href="page-dashboard-wish-list.html"><span class="flaticon-heart"></span></a></li>
-                      <li><a href="page-dashboard-wish-list.html"><span class="flaticon-search"></span></a></li>
-                      <li><a href="page-shop-list-v6.html"><span class="flaticon-shuffle"></span></a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="details text-center">
-                  <div class="title">FRUITS</div>
-                  <div class="review">
-                    <ul class="mb0">
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                    </ul>
-                  </div>
-                  <div class="sub_title">Silver Heinz Ketchup <br> 350 ml</div>
-                  <div class="si_footer">
-                    <div class="price">$7.63</div>
-                    <a href="page-shop-cart.html" class="cart_btn btn-thm"><span class="flaticon-shopping-cart mr10"></span>ADD TO CART</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="item">
-              <div class="shop_item">
-                <div class="thumb">
-                  <div class="offer_badge">
-                    <ul class="mb0">
-                      <li><a class="offr_tag" href="#"><span>HOT</span></a></li>
-                      <li><a class="comison_rate" href="#"><span>-4 %</span></a></li>
-                    </ul>
-                  </div>
-                  <img src="images/shop-items/fp17.png" alt="fp17.png">
-                  <div class="thumb_info">
-                    <ul class="mb0">
-                      <li><a href="page-dashboard-wish-list.html"><span class="flaticon-heart"></span></a></li>
-                      <li><a href="page-dashboard-wish-list.html"><span class="flaticon-search"></span></a></li>
-                      <li><a href="page-shop-list-v6.html"><span class="flaticon-shuffle"></span></a></li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="details text-center">
-                  <div class="title">VEGETABLES</div>
-                  <div class="review">
-                    <ul class="mb0">
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                      <li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-                    </ul>
-                  </div>
-                  <div class="sub_title">Organic Rocket <br> 1 lb</div>
-                  <div class="si_footer">
-                    <div class="price">$2.00</div>
-                    <a href="page-shop-cart.html" class="cart_btn btn-thm"><span class="flaticon-shopping-cart mr10"></span>ADD TO CART</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
+
+
 
 
 

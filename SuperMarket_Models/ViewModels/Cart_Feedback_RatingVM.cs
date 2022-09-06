@@ -43,5 +43,9 @@ namespace SuperMarket_Models.ViewModels
         [NotMapped]
         [ValidateNever]
         public int RatingPointAverage { get; set; }
+
+        [NotMapped]
+        [ValidateNever]
+        public List<Stock> RelatedProduct { get; set; }
     }
 }
