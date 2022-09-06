@@ -107,25 +107,28 @@
 												{
 													if (Image.IsMainImage == true)
 													{
-														<img src="@Image.Url" alt="fp1.png">
+														<img width="500" height="400" src="@Image.Url" alt="fp1.png">
 													}
 												}
 												<div class="thumb_info">
 													<ul class="mb0">
-														<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></li>
+														<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span style="font-size:20px;" class="flaticon-shopping-cart"></span></li>
 													</ul>
 												</div>
 											</div>
 											<div class="details text-center">
 												<div class="title">@data.Product.Brand_Category.Category.CategoryName</div>
 												<div class="review">
-													<ul class="mb0">
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-														<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-													</ul>
+													<div class="small-ratings">
+														@for (var i = 0; i < @data.RatingPointAverage; i++)
+														{
+															<i class="fa fa-star rating-color"></i>
+														}
+														@for (int i = 0; i < 5-@data.RatingPointAverage; i++)
+														{
+															<i class="fa fa-star"></i>
+														}
+													</div>
 												</div>
 												<div class="sub_title">@data.Product.Title </div>
 												<div class="si_footer">
@@ -166,26 +169,29 @@
 														{
 															if (Image.IsMainImage == true)
 															{
-																<img src="@Image.Url" alt="fp1.png">
+																<img width="500" height="400" src="@Image.Url" alt="fp1.png">
 
 															}
 														}
-														<div class="thumb_info ">
+														<div class="thumb_info" >
 															<ul class="mb0">
-																<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span class="flaticon-shopping-cart"></span></li>
+																<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span style="font-size:20px;" class="flaticon-shopping-cart"></span></li>
 															</ul>
 														</div>
 													</div>
 													<div class="details text-center">
 														<div class="title">@data.Product.Brand_Category.Category.CategoryName</div>
 														<div class="review">
-															<ul class="mb0">
-																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-																<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-															</ul>
+															<div class="small-ratings">
+																@for (var i = 0; i < @data.RatingPointAverage; i++)
+																{
+																	<i class="fa fa-star rating-color"></i>
+																}
+																@for (int i = 0; i < 5-@data.RatingPointAverage; i++)
+																{
+																	<i class="fa fa-star"></i>
+																}
+															</div>
 														</div>
 														<div class="sub_title">@data.Product.ProductName </div>
 														<div class="si_footer">

@@ -27,5 +27,9 @@ namespace SuperMarket_Models.Models
         [ForeignKey("BranchId")]
         [ValidateNever]
         public Branch? Branch { get; set; }
+
+        [NotMapped]
+        [ValidateNever]
+        public int RatingPointAverage { get; set; }
     }
 }
