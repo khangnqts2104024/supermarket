@@ -770,7 +770,7 @@ var isApplied = false;
 
         $("#ProceedCheckout").on("click", function (e) {
             $.ajax({
-                url: "/Customer/Cart/CheckCount",
+                url: "/Customer/Cart/CheckCartBeforeCheckout",
                 type: "GET",
                 success: function (response) {
                     if (response.statusCode == 200 && response.count != 0) {
@@ -1040,6 +1040,7 @@ var isApplied = false;
             $quantityArrowPlus.click(quantityPlus);
 
             function quantityMinus() {
+                
                 let stockCount = parseInt($("#stockCount").text())
                 if ($quantityNum.val() > 1) {
                     $quantityNum.val(+$quantityNum.val() - 1);
@@ -1053,7 +1054,7 @@ var isApplied = false;
             }
             function quantityPlus() {
                 let stockCount = parseInt($("#stockCount").text());
-
+               
                 if ($quantityNum.val() == stockCount) {
                     $("#messageLimitedQuantity").text("The product you have selected has reached a limited quantity");
                 } else {
@@ -2167,7 +2168,6 @@ var isApplied = false;
 
 
 $(function () {
-
     $('#thumbnail li').click(function () {
         var thisIndex = $(this).index()
 

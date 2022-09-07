@@ -101,11 +101,11 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"],out int result);
 
             var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CartId == cartId, includeProperties: "Product");
-            if (cartFromDb != null)
+            if (cartFromDb != null && branchId == true)
             {
                 var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == result && x.ProductId == cartFromDb.ProductId);
 
-                if (itemCount == stock.Count)
+                if (itemCount == stock.Count || itemCount + cartFromDb.Count >= stock.Count)
                 {
                     return Json(new
                     {
@@ -382,7 +382,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CheckCount()
+        public async Task<IActionResult> CheckCartBeforeCheckout()
         {
             if (User.Identity != null)
             {
