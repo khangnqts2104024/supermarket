@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SuperMarket_DataAccess.Repository.IRepository;
 using SuperMarket_Models.Models;
@@ -7,6 +8,7 @@ using SuperMarket_Models.ViewModels;
 namespace SuperMarket_Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class StockController : Controller
     {
 
