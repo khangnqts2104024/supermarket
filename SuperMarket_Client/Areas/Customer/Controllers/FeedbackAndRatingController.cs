@@ -8,7 +8,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
     [BranchActionFilter]
-    [Authorize]
+    [Authorize(Roles = "Customer")]
     public class FeedbackAndRatingController : Controller
     {
         private readonly IUnitOfWork unitOfWork;

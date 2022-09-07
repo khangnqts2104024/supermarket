@@ -9,7 +9,7 @@ using System.Security.Claims;
 namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    [Authorize]
+    [Authorize(Roles = "Customer")]
     public class CouponController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
