@@ -31,25 +31,25 @@
                             {
                                    @if(item.IsMainImage){
                                     <li class="active-img">
-                                        <img  src="@item.Url" alt="" />
+                                        <img src="@item.Url" alt="" />
                                     </li>
                                 }
                                 else
                                 {
                                     <li>
-                                        <img   src="@item.Url" alt="" />
+                                        <img src="@item.Url" alt="" />
                                     </li>
                                 }
                             }
                         </ul>
                     </div>
 
-                    <div id="thumbnail">
-                        <ul>
+                    <div id="thumbnail" style="overflow-x:scroll" >
+                        <ul >
                             @foreach (var item in Model.Product.ImageProduct)
                             {
                                  @if(item.IsMainImage){
-                                    <li class="active">
+                                    <li class="active" >
                                         <img src="@item.Url" alt="" />
                                     </li>
                                 }
@@ -62,10 +62,9 @@
                             }
                         </ul>
                     </div>
-
-
-
         </div>
+
+
 			</div>
 				<div class="col-lg-6">
 					<div class="shop_single_product_details">

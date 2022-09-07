@@ -143,6 +143,7 @@ var isApplied = false;
                 type: "POST",
                 data: { content: content, ratingPoint: id, productId: productId },
                 success: function (response) {
+                    console.log(response)
                     if (response.statusCode == 401 || response.statusCode == 400) {
                         Swal.fire({
                             icon: 'error',
@@ -154,7 +155,7 @@ var isApplied = false;
                         let data = `
                                  <div class="mbp_first d-flex align-items-center">
                                 <div class="flex-shrink-0">
-                                  <img src="images/blog/reviewer1.png" class="mr-3" alt="reviewer1.png">
+                                  <img src="${response.content.customer.customerAvatar}" class="mr-3" alt="reviewer1.png">
                                 </div>
                                 <div class="flex-grow-1 ms-4">
                                   <h4 class="sub_title mt20">${response.content.customer.fullName}</h4>
