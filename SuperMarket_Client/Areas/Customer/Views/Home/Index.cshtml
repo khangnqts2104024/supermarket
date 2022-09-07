@@ -5,7 +5,7 @@
 
 
 <!-- Home Design -->
-<section class="home-one mt0 bg-home1">
+<div class="home-one mt0 bg-home1">
 	<div class="container">
 		<div class="row posr">
 			<div class="col-lg-8 col-xl-6">
@@ -22,17 +22,21 @@
 							<span class="fw700">Organic food</span> is food produced by methods that
 							comply with the <br class="dn-520"> standards of organic farming.
 						</p>
-						<a class="btn btn-thm2" href="page-shop-list-v1.html">SHOP NOW</a>
+						
+						
 					</div>
+					<a class="btn btn-thm dc_btn " asp-action="Index" asp-area="Customer" asp-controller="Product">SHOP NOW</a>
 				</div>
 			</div>
 		</div>
 	</div>
-</section>
+	
+</div>
 
 <!-- Top Category -->
 <section class="top-category pb60">
 	<div class="container">
+	
 		<div class="row">
 			<div class="col-lg-6 offset-lg-3">
 				<div class="main-title text-center">
@@ -46,7 +50,7 @@
 					@foreach (Category item in @ViewBag.CategoryList)
 					{
 						<div class="item">
-							<a href="page-shop-list-v6.html">
+							<a asp-action="Index" asp-area="Customer" asp-controller="Product" asp-route-cateID="@item.CategoryId">
 								<div class="iconbox">
 									<div class="icon"><img src="@item.CategoryImg" alt="food-grocery.png"></div>
 									<div class="details">
@@ -55,8 +59,7 @@
 								</div>
 							</a>
 						</div>
-					}
-
+					}						
 
 				</div>
 			</div>
@@ -246,7 +249,8 @@
 						Organic food is food produced by methods that comply with the standards of organic
 						farming. Standards vary worldwide, but organic farming in general features.
 					</p>
-					<a href="page-shop-list-v1.html" class="btn btn-thm dc_btn">GO SHOP</a>
+						
+					<a asp-action="Index" asp-area="Customer" asp-controller="Product" class="btn btn-thm dc_btn">GO SHOP</a>
 				</div>
 			</div>
 		</div>
