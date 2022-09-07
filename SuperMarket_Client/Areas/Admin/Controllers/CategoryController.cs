@@ -38,7 +38,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 {
                     foreach (var item in data)
                     {
-                        if (item.CategoryName == obj.CategoryName)
+                        if (item.CategoryName.ToLower() == obj.CategoryName.ToLower())
                         {
                             count++;
                         }
@@ -119,7 +119,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             {
                 foreach (var item in data)
                 {
-                    if (item.CategoryName==obj.CategoryName)
+                    if (item.CategoryName.ToLower()==obj.CategoryName.ToLower())
                     {
                         return RedirectToAction("UpdateCategory", new { msg = "Category name has been Used. Try another." });
                     }
@@ -167,6 +167,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var data = await unitOfWork.Brand_Category.GetAll(x => x.CategoryId == id);
+            string wwwRootPath = env.WebRootPath;
 
             foreach (var item in data)
             {
@@ -177,6 +178,11 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 }
             }
             var data1 = await unitOfWork.Category.GetFirstOrDefault(x => x.CategoryId == id);
+            var oldImgPath = Path.Combine(wwwRootPath, data1.CategoryImg.TrimStart('\\'));
+            if (System.IO.File.Exists(oldImgPath))
+            {
+                System.IO.File.Delete(oldImgPath);
+            }
             unitOfWork.Category.Remove(data1);
             await unitOfWork.Save();
             return Json(new { success = true });

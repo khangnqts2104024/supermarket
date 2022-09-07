@@ -11,7 +11,10 @@ using SuperMarket_Client.Areas.Customer.Controllers;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+
+builder.Services.AddControllersWithViews().AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("sqlconnect")));
 builder.Services.Configure<StripeSettings>(builder.Configuration.GetSection("Stripe"));
 builder.Services.AddIdentity<IdentityUser,IdentityRole>().AddDefaultTokenProviders()
@@ -21,7 +24,6 @@ builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddSession();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 //add newtonsoftJson
-
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = $"/Identity/Account/Login";
@@ -51,6 +53,8 @@ app.MapRazorPages();
 app.MapControllerRoute(
     name: "default",
 
+
     pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
+
     
 app.Run();

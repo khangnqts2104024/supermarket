@@ -43,6 +43,15 @@ namespace SuperMarket_DataAccess.Services
 
         }
 
-  
+        public void UpdateStock(Stock obj, int count)
+        {
+            var editStock= _db.Stocks.FirstOrDefault(s => s.StockId.Equals(obj.StockId));
+            if (editStock != null)
+            { 
+            editStock.Count= count;
+                _db.Stocks.Update(editStock);
+            
+            }
+        }
     }
 }

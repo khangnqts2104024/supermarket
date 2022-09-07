@@ -37,8 +37,6 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         var orderTotalBeforeCoupon = await GetOrderTotal();
                         var orderTotalAfterCoupon = orderTotalBeforeCoupon * (100 - discountPercent) / 100;
                         var discountAmount = orderTotalBeforeCoupon - orderTotalAfterCoupon;
-
-
                             return Json(new
                             {
                             statusCode = 200,

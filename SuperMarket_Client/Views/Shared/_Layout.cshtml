@@ -46,13 +46,12 @@
 			if(this.ViewContext.RouteData.Values["controller"] != null)
 			{
 				var controllerName = this.ViewContext.RouteData.Values["controller"].ToString();
-				if (@Context.Session.GetInt32("branchId") == null && controllerName != "Customer")
+				if (@Context.Request.Cookies["branchId"] == null && controllerName != "Customer")
 				{
-									<div class="popup_onload_modal">
-										@await Component.InvokeAsync("BranchList")
-									</div>
-									<input type="hidden" id="checkSessionBranchId" value="1" />
-
+					<div class="popup_onload_modal">
+						@await Component.InvokeAsync("BranchList")
+					</div>
+					<input type="hidden" id="checkSessionBranchId" value="1" />
 				}
 			}
 		}
@@ -69,9 +68,9 @@
 					<div class="col-lg-6 col-xl-6">
 						<div class="ht_contact_widget">
 							<ul class="m0">
-								@if(Context.Session.GetString("branchName") != null){
-									<li class="list-inline-item"><a href="#"><span class="flaticon-phone-call mr5"></span> You are ordering at @Context.Session.GetString("branchName") </a></li>
-									<li class="list-inline-item"><a href="#" class="text-white" data-toggle="modal" data-target="#selectBranch_popup" id="showModal">Change Branch</a></li>
+								@if(Context.Request.Cookies["branchId"] != null){
+									<li class="list-inline-item" style="color:white"><span class="flaticon-phone-call mr5"></span> You are ordering at @Context.Request.Cookies["branchName"]</li>
+									<li style="color:red;" class="list-inline-item"><a href="#" style="color:red;"  class="text-white" data-toggle="modal" data-target="#selectBranch_popup" id="showModal">*Change branch</a></li>
 								}
 							</ul>
 						</div>
@@ -85,6 +84,7 @@
 							</ul>
 						</div>
 					</div>
+
 				</div>
 			</div>
 		</div>
@@ -97,7 +97,9 @@
 				<div class="row">
 					<div class="col-lg-2 col-xl-3">
 						<div class="header_top_logo_home1">
-							<img src="~/Asset/images/logoSuperMarket.png" alt="logoSuperMarket.png">
+							<a href="/">
+								<img src="~/Asset/images/logoSuperMarket.png" alt="logoSuperMarket.png">
+							</a>
 						</div>
 					</div>
 					<div class="col-lg-7 col-xl-7">
@@ -105,59 +107,16 @@
 							<div class="search_form_wrapper">
 								<div class="row">
 									<div class="col-auto pr0">
-										<div class="actegory">
-											<select class="custom_select_dd" id="selectbox_alCategory">
-												<option value="AllCategory">All Category</option>
-												<option value="HotOffers">Hot Offers</option>
-												<option value="NewArrivals">New Arrivals</option>
-												<option value="DealsOfTheDay">Deals of The Day</option>
-												<option value="Fruits">Fruits</option>
-												<option value="Vegetables">Vegetables</option>
-												<option value="Drinks">Drinks</option>
-												<option value="Bakery">Bakery</option>
-												<option value="Butter&Egges">Butter & Egges</option>
-												<option value="Milks&Creams">Milks & Creams</option>
-												<option value="Meats">Meats</option>
-												<option value="Fish">Fish</option>
-											</select>
-										</div>
-									</div>
-									<div class="col-auto pr0">
 										<div class="top-search">
-											<form action="#" method="get" class="form-search" accept-charset="utf-8">
+											<form id="formSearch" asp-action="SearchByName" asp-controller="Product" asp-area="Customer" method="get" class="form-search" accept-charset="utf-8">
 												<div class="box-search pre_line">
-													<input class="form_control" type="text" name="search" placeholder="I'm shopping for...">
+													<input class="form_control" autocomplete="off" type="text" style="border-radius: 4px;border: 1px solid #ebebeb;" name="search" placeholder="I'm shopping for...">
 													<div class="search-suggestions">
 														<div class="box-suggestions">
-															<ul>
-																<li>
-																	<div class="thumb">
-																		<img src="~/Asset/images/listing/sf1.png" alt="sf1.png">
-																	</div>
-																	<div class="info-product">
-																		<div class="item_title">Silver Heinz Ketchup 350 ml</div>
-																		<div class="price"><span class="sale">$50.00</span></div>
-																	</div>
-																</li>
-																<li>
-																	<div class="thumb">
-																		<img src="~/Asset/images/listing/sf2.png" alt="sf2.png">
-																	</div>
-																	<div class="info-product">
-																		<div class="item_title">Silver Heinz Ketchup 350 ml</div>
-																		<div class="price"><span class="sale">$24.00</span></div>
-																	</div>
-																</li>
-																<li>
-																	<div class="thumb">
-																		<img src="~/Asset/images/listing/sf3.png" alt="sf3.png">
-																	</div>
-																	<div class="info-product">
-																		<div class="item_title">Silver Heinz Ketchup 350 ml</div>
-																		<div class="price"><span class="sale">$90.00</span></div>
-																	</div>
-																</li>
-															</ul>
+															@if (Context.Request.Cookies["branchId"] != null)
+																{
+																	@await Component.InvokeAsync("RecommendSearch")
+																}
 														</div><!-- /.box-suggestions -->
 													</div><!-- /.search-suggestions -->
 												</div><!-- /.box-search -->
@@ -166,7 +125,7 @@
 									</div>
 									<div class="col-auto p0">
 										<div class="advscrh_frm_btn">
-											<button type="submit" class="btn search-btn"><span class="flaticon-search"></span></button>
+											<button form="formSearch"type="submit" class="btn search-btn"><span class="flaticon-search"></span></button>
 										</div>
 									</div>
 								</div>
@@ -184,11 +143,14 @@
 												@await Component.InvokeAsync("CartList")
 											</div>
 										}
-
 										else
-
 										{
-											<a class="cart_btn1" href="#"><span class="flaticon-shopping-cart icon"></span> </a>
+											<a class="cart_btn1" href="#"><span class="flaticon-shopping-cart icon"><span id="CartCount" class="badge bgc-thm">0</span></span> <span class="price">$0</span></a>
+											<ul class="dropdown_content">
+												<li style="border:0"><h5>Subtotal: <span class="text-thm fw400 float-end">$0</span></h5></li>
+												<li style="border:0" class="text-center"><img width="100" src="/Asset/images/cart/empty_cart.png" /></li>
+												<li style="border:0" class="text-center">Your Cart Is Empty</li>
+											</ul>
 										}
 
 									</li>
@@ -223,7 +185,7 @@
 								<span class="ctr_title">ALL CATEGORIES</span>
 								<i class="fa fa-angle-down icon"></i>
 							</div>
-							<ul class="menu">
+							<ul class="menu" >
 								@await Component.InvokeAsync("CategoryList")
 							</ul>
 						</div>
@@ -231,110 +193,29 @@
 					<!-- Responsive Menu Structure-->
 					<ul id="respMenu" class="ace-responsive-menu menu_list_custom_code wa pl330" data-menu-style="horizontal">
 						<li>
-							<a href="#"><span class="title">HOME</span></a>
-							<!-- Level Two-->
-							<ul>
-								<li><a href="index.html">Home V1</a></li>
-								<li><a href="index2.html">Home V2</a></li>
-								<li><a href="index3.html">Home V3</a></li>
-								<li><a href="index4.html">Home V4</a></li>
-								<li><a href="index5.html">Home V5</a></li>
-								<li><a href="index6.html">Home V6</a></li>
-								<li><a href="index7.html">Home V7</a></li>
-								<li><a href="index8.html">Home V8</a></li>
-								<li><a href="index9.html">Home V9</a></li>
-								<li><a href="index10.html">Home V10</a></li>
-							</ul>
+							<a href="/"><span class="title">HOME</span></a>
 						</li>
 						<li class="megamenu_style">
-							<a href="#"><span class="title">SHOP</span></a>
-							<ul class="row dropdown-megamenu">
-								<li class="col mega_menu_list pl30">
-									<h4 class="title">Shop Listing</h4>
-									<ul>
-										<li><a href="page-shop-list-v1.html">Listing v1</a></li>
-										<li><a href="page-shop-list-v2.html">Listing v2</a></li>
-										<li><a href="page-shop-list-v3.html">Listing v3</a></li>
-										<li><a href="page-shop-list-v4.html">Listing v4</a></li>
-										<li><a href="page-shop-list-v5.html">Listing v5</a></li>
-										<li><a href="page-shop-list-v6.html">Listing v6</a></li>
-									</ul>
-								</li>
-								<li class="col mega_menu_list">
-									<h4 class="title">Shop Single</h4>
-									<ul>
-										<li><a href="page-shop-single-simple.html">Simple</a></li>
-										<li><a href="page-shop-single-variable.html">Variable</a></li>
-										<li><a href="page-shop-single-group.html">Group</a></li>
-										<li><a href="page-shop-single-affiliate.html">Affiliate</a></li>
-										<li><a href="page-shop-single-countdown.html">Countdown</a></li>
-										<li><a href="page-shop-single-thumbnail-vertical.html">Thumbnail Vertical</a></li>
-										<li><a href="page-shop-single-right-sidebar.html">Right Sidebar</a></li>
-										<li><a href="page-shop-single-three-columns.html">Three Columns</a></li>
-									</ul>
-								</li>
-								<li class="col mega_menu_list">
-									<h4 class="title">User Dashboard</h4>
-									<ul>
-										<li><a href="page-dashboard.html">Dashboard</a></li>
-										<li><a href="page-dashboard-order.html">Orders</a></li>
-										<li><a href="page-dashboard-wish-list.html">Downloads</a></li>
-										<li><a href="page-dashboard-address.html">Addresses</a></li>
-										<li><a href="page-dashboard-account-details.html">Account Details</a></li>
-										<li><a href="page-dashboard-wish-list.html">Wishlist</a></li>
-										<li><a href="page-login.html">Logout</a></li>
-									</ul>
-								</li>
-								<li class="col mega_menu_list">
-									<h4 class="title">SHOP PAGES</h4>
-									<ul>
-										<li><a href="page-shop-cart.html">Cart</a></li>
-										<li><a href="page-shop-checkout.html">Checkout</a></li>
-										<li><a href="page-shop-complete-order.html">Complete Order</a></li>
-										<li><a href="order-tracking.html">Order Tracking</a></li>
-										<li><a href="page-store-location.html">Store Locator</a></li>
-									</ul>
-								</li>
-								<li class="col mega_menu_list">
-									<div class="banner_one megamenu_style">
-										<div class="thumb"><img src="~/Asset/images/banner/31.jpg" alt="31.jpg"></div>
-										<div class="details style2">
-											<p class="para">Tasty Healthy</p>
-											<h2 class="title">Fresh Vegetables</h2>
-											<a href="page-shop-list-v1.html" class="shop_btn style2">SHOP NOW</a>
-										</div>
-									</div>
-								</li>
-							</ul>
+							<a asp-action="Index" asp-controller="Product" asp-area="Customer"><span class="title">SHOP</span></a>
+						</li>
+						<li class="megamenu_style">
+							<a asp-action="CompareProduct" asp-area="Customer" asp-controller="Product"><span class="title">COMPARE</span></a>
 						</li>
 						<li>
 							<a href="#"><span class="title">PAGES</span></a>
 							<ul>
-								<li><a href="page-about.html">About Us</a></li>
-								<li><a href="page-error.html">404 Page</a></li>
-								<li><a href="page-faq.html">Faq</a></li>
-								<li><a href="page-invoices.html">Invoices</a></li>
-								<li><a href="page-login.html">My Account</a></li>
-								<li><a href="page-terms.html">Terms and Conditions</a></li>
-								<li><a href="page-ui-element.html">UI Elements</a></li>
+								<li><a asp-action="Index" asp-controller="Cart" asp-area="Customer">Your Cart</a></li>
+								<li><a asp-action="Order" asp-controller="Customer" asp-area="Customer">Order History</a></li>
 							</ul>
 						</li>
 						<li>
-							<a href="#"><span class="title">BLOG</span></a>
-							<ul>
-								<li><a href="page-blog-grid.html">Blog Grid</a></li>
-								<li><a href="page-blog-grid-sidebar.html">Blog Grid Sidebar</a></li>
-								<li><a href="page-blog-details.html">Blog Details</a></li>
-								<li><a href="page-blog-list.html">Blog List</a></li>
-								<li><a href="page-blog-single.html">Blog Single</a></li>
-								<li><a href="page-blog-single2.html">Blog Single v2</a></li>
-							</ul>
+							<a asp-action="AboutUs" asp-controller="Home" asp-area="Customer"><span class="title">ABOUT US</span></a>
 						</li>
-						<li><a href="page-contact.html">CONTACT</a></li>
+						<li><a asp-action="Index" asp-controller="StoreLocator" asp-area="Customer">CONTACT</a></li>
 					</ul>
 					<ul id="respMenu2" class="ace-responsive-menu widget_menu_home2 wa" data-menu-style="horizontal">
 						<li class="list-inline-item list_c">
-							<a href="#"><span class="flaticon-phone-call vam mr7"></span> HOTLINE <span class="text-thm fw400 dn-lg">(42) 500-78-42</span></a>
+							<a href="#"><span class="flaticon-phone-call vam mr7"></span> HOTLINE <span class="text-thm fw400 dn-lg">(+84) 37 340 5298</span></a>
 						</li>
 					</ul>
 				</div>
@@ -342,7 +223,7 @@
 		</header>
 
 		<!-- ==================================================================================================================== -->
-		<section class="container">
+		<section class="container-fluid" style="padding-right:0;padding-left:0;">
 			<main role="main" class="pb-3">
 				<partial name="_Notification" />
 				@RenderBody()
@@ -380,9 +261,13 @@
 				<div class="row mt100">
 					<div class="col-sm-6 col-md-4 col-lg-3 col-xl-3">
 						<div class="footer_about_widget">
-							<div class="logo mb40"><img src="~/Asset/images/logoSuperMarket.png" alt="logoSuperMarket.png"></div>
-							<p>Collins Street West, Victoria <br> 8007, Australia.</p>
-							<a href="#" class="shop_map_btn">SHOW ON MAP</a>
+							<div class="logo mb40">
+								<a href="/">
+									<img src="~/Asset/images/logoSuperMarket.png" alt="logoSuperMarket.png">
+								</a>
+							</div>
+							<p> Cach Mang Thang Tam <br> 580, VietNam.</p>
+							<a href="/Customer/StoreLocator/Index" class="shop_map_btn">SHOW ON MAP</a>
 						</div>
 						<div class="footer_social_widget mt30">
 							<ul class="mb0">
@@ -398,10 +283,10 @@
 						<div class="footer_contact_widget">
 							<h4>NEED HELP</h4>
 							<ul class="list-unstyled">
-								<li class="text-white df"><span class="flaticon-phone-call"></span><a class="phone" href="#">00 0392 96 32</a></li>
+								<li class="text-white df"><span class="flaticon-phone-call"></span><a class="phone" href="#">037 340 5298</a></li>
 								<li class="text-white"><a href="#">Monday - Friday : 9:00 - 20:00</a></li>
 								<li class="text-white"><a href="#">Saturday: 11:00 - 14:00</a></li>
-								<li class="text-white"><span class="flaticon-email"></span><a href="#">oder@freshen.com</a></li>
+								<li class="text-white"><span class="flaticon-email"></span><a href="#">ktkstore2022@gmail.com</a></li>
 							</ul>
 						</div>
 					</div>
@@ -409,12 +294,8 @@
 						<div class="footer_qlink_widget">
 							<h4>INFORMATION</h4>
 							<ul class="list-unstyled">
-								<li><a href="#">Delivery Information</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-								<li><a href="#">Terms & Conditions</a></li>
-								<li><a href="#">Contact</a></li>
-								<li><a href="#">Returns</a></li>
-								<li><a href="#">Affilate</a></li>
+								<li><a asp-action="Index" asp-controller="StoreLocator" asp-area="Customer">Contact</a></li>
+								<li><a href="#">AboutUs</a></li>
 							</ul>
 						</div>
 					</div>
@@ -424,10 +305,6 @@
 							<ul class="list-unstyled">
 								<li><a href="#">My account</a></li>
 								<li><a href="#">Order History</a></li>
-								<li><a href="#">Wishlist</a></li>
-								<li><a href="#">Shipping</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-								<li><a href="#">Help</a></li>
 							</ul>
 						</div>
 					</div>
@@ -435,12 +312,7 @@
 						<div class="footer_qlink_widget">
 							<h4>OUR STORES</h4>
 							<ul class="list-unstyled">
-								<li><a href="#">New York</a></li>
-								<li><a href="#">London SF</a></li>
-								<li><a href="#">Cockfosters BP</a></li>
-								<li><a href="#">Los Angeles</a></li>
-								<li><a href="#">Chicago</a></li>
-								<li><a href="#">Las Vegas</a></li>
+								@await Component.InvokeAsync("BranchList_Footer")
 							</ul>
 						</div>
 					</div>
@@ -451,7 +323,7 @@
 				<div class="row">
 					<div class="col-md-6 col-lg-8 col-xl-9">
 						<div class="copyright-widget mb15-767">
-							<p>© 2021 Freshen. Made with love.</p>
+							<p>© 2022 KTK. Made with love.</p>
 						</div>
 					</div>
 					<div class="col-md-6 col-lg-4 col-xl-3">

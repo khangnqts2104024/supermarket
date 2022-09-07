@@ -38,6 +38,11 @@ var isApplied = false;
     }
 
     $(document).ready(function () {
+
+        var selectCoupon = $("#selectCoupon");
+        selectCoupon.on("change", function () {
+            $("#couponField").val(selectCoupon.val());
+        });
         $('#selectBranch_popup').modal({ backdrop: 'static', keyboard: false })  
         var checkSessionBranchId = $("#checkSessionBranchId").val();
         if (checkSessionBranchId == 1) {
@@ -239,9 +244,7 @@ var isApplied = false;
         
     });
 
-    function selectBranch_popup() {
-        $('#selectBranch_popup').modal('show');
-    }
+   
 
    
 
@@ -767,7 +770,7 @@ var isApplied = false;
 
         $("#ProceedCheckout").on("click", function (e) {
             $.ajax({
-                url: "/Customer/Cart/CheckCount",
+                url: "/Customer/Cart/CheckCartBeforeCheckout",
                 type: "GET",
                 success: function (response) {
                     if (response.statusCode == 200 && response.count != 0) {
@@ -892,6 +895,48 @@ var isApplied = false;
 
             });
         });
+        //Add To Cart Home Page
+        $(".addToCartHome").on("click", function (e) {
+            var checkLoggedIn = $("#LoggedIn").val();
+            if (checkLoggedIn != 1) {
+                window.location.href = domain + "Identity/Account/Login";
+                return false;
+            }
+            e.preventDefault();
+            let id = $(this).data("productid");
+            $.ajax({
+                url: "/Customer/Product/Details?id=" + id,
+                type:"GET",
+                success: function (responseDetailGet) {
+                    console.log(responseDetailGet);
+                    $.ajax({
+                        url: "/Customer/Product/Details",
+                        type: "POST",
+                        data: responseDetailGet,
+                        success: function (response) {
+                            if (response.statusCode == 200 || response.statusCode == 201) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                                reloadCart();
+                                $("#Count").val(response.count);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: response.message,
+                                })
+                            }
+
+                        }
+                    });
+                }
+            });
+        })
+
         //Add To Cart
         $("#formAddCart").on('submit', function (e) {
             let userLogged = $("#manage").val();
@@ -995,6 +1040,7 @@ var isApplied = false;
             $quantityArrowPlus.click(quantityPlus);
 
             function quantityMinus() {
+                
                 let stockCount = parseInt($("#stockCount").text())
                 if ($quantityNum.val() > 1) {
                     $quantityNum.val(+$quantityNum.val() - 1);
@@ -1008,13 +1054,23 @@ var isApplied = false;
             }
             function quantityPlus() {
                 let stockCount = parseInt($("#stockCount").text());
-
-                if ($quantityNum.val() == stockCount) {
-                    $("#messageLimitedQuantity").text("The product you have selected has reached a limited quantity");
-                } else {
-                    $quantityNum.val(+$quantityNum.val() + 1);
-                    $("#messageLimitedQuantity").text("");
-                }
+                let productId = $("#ProductId").val();
+                let countNumber = parseInt($("#Count").val());
+                $.ajax({
+                    url: "/Customer/Cart/Plus",
+                    type: "POST",
+                    data: { productId: productId, itemCount: countNumber },
+                    success: function (response) {
+                        console.log(response)
+                        if (response.statusCode == 400 || $quantityNum.val() == stockCount) {
+                            $("#messageLimitedQuantity").text("The product you have selected has reached a limited quantity");
+                        } else {
+                            $quantityNum.val(+$quantityNum.val() + 1);
+                            $("#messageLimitedQuantity").text("");
+                        }
+                    }
+                });
+               
             }
         })();
 
@@ -2118,3 +2174,37 @@ var isApplied = false;
 
 
 })(window.jQuery);
+
+
+
+$(function () {
+    $('#thumbnail li').click(function () {
+        var thisIndex = $(this).index()
+
+        if (thisIndex < $('#thumbnail li.active').index()) {
+            prevImage(thisIndex, $(this).parents("#thumbnail").prev("#image-slider"));
+        } else if (thisIndex > $('#thumbnail li.active').index()) {
+            nextImage(thisIndex, $(this).parents("#thumbnail").prev("#image-slider"));
+        }
+
+        $('#thumbnail li.active').removeClass('active').css('border', '').css('opacity','');
+        $(this).addClass('active').css('border', '1px solid #86BC42').css('opacity', 1);
+    });
+});
+
+var width = $('#image-slider').width();
+
+function nextImage(newIndex, parent) {
+    parent.find('li').eq(newIndex).addClass('next-img').css('left', width).animate({ left: 0 }, 600);
+    parent.find('li.active-img').removeClass('active-img').css('left', '0').animate({ left: -width }, 600);
+    parent.find('li.next-img').attr('class', 'active-img');
+}
+function prevImage(newIndex, parent) {
+    parent.find('li').eq(newIndex).addClass('next-img').css('left', -width).animate({ left: 0 }, 600);
+    parent.find('li.active-img').removeClass('active-img').css('left', '0').animate({ left: width }, 600);
+    parent.find('li.next-img').attr('class', 'active-img');
+}
+
+/* Thumbails */
+//var ThumbailsWidth = ($('#image-slider').width() - 18.5) / 7;
+//$('#thumbnail li').find('img').css('width', ThumbailsWidth);

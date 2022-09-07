@@ -1,0 +1,40 @@
+﻿<div class="flex-container">
+
+    <div class="flex-card">
+        <a asp-action="CouponManage" asp-controller="Coupon" asp-area="Admin">
+            <div class="manage-option">
+                   <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                <p>Coupon Management</p>
+            </div>
+        </a>
+    </div>
+
+
+    <div class="flex-card">
+        <a asp-action="Index" asp-controller="Stock" asp-area="Admin">
+            <div class="manage-option">
+              <i class="fa fa-list" aria-hidden="true"></i>
+                <p>Stock Management</p>
+            </div>
+        </a>
+    </div>
+
+      <div class="flex-card">
+        <a class="collapse-item" asp-area="Admin" asp-action="Index" asp-controller="Branch">
+            <div class="manage-option">
+                  <i class="fa fa-sitemap" aria-hidden="true"></i>
+                <p>Branch Management</p>
+            </div>
+        </a>
+    </div>
+
+
+    <div class="flex-card">
+      	<a  asp-area="Admin" asp-action="Index" asp-controller="Brand">
+            <div class="manage-option">
+             <i class="fa fa-tags" aria-hidden="true"></i>
+                <p>Brand Management</p>
+            </div>
+        </a>
+    </div>
+</div>

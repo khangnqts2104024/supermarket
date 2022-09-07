@@ -4,8 +4,8 @@
 @foreach (var item in Model)
 {
 	<li>
-		<a href="#">
-			<span class="menu-icn flaticon-fish"></span>
+		<a asp-action="Index" asp-controller="Product" asp-area="Customer" asp-route-cateID="@item.CategoryId">
+			<span><img src="@item.CategoryImg" width="30px" /></span>
 			<span class="menu-title">@item.CategoryName</span>
 		</a>
 	</li>

@@ -7,7 +7,8 @@ namespace SuperMarket_Client
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var branchIdSession = context.HttpContext.Session.GetInt32("branchId");
+            var request = context.HttpContext.Request;
+            var branchIdSession = request.Cookies["branchId"];
         
             if (branchIdSession == null)
             {

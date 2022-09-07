@@ -5,7 +5,7 @@
 <h3>@ViewData["Title"]</h3>
 
 <a class="btn btn-outline-primary" href="/Admin/Product/CreateProduct">Create Product</a> | 
-<a class="btn btn-outline-primary" href="/Admin/Brand_Category/Brand_CategoryManage">Back to Brand-Category manage</a>
+<a class="btn btn-outline-primary" href="/Admin/Home/Index">Back to Home</a>
 <hr />
 
 <table class="table" id="ProductTable">
@@ -19,9 +19,6 @@
 				Title
 			</th>
 			<th>
-				Description
-			</th>
-			<th>
 				Created Date
 			</th>
 			<th>
@@ -33,9 +30,6 @@
 			<th>
 				Weight
 			</th>
-			@*<th>
-				Stock
-			</th>*@
 			<th>
 				Category
 			</th>
@@ -65,7 +59,6 @@
 				"columns": [
 					{ "data": "productName", "width": "15%" },
 					{ "data": "title", "width": "15%" },
-					{ "data": "description", "width": "15%" },
 					{ "data": "createdDate", "width": "15%" },
 					{ "data": "manufactureDate", "width": "15%" },
 					{ "data": "expiryDate", "width": "15%" },

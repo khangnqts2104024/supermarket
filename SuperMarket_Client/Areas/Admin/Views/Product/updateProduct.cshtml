@@ -4,9 +4,9 @@
 }
 <h3>@ViewData["Title"]</h3>
 <div>
+<span>@ViewBag.msg</span>
 	<div class="col-md-8 offset-2">
 		<form asp-action="Update" class="row" enctype="multipart/form-data">
-			<span>@ViewBag.msg</span>
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<input type="hidden" asp-for="ProductId" />
 			<div class="form-group py-2 col-6">
@@ -47,13 +47,13 @@
 
 			<div class="form-group py-2 col-6">
 				<label class="form-label">Category</label>
-				<input class="form-control" name="CategoryId" asp-for="Brand_Category.Category.CategoryName" readonly/>
-				
+				<input class="form-control" name="CategoryId" asp-for="Brand_Category.Category.CategoryName" readonly />
+
 			</div>
 			<div class="form-group py-2 col-6">
 				<label class="form-label">Brand</label>
 				<input class="form-control" name="BrandId" asp-for="Brand_Category.Brand.BrandName" readonly>
-				
+
 			</div>
 			@foreach (ImageProduct item in @ViewBag.imgList)
 			{
@@ -63,8 +63,8 @@
 					<div class="form-group  py-2 col-6">
 						<label class="control-label">Main Image</label>
 						<input type="text" name="mainImgId" value="@item.ImageId" hidden />
-						<input class="form-control" type="file" name="mainImg" />
-						<input class="form-control" type="text" name="mainImageUrl" value="@item.Url" hidden/>
+						<input class="form-control" type="file" name="mainImg" onchange="    return check(this);"/>
+						<input class="form-control" type="text" name="mainImageUrl" value="@item.Url" hidden />
 						<img src="@item.Url" width="80px" />
 					</div>
 				}
@@ -76,25 +76,25 @@
 				{
 					if (item.IsMainImage == false)
 					{
-						<div class="form-group  py-2 col-6">
-							<label class="control-label">Side Image</label>
-							<input class="form-control" type="file" name="sideImg_@count" />
-							<img src="@item.Url" width="80px" />
-							<input class="form-control" type="text" name="sideImageUrl_@count" value="@item.Url" hidden/>
-							<input type="text" name="imgId_@count" value="@item.ImageId" hidden />
-						</div>
+																		<div class="form-group  py-2 col-6">
+																			<label class="control-label">Side Image</label>
+																			<input class="form-control" type="file" name="sideImg_@count" onchange="    return check(this);" />
+																			<img src="@item.Url" width="80px" />
+																			<input class="form-control" type="text" name="sideImageUrl_@count" value="@item.Url" hidden />
+																			<input type="text" name="imgId_@count" value="@item.ImageId" hidden />
+																		</div>
 						count++;
 					}
 				}
-				if (count < 6)
+				if (count < 7)
 				{
-					for (int i = count; i < 7; i++)
+					for (int i = count; i <7; i++)
 					{
-						<div class="form-group  py-2 col-6">
-							<label class="control-label">Side Image</label>
-							<input class="form-control" type="file" name="AddNewSideImg_@i"  />
-							<img src="" width="80px" />
-						</div>
+																		<div class="form-group  py-2 col-6">
+																			<label class="control-label">Side Image</label>
+																			<input class="form-control" type="file" name="AddNewSideImg_@i" onchange="    return check(this);"/>
+																			<img src="" width="80px" />
+																		</div>
 					}
 				}
 			}
@@ -107,3 +107,13 @@
 <div>
 	<a href="/Admin/Product/Index">Back to Product manage</a>
 </div>
+
+<script >
+function check(data) {
+    if (data.files[0].size > 2000000) {
+        alert('Picture must be lower than 2mb');
+        data.value = "";
+	}
+}
+
+</script>

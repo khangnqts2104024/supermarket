@@ -20,6 +20,7 @@ namespace SuperMarket_Models.Models
         public int? ProductId { get; set; }
         [ForeignKey("ProductId")]
         [ValidateNever]
+   
         public Product? Product { get; set; }
 
         //FK
@@ -27,5 +28,9 @@ namespace SuperMarket_Models.Models
         [ForeignKey("BranchId")]
         [ValidateNever]
         public Branch? Branch { get; set; }
+
+        [NotMapped]
+        [ValidateNever]
+        public int RatingPointAverage { get; set; }
     }
 }

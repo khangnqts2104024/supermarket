@@ -19,5 +19,9 @@ namespace SuperMarket_Client.ViewComponents
             var List = await unitOfWork.Branch.GetAll();
             return View("BranchList",List);
         }
+
+        
+
+        
     }
 }

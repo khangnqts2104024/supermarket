@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+//using JsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
 
 namespace SuperMarket_Models.Models
 {
@@ -43,16 +44,19 @@ namespace SuperMarket_Models.Models
         public DateTime ManufactureDate { get; set; }
         [Required]
         public DateTime ExpiryDate { get; set; }
-        public double Weight { get; set; }
+        public string Weight { get; set; }
         public int BrandCateId { get; set; }
         [ForeignKey("BrandCateId")]
         [ValidateNever]
         public Brand_Category Brand_Category { get; set; }
-       
+   
         public virtual List<ImageProduct> ImageProduct { get; set; }
-
+        [Newtonsoft.Json.JsonIgnore]
         public List<Stock>? Stock { get; set; }
+        [ValidateNever]
 
-       
+        public virtual List<Feedback_Rating> Feedback_Ratings { get; set; }
+
+
     }
 }

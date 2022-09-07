@@ -24,7 +24,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllProduct()
         {
-            var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock");
+            var data = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category.Brand,Brand_Category.Category");
             return Json(new { data = data });
         }
 		//[HttpGet]
@@ -49,6 +49,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             var brandList = await unitOfWork.Brand.GetAll();
             ViewBag.categoryList = new SelectList(categoryList, "CategoryId", "CategoryName");
             ViewBag.brandList = new SelectList(brandList, "BrandId", "BrandName");
+
             ViewBag.msg = msg;
             return View();
         }
@@ -62,7 +63,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 var data = await unitOfWork.Product.GetAll();
                 foreach (var item in data)
                 {
-                    if (item.ProductName == obj.ProductName)
+                    if (item.ProductName.ToLower() == obj.ProductName.ToLower())
                     {
                         return RedirectToAction("CreateProduct", "Product", new { msg = "Name of product has been used. Try an other." });
                     }
@@ -119,6 +120,8 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                         TempData["sideImageList"] = JsonConvert.SerializeObject(imgList);
 
                     }
+
+
                     return RedirectToAction("ProcessCreateProduct", "Product");
                 }
                 else
@@ -127,6 +130,24 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                     await unitOfWork.Product.Add(obj);
                     await unitOfWork.Save();
 
+                    var branchs = await unitOfWork.Branch.GetAll();
+                    foreach (var branch in branchs)
+                    {
+                        Stock stock = new Stock()
+                        {
+                            Count = 0,
+                            ProductId = obj.ProductId,
+
+                            BranchId = branch.BranchId
+
+                        };
+                        var checkStock = await unitOfWork.Stock.GetFirstOrDefault(s => s.BranchId.Equals(stock.BranchId) && s.ProductId.Equals(stock.ProductId));
+                        if (checkStock == null) { await unitOfWork.Stock.Add(stock); }
+                        await unitOfWork.Stock.Add(stock);
+                        
+                    
+                    }
+                    await unitOfWork.Save();
                     var getId = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductName == obj.ProductName);
                     if (mainImage != null)
                     {
@@ -176,7 +197,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
 
 
             }
-            return View();
+            return null;
         }
         public async Task<IActionResult> ProcessCreateProduct()
         {
@@ -197,6 +218,24 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
 
                 await unitOfWork.Product.Add(product);
                 await unitOfWork.Save();
+                var branchs = await unitOfWork.Branch.GetAll();
+                foreach (var branch in branchs)
+                {
+                    Stock stock = new Stock()
+                    {
+                        Count = 0,
+                        ProductId = product.ProductId,
+
+                        BranchId = branch.BranchId
+
+                    };
+                   var checkStock= await unitOfWork.Stock.GetFirstOrDefault(s => s.BranchId.Equals(stock.BranchId) && s.ProductId.Equals(stock.ProductId));
+                    if(checkStock == null) { await unitOfWork.Stock.Add(stock); }
+                   
+
+
+                }
+                await unitOfWork.Save();
 
                 var data = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductName == product.ProductName);
                 MainImage.ProductId = data.ProductId;
@@ -215,14 +254,16 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             var finalSideImgLsit = JsonConvert.DeserializeObject<List<ImageProduct>>(TempData["finalSideImgLsit"].ToString());
             await unitOfWork.ImageProduct.Add(fianlMainImg);
             await unitOfWork.ImageProduct.AddRange(finalSideImgLsit);
+            unitOfWork.Save();
             return RedirectToAction("CreateProduct", "Product", new { msg = "Product is created succesfully" });
         }
         [HttpGet]
-        public async Task<IActionResult> UpdateProduct(int id)
+        public async Task<IActionResult> UpdateProduct(int id,string msg)
         {
             var data = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id, includeProperties: "Brand_Category.Brand,Brand_Category.Category");
             var imgList = await unitOfWork.ImageProduct.GetAll(x => x.ProductId == id);
             ViewBag.imgList = imgList;
+            ViewBag.msg = msg;
             return View(data);
         }
         [HttpPost]
@@ -232,10 +273,9 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             string wwwRootPath = env.WebRootPath;
             foreach (var item in data)
             {
-                if (item.ProductName == obj.ProductName)
+                if (item.ProductName.ToLower() == obj.ProductName.ToLower())
                 {
-                    ViewBag.msg = "Product name has been used. Please try another";
-                    return RedirectToAction("UpdateProduct", new { id = obj.ProductId });
+                    return RedirectToAction("UpdateProduct", new { id = obj.ProductId,msg= "Product name has been used. Please try another" });
                 }
             }
             unitOfWork.Product.Update(obj);
@@ -511,12 +551,14 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             }
             await unitOfWork.Save();
 
-            return RedirectToAction("UpdateProduct", new { id = obj.ProductId });
+            return RedirectToAction("UpdateProduct", new { id = obj.ProductId,msg="Update Succesfully" });
         }
 
         public async Task<IActionResult> DeleteProduct(int id)
         {
-            var check=await unitOfWork.Stock.GetFirstOrDefault(x=>x.ProductId==id);
+            var check=await unitOfWork.Stock.GetFirstOrDefault(x=>x.ProductId==id && x.Count!=0);
+            string wwwRootPath = env.WebRootPath;
+
             if (check != null)
             {
                 return Json(new { success = false });
@@ -524,7 +566,20 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
             else
             {
                 var data = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == id);
+                var img=await unitOfWork.ImageProduct.GetAll(x=>x.ProductId==id);
+                foreach (var item in img)
+                {
+                    var oldImgPath = Path.Combine(wwwRootPath, item.Url.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImgPath))
+                    {
+                        System.IO.File.Delete(oldImgPath);
+                    }
+                    unitOfWork.ImageProduct.Remove(item);
+                }
+                await unitOfWork.Save();
                 unitOfWork.Product.Remove(data);
+                var temp = await unitOfWork.Stock.GetAll(x => x.ProductId == id);
+                unitOfWork.Stock.RemoveRange(temp);
                 await unitOfWork.Save();
                 return Json(new { success = true });
             }
