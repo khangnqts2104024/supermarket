@@ -222,7 +222,7 @@ function Brand(picker, modelData) {
                     for (let j = 0; j < item.Feedback_Ratings.length; j++) { ratingTotal += item.Feedback_Ratings[j].RatingPoint; count++; }
                     let rating;
                     if (count == 0) { rating = 0; }
-                    else { rating = Math.ceil(ratingTotal / count) };
+                    else { rating = Math.floor(ratingTotal / count) };
                     if (img != null) { PUrl = img.Url; }
 
 

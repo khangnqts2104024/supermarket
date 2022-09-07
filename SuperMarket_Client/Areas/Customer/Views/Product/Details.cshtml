@@ -9,8 +9,8 @@
           <div class="breadcrumb_content">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item"><a href="#">Shop</a></li>
-              <li class="breadcrumb-item"><a href="#">@Model.Product.Brand_Category.Category.CategoryName</a></li>
+              <li class="breadcrumb-item"><a asp-action="Index" asp-area="Customer" asp-controller="Product">Shop</a></li>
+              <li class="breadcrumb-item"><a asp-action="Index" asp-area="Customer" asp-controller="Product" asp-route-cateID="@Model.Product.Brand_Category.CategoryId">@Model.Product.Brand_Category.Category.CategoryName</a></li>
               <li class="breadcrumb-item active" aria-current="page"><a href="#">@Model.Product.Title</a></li>
             </ol>
           </div>
@@ -254,7 +254,7 @@
 
 
 
-@if(Model.RelatedProduct != null)
+@if(Model.RelatedProduct.Count() != 0)
 {
     <!-- Our Shopping Product -->
     <section class="our-shop bt1">
