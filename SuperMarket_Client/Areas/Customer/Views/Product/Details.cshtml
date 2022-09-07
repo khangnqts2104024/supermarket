@@ -9,8 +9,8 @@
           <div class="breadcrumb_content">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="/">Home</a></li>
-              <li class="breadcrumb-item"><a href="#">Shop</a></li>
-              <li class="breadcrumb-item"><a href="#">@Model.Product.Brand_Category.Category.CategoryName</a></li>
+              <li class="breadcrumb-item"><a asp-action="Index" asp-area="Customer" asp-controller="Product">Shop</a></li>
+              <li class="breadcrumb-item"><a asp-action="Index" asp-area="Customer" asp-controller="Product" asp-route-cateID="@Model.Product.Brand_Category.CategoryId">@Model.Product.Brand_Category.Category.CategoryName</a></li>
               <li class="breadcrumb-item active" aria-current="page"><a href="#">@Model.Product.Title</a></li>
             </ol>
           </div>
@@ -31,25 +31,25 @@
                             {
                                    @if(item.IsMainImage){
                                     <li class="active-img">
-                                        <img  src="@item.Url" alt="" />
+                                        <img src="@item.Url" alt="" />
                                     </li>
                                 }
                                 else
                                 {
                                     <li>
-                                        <img   src="@item.Url" alt="" />
+                                        <img src="@item.Url" alt="" />
                                     </li>
                                 }
                             }
                         </ul>
                     </div>
 
-                    <div id="thumbnail">
-                        <ul>
+                    <div id="thumbnail" style="overflow-x:scroll" >
+                        <ul >
                             @foreach (var item in Model.Product.ImageProduct)
                             {
                                  @if(item.IsMainImage){
-                                    <li class="active">
+                                    <li class="active" >
                                         <img src="@item.Url" alt="" />
                                     </li>
                                 }
@@ -62,10 +62,9 @@
                             }
                         </ul>
                     </div>
-
-
-
         </div>
+
+
 			</div>
 				<div class="col-lg-6">
 					<div class="shop_single_product_details">
@@ -254,6 +253,8 @@
 
 
 
+@if(Model.RelatedProduct.Count() != 0)
+{
     <!-- Our Shopping Product -->
     <section class="our-shop bt1">
         <div class="container">
@@ -316,6 +317,8 @@
             </div>
         </div>
     </section>
+
+}
 
 
 

@@ -20792,7 +20792,7 @@ canvas#myChart{
 .shop_item{
   border: 1px solid transparent;
   border-radius: 4px;
-  padding: 30px 20px;
+  padding: 30px 44px;
   position: relative;
   -webkit-transition: all 0.3s ease;
   -moz-transition: all 0.3s ease;
@@ -20834,8 +20834,8 @@ canvas#myChart{
   text-align: center;
 }
 .shop_item .thumb img{
-width:auto;
-height:250px;
+/*width:auto;
+height:250px;*/
 }
 .shop_item .offer_badge{
   left: 0;
@@ -22249,7 +22249,7 @@ TEST THUMBNAIL CAROUSEL*/
 
     #image-slider ul {
         width: 100%;
-        height: 388px;
+        height: 333px;
         position: relative;
     }
 
@@ -22264,7 +22264,7 @@ TEST THUMBNAIL CAROUSEL*/
 
 #image-slider ul li img {
     width: 100%;
-    height: auto;
+    height: 100%;
 
 }
 
@@ -22287,25 +22287,30 @@ TEST THUMBNAIL CAROUSEL*/
     #thumbnail ul {
         width: 100%;
         height: 100%;
+        display: flex;
+        flex-wrap: wrap;
     }
 
     #thumbnail li {
         list-style: none;
-        float: left;
+    
         cursor: pointer;
-        min-width: 1px;
+        min-width: 100px;
+       
+        width: 33%;
     }
 
-        #thumbnail li img {
-            padding: 0;
-            float: left;
-            margin: 0px 1.5px;
-            max-height: 100px;
-            height: 100px;
-           /*border: 1px solid black;*/
-        }
+#thumbnail li img {
+    padding: 0;
+/*    float: left;*/
+  /*  margin: 0px 1.5px;*/
+    max-height: 100px;
+    width:100%;
+    height: 100px;
+    /*border: 1px solid black;*/
+}
 
-        #thumbnail li:first-child img {
-            margin-right: 0px;
-            margin-left: 0px;
-        }	
+#thumbnail li:first-child img {
+    margin-right: 0px;
+    margin-left: 0px;
+}	

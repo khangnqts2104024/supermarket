@@ -1,19 +1,31 @@
-﻿	@model SuperMarket_Models.Models.Branch
-
+﻿
 <div class="container">
-<div>
-	<h2>Closest Location Recommendation: </h2>
+<div class="mb60">
+	<h2>Find The Closest Store : </h2>
+    
+    <div>
+        <div class="row">
+            <div class="col-md-5">
+                <div id="showResult">
+                   <button id="calDistance" class="btn btn-warning">Click here</button>
+               </div>
+            </div>
+            <div class="col-md-7">
+               
+            </div>
+        </div>
+    </div>
+  
 </div>
-<div class="mb30">
-	<span style="color:red;font-size:30px;"  id="branchNameClosest"> @Model.BranchName</span>
-</div>  
+
+  
 
 
 <!-- Store Locator -->
   <iframe src="https://my.atlistmaps.com/map/2517e2e6-e937-413b-afa1-51359e82830e?share=true" allow="geolocation" width="100%" height="800" frameborder="0" scrolling="no" allowfullscreen></iframe>
 
-  @{
-    if(TempData["MsgSuccess"] != null)
+  
+    @if(TempData["MsgSuccess"] != null)
     {
                @section Scripts{
                 <script type="text/javascript">
@@ -26,19 +38,19 @@
                     })
 
                 </script>
-                }
+                }                                                                               
     } 
      
-}
+
  
 
   <!-- Our Contact -->
   <section class="our-contact bgc-f5 p0">
     <div class="container-fluid p0">
       <div class="row">
-        <div class="col-lg-7" style="background-color:rgb(71,113,227)" >
+        <div class="col-lg-7" style="background-color:	#FFF0F5" >
           <div class="h700" style="display: flex;align-items: center;justify-content: center;" id="map-canvas">
-              <p style="font-size:100px; " class="text-center text-light">Contact Us</p>
+             <img src="~/Asset/images/about/contactus.jpg" />
           </div>
         </div>
         <div class="col-lg-5">
@@ -83,3 +95,44 @@
     </div>
   </section>
 </div>
+
+@section Scripts{
+    <script type="text/javascript">
+        
+        
+        $(function() {
+            var x = document.getElementById("demo");
+            $("#calDistance").on("click", function() {
+                getLocation();
+            });
+        });
+        
+        
+        function getLocation(){
+             if (navigator.geolocation) {
+                 navigator.geolocation.getCurrentPosition(showPosition);
+              } else { 
+                x.innerHTML = "Geolocation is not supported by this browser.";
+              }
+        }
+
+        function showPosition(position) {
+            $.ajax({
+                url: "/Customer/StoreLocator/FindShortestBranch",
+                type: "GET",
+                data: { latituteUser : position.coords.latitude, longitudeUser : position.coords.longitude },
+                success: function(response) {
+                    if(response.data != "" && response.data != undefined){
+                        $("#showResult").html(`
+                            <h3  style="color:Blue;">Store Name:  ${response.data.branchName} </h3> 
+                            <h3  style="color:Blue;">Address:  ${response.data.address}  </h3> 
+                            <h3  style="color:Blue;">Phone:  ${response.data.phone}  </h3> 
+                        `);
+                    }
+                }
+            });
+        }
+           
+
+    </script>
+}

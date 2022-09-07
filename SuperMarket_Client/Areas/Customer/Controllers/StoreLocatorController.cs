@@ -12,59 +12,16 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
     public class StoreLocatorController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly HttpClient _httpClient;
-        //create constructor and call HttpClient
+   
         public StoreLocatorController(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
-            _httpClient = new HttpClient()
-            {
-                Timeout = TimeSpan.FromSeconds(5)
-            };
         }
-        private async Task<string> GetIPAddress()
-        {
-            try
-            {
-                var ipAddress = await _httpClient.GetAsync($"http://ipinfo.io/ip");
-                if (ipAddress.IsSuccessStatusCode)
-                {
-                    var json = await ipAddress.Content.ReadAsStringAsync();
-                    return json.ToString();
-                }
-                return "";
-            }
-            catch (Exception)
-            {
-                return "";
-            }
-        }
+       
 
-        public async Task<string> GetGeoInfo()
+        public IActionResult Index()
         {
-            try
-            {
-                //I have already created this function under GeoInfoProvider class.
-                var ipAddress = await GetIPAddress();
-                // When geting ipaddress, call this function and pass ipaddress as given below
-                var response = await _httpClient.GetAsync($"http://api.ipstack.com/" + ipAddress + "?access_key=314a29c1b728e0c80705ef749c0e4059");
-                if (response.IsSuccessStatusCode)
-                {
-                    var json = await response.Content.ReadAsStringAsync();
-                    return json;
-                }
-                return null;
-            }
-            catch (Exception)
-            {
-                return "";
-            }
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            Branch shortestbranch = await FindShortestBranch();
-            return View(shortestbranch);
+            return View();
         }
 
         [HttpPost]
@@ -82,23 +39,19 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             return View();
         }
 
-
-        public async Task<Branch> FindShortestBranch()
+        [HttpGet]
+        public async Task<IActionResult> FindShortestBranch(string latituteUser, string longitudeUser)
         {
             var branch = await unitOfWork.Branch.GetAll();
             if(branch != null)
             {
-                var result = await GetGeoInfo();
-                if (!string.IsNullOrEmpty(result))
-                {
-                    string latituteUser = JObject.Parse(result)["latitude"].ToString();
-                    string longitudeUser = JObject.Parse(result)["longitude"].ToString();
                     if (!string.IsNullOrEmpty(latituteUser) && !string.IsNullOrEmpty(longitudeUser))
                     {
                         Location currentUserLocation = new Location()
                         {
                             Latitude = double.Parse(latituteUser),
                             Longitude = double.Parse(longitudeUser)
+
                         };
                         List<Location> storeLocation = new List<Location>();
                         List<double> distances = new List<double>();
@@ -122,12 +75,21 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                             var shortestBranch = branch.FirstOrDefault(x => x.BranchId == selectbranch.BranchId);
                             if(shortestBranch != null)
                             {
-                                return shortestBranch;
-
+                                return Json(new
+                                {
+                                    data = shortestBranch
+                                });
+                            }
+                            else
+                            {
+                                return Json(new
+                                {
+                                    data = ""
+                                });
                             }
                         }
                     }
-                }
+                
             }
             
 

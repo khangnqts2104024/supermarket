@@ -143,6 +143,7 @@ var isApplied = false;
                 type: "POST",
                 data: { content: content, ratingPoint: id, productId: productId },
                 success: function (response) {
+                    console.log(response)
                     if (response.statusCode == 401 || response.statusCode == 400) {
                         Swal.fire({
                             icon: 'error',
@@ -154,7 +155,7 @@ var isApplied = false;
                         let data = `
                                  <div class="mbp_first d-flex align-items-center">
                                 <div class="flex-shrink-0">
-                                  <img src="images/blog/reviewer1.png" class="mr-3" alt="reviewer1.png">
+                                  <img src="${response.content.customer.customerAvatar}" class="mr-3" alt="reviewer1.png">
                                 </div>
                                 <div class="flex-grow-1 ms-4">
                                   <h4 class="sub_title mt20">${response.content.customer.fullName}</h4>
@@ -770,7 +771,7 @@ var isApplied = false;
 
         $("#ProceedCheckout").on("click", function (e) {
             $.ajax({
-                url: "/Customer/Cart/CheckCount",
+                url: "/Customer/Cart/CheckCartBeforeCheckout",
                 type: "GET",
                 success: function (response) {
                     if (response.statusCode == 200 && response.count != 0) {
@@ -1040,6 +1041,7 @@ var isApplied = false;
             $quantityArrowPlus.click(quantityPlus);
 
             function quantityMinus() {
+                
                 let stockCount = parseInt($("#stockCount").text())
                 if ($quantityNum.val() > 1) {
                     $quantityNum.val(+$quantityNum.val() - 1);
@@ -1053,13 +1055,23 @@ var isApplied = false;
             }
             function quantityPlus() {
                 let stockCount = parseInt($("#stockCount").text());
-
-                if ($quantityNum.val() == stockCount) {
-                    $("#messageLimitedQuantity").text("The product you have selected has reached a limited quantity");
-                } else {
-                    $quantityNum.val(+$quantityNum.val() + 1);
-                    $("#messageLimitedQuantity").text("");
-                }
+                let productId = $("#ProductId").val();
+                let countNumber = parseInt($("#Count").val());
+                $.ajax({
+                    url: "/Customer/Cart/Plus",
+                    type: "POST",
+                    data: { productId: productId, itemCount: countNumber },
+                    success: function (response) {
+                        console.log(response)
+                        if (response.statusCode == 400 || $quantityNum.val() == stockCount) {
+                            $("#messageLimitedQuantity").text("The product you have selected has reached a limited quantity");
+                        } else {
+                            $quantityNum.val(+$quantityNum.val() + 1);
+                            $("#messageLimitedQuantity").text("");
+                        }
+                    }
+                });
+               
             }
         })();
 
@@ -2167,7 +2179,6 @@ var isApplied = false;
 
 
 $(function () {
-
     $('#thumbnail li').click(function () {
         var thisIndex = $(this).index()
 

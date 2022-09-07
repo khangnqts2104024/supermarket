@@ -14,7 +14,7 @@
 	</div>
 	<div class="option-container">
 
-		<a class="option" asp-action="" asp-controller="" asp-area="">
+		<a class="option" asp-action="Index" asp-controller="Order" asp-area="Admin">
 			All
 		</a>
 		<a class="option" asp-action="Index" asp-controller="Order" asp-area="Admin" asp-route-status ="@SD.StatusApproved">
@@ -67,9 +67,7 @@
 			}
 			<td><a asp-action="OrderDetails" asp-controller="Order" asp-area="Admin" asp-route-OrderId="@item.OrderId">Details</a></td>
 			</tr>
-
 			}
-
 		</tbody>
 		<tfoot>
 			<tr>
