@@ -95,47 +95,84 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Plus(int cartId, int itemCount)
+        public async Task<IActionResult> Plus(int cartId, int itemCount,int? productId)
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             //check branchId is exists in Cookie
             var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"],out int result);
-
-            var cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CartId == cartId, includeProperties: "Product");
-            if (cartFromDb != null)
+            var cartFromDb = new ShoppingCart();
+            if (productId != null)
             {
-                var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == result && x.ProductId == cartFromDb.ProductId);
+                 cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.ProductId == productId && x.CustomerId == claim.Value, includeProperties: "Product");
+                if (cartFromDb != null && branchId == true)
+                {
+                    var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == result && x.ProductId == cartFromDb.ProductId);
 
-                if (itemCount == stock.Count)
+                    if (itemCount == stock.Count || itemCount + cartFromDb.Count >= stock.Count)
+                    {
+                        return Json(new
+                        {
+                            statusCode = 400,
+                            message = "The product you have selected has reached a limited quantity",
+                        });
+                    }
+
+                    return Json(new
+                    {
+                        statusCode = 200,
+                        message = "Increment Count Successfully",
+                    });
+                }
+                else
                 {
                     return Json(new
                     {
-                        statusCode = 400,
-                        message = "The product you have selected has reached a limited quantity",
+                        statusCode = 404,
+                        message = "Cannot Found Item"
+                    });
+                }
+            }
+            else
+            {
+                 cartFromDb = await unitOfWork.ShoppingCart.GetFirstOrDefault(x => x.CartId == cartId, includeProperties: "Product");
+                if (cartFromDb != null && branchId == true)
+                {
+                    var stock = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == result && x.ProductId == cartFromDb.ProductId);
+
+                    if (itemCount == stock.Count)
+                    {
+                        return Json(new
+                        {
+                            statusCode = 400,
+                            message = "The product you have selected has reached a limited quantity",
+                            count = cartFromDb.Count,
+                            subTotalItem = cartFromDb.Product.Price * cartFromDb.Count,
+                            subTotalOrder = await GetOrderTotal()
+                        });
+                    }
+
+                    unitOfWork.ShoppingCart.IncrementCount(cartFromDb, 1);
+                    await unitOfWork.Save();
+                    return Json(new
+                    {
+                        statusCode = 200,
+                        message = "Increment Count Successfully",
                         count = cartFromDb.Count,
                         subTotalItem = cartFromDb.Product.Price * cartFromDb.Count,
                         subTotalOrder = await GetOrderTotal()
                     });
                 }
-
-                unitOfWork.ShoppingCart.IncrementCount(cartFromDb, 1);
-                await unitOfWork.Save();
-                return Json(new
+                else
                 {
-                    statusCode = 200,
-                    message = "Increment Count Successfully",
-                    count = cartFromDb.Count,
-                    subTotalItem = cartFromDb.Product.Price * cartFromDb.Count,
-                    subTotalOrder = await GetOrderTotal()
-                });
+                    return Json(new
+                    {
+                        statusCode = 404,
+                        message = "Cannot Found Item"
+                    });
+                }
             }
-            else
-            {
-                return Json(new
-                {
-                    statusCode = 404,
-                    message = "Cannot Found Item"
-                });
-            }
+            
         }
 
         [HttpPost]
@@ -382,7 +419,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CheckCount()
+        public async Task<IActionResult> CheckCartBeforeCheckout()
         {
             if (User.Identity != null)
             {

@@ -34,6 +34,7 @@ namespace SuperMarket_Client.ViewComponents
             }
 
             ViewBag.CartCount = cartList.Count();
+            ViewBag.cartId = cartList.FirstOrDefault().CartId;
             ViewBag.totalCart = totalCart;
             return View("CartList", cartList);
         }
