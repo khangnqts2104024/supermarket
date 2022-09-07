@@ -1054,13 +1054,23 @@ var isApplied = false;
             }
             function quantityPlus() {
                 let stockCount = parseInt($("#stockCount").text());
+                let productId = $("#ProductId").val();
+                let countNumber = parseInt($("#Count").val());
+                $.ajax({
+                    url: "/Customer/Cart/Plus",
+                    type: "POST",
+                    data: { productId: productId, itemCount: countNumber },
+                    success: function (response) {
+                        console.log(response)
+                        if (response.statusCode == 400 || $quantityNum.val() == stockCount) {
+                            $("#messageLimitedQuantity").text("The product you have selected has reached a limited quantity");
+                        } else {
+                            $quantityNum.val(+$quantityNum.val() + 1);
+                            $("#messageLimitedQuantity").text("");
+                        }
+                    }
+                });
                
-                if ($quantityNum.val() == stockCount) {
-                    $("#messageLimitedQuantity").text("The product you have selected has reached a limited quantity");
-                } else {
-                    $quantityNum.val(+$quantityNum.val() + 1);
-                    $("#messageLimitedQuantity").text("");
-                }
             }
         })();
 
