@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using SuperMarket_DataAccess.Repository.IRepository;
@@ -8,7 +9,7 @@ using System.Collections.Generic;
 namespace SuperMarket_Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
-
+    [Authorize]
     public class BrandController : Controller
     {
         private readonly IUnitOfWork unitOfWork;

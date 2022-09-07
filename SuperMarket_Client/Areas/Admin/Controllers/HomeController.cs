@@ -7,7 +7,7 @@ using SuperMarket_Utility;
 namespace SuperMarket_Client.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    //[Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -15,7 +15,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         {
             this.unitOfWork = unitOfWork;
         }
-        //[Authorize(Roles ="Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             return View();
