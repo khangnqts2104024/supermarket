@@ -25,8 +25,6 @@ namespace SuperMarket_DataAccess.Services
                 objFromDb.Title = obj.Title;
                 objFromDb.Description = obj.Description;
                 objFromDb.CreatedDate = obj.CreatedDate;
-                objFromDb.ManufactureDate = obj.ManufactureDate;
-                objFromDb.ExpiryDate = obj.ExpiryDate;
                 objFromDb.Weight = obj.Weight;
                 obj.Brand_Category = obj.Brand_Category;
                 _db.Products.Update(objFromDb);

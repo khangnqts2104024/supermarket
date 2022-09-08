@@ -12,8 +12,8 @@ using SuperMarket_DataAccess.Data;
 namespace SuperMarket_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220905152427_khang")]
-    partial class khang
+    [Migration("20220908133923_spm")]
+    partial class spm
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
