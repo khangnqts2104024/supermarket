@@ -18,118 +18,184 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Error", new {area="Customer"});
+            }
         }
         public async Task<IActionResult> GetAllBranch()
         {
-            var data = await unitOfWork.Branch.GetAll();
-            return Json(new { data = data });
+            try
+            {
+                var data = await unitOfWork.Branch.GetAll();
+                return Json(new { data = data });
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
+            }
+
         }
         [HttpGet]
         public async Task<IActionResult> CreateBranch(string? msg)
         {
-            if (msg != null)
+            try
             {
-                ViewBag.msg = msg;
+                if (msg != null)
+                {
+                    ViewBag.msg = msg;
+                }
+                return View();
             }
-            return View();
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
+            }
+
         }
         [HttpPost]
         public async Task<IActionResult> CreateBranch(Branch obj,IFormFile BranchImg)
         {
-            string wwwRootPath = env.WebRootPath;
-
-            if (obj != null && BranchImg !=null )
+            try
             {
-                string fileName = Guid.NewGuid().ToString();
-                var uploads = Path.Combine(wwwRootPath, @"Images\BranchImage");
-                var extension = Path.GetExtension(BranchImg.FileName);
-                using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                string wwwRootPath = env.WebRootPath;
+
+                if (obj != null && BranchImg != null)
                 {
-                    BranchImg.CopyTo(fileStreams);
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(wwwRootPath, @"Images\BranchImage");
+                    var extension = Path.GetExtension(BranchImg.FileName);
+                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        BranchImg.CopyTo(fileStreams);
+                    }
+                    obj.BranchImg = @"\Images\BranchImage\" + fileName + extension;
+                    await unitOfWork.Branch.Add(obj);
+                    await unitOfWork.Save();
+                    var msg = "Add successfully";
+                    return RedirectToAction("CreateBranch", new { msg = msg });
+
                 }
-                obj.BranchImg = @"\Images\BranchImage\" + fileName + extension;
-                await unitOfWork.Branch.Add(obj);
-                await unitOfWork.Save();
-                var msg = "Add successfully";
-                return RedirectToAction("CreateBranch", new { msg = msg });
+                else
+                {
+                    var msg = "Some thing went wrong.";
+                    return RedirectToAction("CreateBranch", new { msg = msg });
 
+                }
             }
-            else
+            catch (Exception)
             {
-                var msg = "Some thing went wrong.";
-                return RedirectToAction("CreateBranch", new { msg = msg });
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
 
             }
+
         }
         [HttpDelete]
         public async Task<IActionResult> DeleteBranch(int id)
         {
-            string wwwRootPath = env.WebRootPath;
-
-            var data = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == id);
-            if(data == null)
+            try
             {
-                var temp=await unitOfWork.Branch.GetFirstOrDefault(x => x.BranchId == id);
-                var oldImgPath = Path.Combine(wwwRootPath, temp.BranchImg.TrimStart('\\'));
-                if (System.IO.File.Exists(oldImgPath))
+                string wwwRootPath = env.WebRootPath;
+
+                var data = await unitOfWork.Stock.GetFirstOrDefault(x => x.BranchId == id);
+                if (data == null)
                 {
-                    System.IO.File.Delete(oldImgPath);
+                    var temp = await unitOfWork.Branch.GetFirstOrDefault(x => x.BranchId == id);
+                    var oldImgPath = Path.Combine(wwwRootPath, temp.BranchImg.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImgPath))
+                    {
+                        System.IO.File.Delete(oldImgPath);
+                    }
+                    unitOfWork.Branch.Remove(temp);
+                    await unitOfWork.Save();
+                    return Json(new { success = true, msg = "Branch has been deleted." });
+
                 }
-                unitOfWork.Branch.Remove(temp);
-                await unitOfWork.Save();
-                return Json(new { success = true, msg = "Branch has been deleted." });
+                else
+                {
+                    return Json(new { success = false, msg = "This Branch's Stocks are still available, can not delete unless delete all Stocks." });
+                }
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
 
             }
-            else
-            {
-                return Json(new { success = false, msg = "This Branch's Stocks are still available, can not delete unless delete all Stocks." });
-            }
+
         }
         [HttpGet]
         public async Task<IActionResult> UpdateBranch(int id,string msg)
         {
-            var data = await unitOfWork.Branch.GetFirstOrDefault(x => x.BranchId == id);
-            if (msg != null)
+            try
             {
-                ViewBag.msg = msg;
+                var data = await unitOfWork.Branch.GetFirstOrDefault(x => x.BranchId == id);
+                if (msg != null)
+                {
+                    ViewBag.msg = msg;
+                }
+                return View(data);
             }
-            return View(data);
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
+            }
+
         }
         [HttpPost]
         public async Task<IActionResult> UpdateBranch(Branch obj,IFormFile BranchImg)
         {
-            string wwwRootPath = env.WebRootPath;
-            if (BranchImg != null)
+            try
             {
-                string fileName = Guid.NewGuid().ToString();
-                var uploads = Path.Combine(wwwRootPath, @"Images\BranchImage");
-                var extension = Path.GetExtension(BranchImg.FileName);
-                var temp = await unitOfWork.Branch.GetFirstOrDefault(x => x.BranchId == obj.BranchId);
-                var oldImgPath = Path.Combine(wwwRootPath, temp.BranchImg.TrimStart('\\'));
-                if (System.IO.File.Exists(oldImgPath))
+                string wwwRootPath = env.WebRootPath;
+                if (BranchImg != null)
                 {
-                    System.IO.File.Delete(oldImgPath);
-                }
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(wwwRootPath, @"Images\BranchImage");
+                    var extension = Path.GetExtension(BranchImg.FileName);
+                    var temp = await unitOfWork.Branch.GetFirstOrDefault(x => x.BranchId == obj.BranchId);
+                    var oldImgPath = Path.Combine(wwwRootPath, temp.BranchImg.TrimStart('\\'));
+                    if (System.IO.File.Exists(oldImgPath))
+                    {
+                        System.IO.File.Delete(oldImgPath);
+                    }
 
-                using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
-                {
-                    BranchImg.CopyTo(fileStreams);
+                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        BranchImg.CopyTo(fileStreams);
+                    }
+                    obj.BranchImg = @"\Images\BranchImage\" + fileName + extension;
+                    unitOfWork.Branch.Update(obj);
+                    await unitOfWork.Save();
+                    return RedirectToAction("UpdateBranch", new { id = obj.BranchId, msg = "Branch has been Updated." });
                 }
-                obj.BranchImg = @"\Images\BranchImage\" + fileName + extension;
-                unitOfWork.Branch.Update(obj);
-                await unitOfWork.Save();
-                return RedirectToAction("UpdateBranch", new { id = obj.BranchId, msg = "Branch has been Updated." });
+                else
+                {
+                    var temp = await unitOfWork.Branch.GetFirstOrDefault(x => x.BranchId == obj.BranchId);
+                    obj.BranchImg = temp.BranchImg;
+                    unitOfWork.Branch.Update(obj);
+                    await unitOfWork.Save();
+                    return RedirectToAction("UpdateBranch", new { id = obj.BranchId, msg = "Branch has been Updated." });
+                }
+                return null;
             }
-            else
+            catch (Exception)
             {
-                var temp = await unitOfWork.Branch.GetFirstOrDefault(x => x.BranchId == obj.BranchId);
-                obj.BranchImg = temp.BranchImg;
-                unitOfWork.Branch.Update(obj);
-                await unitOfWork.Save();
-                return RedirectToAction("UpdateBranch", new {id=obj.BranchId, msg = "Branch has been Updated." });
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
             }
-            return null;
+            
         }
 
     }

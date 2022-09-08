@@ -18,12 +18,22 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Brand_CategoryManage()
         {
-            var data = await unitOfWork.Brand_Category.GetAll(includeProperties: "Brand,Category");
-            var categoryList = await unitOfWork.Category.GetAll();
-            var product = await unitOfWork.Product.GetAll();
-            ViewBag.product = product;
-            ViewBag.CategoryList = categoryList;
-            return View(data);
+            try
+            {
+                var data = await unitOfWork.Brand_Category.GetAll(includeProperties: "Brand,Category");
+                var categoryList = await unitOfWork.Category.GetAll();
+                var product = await unitOfWork.Product.GetAll();
+                ViewBag.product = product;
+                ViewBag.CategoryList = categoryList;
+                return View(data);
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
+            }
+
         }
 
         //[HttpGet]
