@@ -104,13 +104,16 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         item.RatingPointAverage = CalculateRatingPointAverage((List<Feedback_Rating>)ratingList, item.Product.ProductId);
                     }
                 }
-                objVM.RelatedProduct = relatedProduct.ToList();
+                 objVM.RelatedProduct = relatedProduct.Take(7).ToList();
                 return View(objVM);
             }
             catch (Exception)
             {
                 return RedirectToAction("Index", "Error", new { area = "Customer" });
             }
+
+           
+
         }
 
         [HttpPost]
