@@ -38,9 +38,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             }
             catch (Exception)
             {
-
                 return RedirectToAction("Index", "Error", new { area = "Customer" });
-
             }
 
 
