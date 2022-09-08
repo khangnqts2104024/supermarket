@@ -27,24 +27,33 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> Contact(string fullname, string email, string phone, string message)
         {
-            string html = "<h3>" + fullname + "</h3>" +
-                "<p>" + email + "</p>" +
-                "<p>Phone: " + phone + "</p>" +
-                "<p> Message: " + message + "</p>";
+            try
+            {
+                string html = "<h3>" + fullname + "</h3>" +
+               "<p>" + email + "</p>" +
+               "<p>Phone: " + phone + "</p>" +
+               "<p> Message: " + message + "</p>";
 
-            string subject = "Customer have a question!";
-            EmailSender emailSender = new EmailSender();
-            await emailSender.UserSendEmailAsync(subject, html);
-            TempData["MsgSuccess"] = "Your Mail Has Been Sent!";
-            return View();
+                string subject = "Customer have a question!";
+                EmailSender emailSender = new EmailSender();
+                await emailSender.UserSendEmailAsync(subject, html);
+                TempData["MsgSuccess"] = "Your Mail Has Been Sent!";
+                return View();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> FindShortestBranch(string latituteUser, string longitudeUser)
         {
-            var branch = await unitOfWork.Branch.GetAll();
-            if(branch != null)
+            try
             {
+                var branch = await unitOfWork.Branch.GetAll();
+                if (branch != null)
+                {
                     if (!string.IsNullOrEmpty(latituteUser) && !string.IsNullOrEmpty(longitudeUser))
                     {
                         Location currentUserLocation = new Location()
@@ -70,10 +79,10 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
                         var shortestDistance = storeLocation.Min(x => x.DistanceToUser);
                         var selectbranch = storeLocation.FirstOrDefault(x => x.DistanceToUser == shortestDistance);
-                        if(selectbranch != null)
+                        if (selectbranch != null)
                         {
                             var shortestBranch = branch.FirstOrDefault(x => x.BranchId == selectbranch.BranchId);
-                            if(shortestBranch != null)
+                            if (shortestBranch != null)
                             {
                                 return Json(new
                                 {
@@ -89,11 +98,17 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                             }
                         }
                     }
-                
-            }
-            
 
-            return null;
+                }
+
+
+                return null;
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+            }
         }
 
         public double CalculateDistance(Location location1, Location currentUserLocation)

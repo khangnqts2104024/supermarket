@@ -23,9 +23,6 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             try
             {
                 ProductController productController = new ProductController(unitOfWork);
-
-
-
                 if (id == null)
                 {
                     var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"], out int result);
@@ -61,7 +58,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             catch (Exception)
             {
 
-                return RedirectToAction("Index", "Error"); 
+                return RedirectToAction("Index", "Error" ,new { area = "Customer" }); 
 
             }
 
@@ -69,19 +66,29 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         }
         public async Task<IActionResult> CreateCookieForBrachId(int selectBranch)
         {
-
-            var branch = await unitOfWork.Branch.GetFirstOrDefault(x=>x.BranchId == selectBranch);
-
-            if(branch != null)
+            try
             {
-                CookieOptions cookieOptions = new CookieOptions() {
-                    Expires = DateTime.Now.AddDays(30),
-                };
-                Response.Cookies.Append("branchId", selectBranch.ToString(),cookieOptions);
-                Response.Cookies.Append("branchName", branch.BranchName, cookieOptions);
+                var branch = await unitOfWork.Branch.GetFirstOrDefault(x => x.BranchId == selectBranch);
+
+                if (branch != null)
+                {
+                    CookieOptions cookieOptions = new CookieOptions()
+                    {
+                        Expires = DateTime.Now.AddDays(30),
+                    };
+                    Response.Cookies.Append("branchId", selectBranch.ToString(), cookieOptions);
+                    Response.Cookies.Append("branchName", branch.BranchName, cookieOptions);
+                }
+
+                return RedirectToAction("Index", new { id = selectBranch });
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
             }
 
-            return RedirectToAction("Index", new {id=selectBranch});
         }
 
 
@@ -91,11 +98,30 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpGet]
         public IActionResult CartListViewComponent()
         {
-            return ViewComponent("CartList");
+            try
+            {
+                return ViewComponent("CartList");
+
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
+            }
         }
         public IActionResult AboutUs()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
+            }
         }
 
     }
