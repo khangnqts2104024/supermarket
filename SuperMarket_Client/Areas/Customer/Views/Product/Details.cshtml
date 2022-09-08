@@ -283,7 +283,15 @@
                                         }
                                         <div class="thumb_info">
                                             <ul class="mb0">
-                                                <li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@item.ProductId><span style="font-size:20px;" class="flaticon-shopping-cart"></span></li>
+                                                <li  data-toggle="tooltip" data-placement="top" title="View Detail">
+															<a href="/Customer/Product/Details?id=@item.ProductId">
+																<i class="fa fa-info-circle" aria-hidden="true"></i>
+															</a>
+														</li>
+
+														<li  data-toggle="tooltip" data-placement="top" title="Compare Product">
+															<a href="/Customer/Product/CompareProduct?CategoryId=@item.Product.Brand_Category.CategoryId&amp;productId=@item.ProductId"><span class="flaticon-search"></span></a>
+														</li>
                                             </ul>
                                         </div>
                                     </div>
@@ -303,9 +311,13 @@
                                             <div class="sub_title">@item.Product.Title <br> @item.Product.Weight</div>
                                             <div class="si_footer">
                                                 <div class="price">@item.Product.Price.ToString("c")</div>
-                                                <a href="/Customer/Product/Details?id=@item.ProductId" class="cart_btn btn-thm">
-                                                    <span class="flaticon-search mr10"></span>VIEW DETAIL
-                                                </a>
+                                                <div class="sell_stock mt20">
+														<div class="sell float-start">Weight: <span class="fwb">@item.Product.Weight</span></div>
+														<div class="stock float-end">Available: <span class="fwb">@item.Count</span></div>
+													</div>
+                                                <button class="addToCartHome cart_btn btn-thm" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@item.ProductId >
+																<span  class="flaticon-shopping-cart"></span> &nbsp; ADD TO CART
+												</button>
                                             </div>
                                         </div>
                                     </div>
