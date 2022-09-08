@@ -22,59 +22,87 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claimsIdentity == null || claim == null)
+            try
             {
-                return RedirectToAction("Index", "Home", new { Area = "Customer" });
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                if (claimsIdentity == null || claim == null)
+                {
+                    return RedirectToAction("Index", "Home", new { Area = "Customer" });
+                }
+                else
+                {
+                    var data = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id == claim.Value);
+                    return View(data);
+                }
             }
-            else
+            catch (Exception)
             {
-                var data = await unitOfWork.Customer.GetFirstOrDefault(x => x.Id == claim.Value);
-                return View(data);
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
             }
+
 
         }
         [HttpPost]
         public async Task<IActionResult> UpdateCustomer(SuperMarket_Models.Models.Customer customer, IFormFile? file)
         {
-            string wwwRootPath = env.WebRootPath;
-            if (file != null)
+            try
             {
-                string fileName = Guid.NewGuid().ToString();
-                var uploads = Path.Combine(wwwRootPath, @"Images\CustomerAvatar");
-                var extension = Path.GetExtension(file.FileName);
-
-                if (customer.CustomerAvatar != null)
+                string wwwRootPath = env.WebRootPath;
+                if (file != null)
                 {
-                    var oldImgPath = Path.Combine(wwwRootPath, customer.CustomerAvatar.TrimStart('\\'));
-                    if (System.IO.File.Exists(oldImgPath))
+                    string fileName = Guid.NewGuid().ToString();
+                    var uploads = Path.Combine(wwwRootPath, @"Images\CustomerAvatar");
+                    var extension = Path.GetExtension(file.FileName);
+
+                    if (customer.CustomerAvatar != null)
                     {
-                        System.IO.File.Delete(oldImgPath);
+                        var oldImgPath = Path.Combine(wwwRootPath, customer.CustomerAvatar.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImgPath))
+                        {
+                            System.IO.File.Delete(oldImgPath);
+                        }
                     }
-                }
 
-                using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
-                {
-                    file.CopyTo(fileStreams);
+                    using (var fileStreams = new FileStream(Path.Combine(uploads, fileName + extension), FileMode.Create))
+                    {
+                        file.CopyTo(fileStreams);
+                    }
+                    customer.CustomerAvatar = @"\Images\CustomerAvatar\" + fileName + extension;
+                    unitOfWork.Customer.Update(customer);
+                    await unitOfWork.Save();
+                    return RedirectToAction("Index", new { id = customer.Id });
                 }
-                customer.CustomerAvatar = @"\Images\CustomerAvatar\" + fileName + extension;
-                unitOfWork.Customer.Update(customer);
-                await unitOfWork.Save();
-                return RedirectToAction("Index", new { id = customer.Id });
+                else
+                {
+                    unitOfWork.Customer.Update(customer);
+                    await unitOfWork.Save();
+                    return RedirectToAction("Index", new { id = customer.Id });
+                }
             }
-            else
+            catch (Exception)
             {
-                unitOfWork.Customer.Update(customer);
-                await unitOfWork.Save();
-                return RedirectToAction("Index", new { id = customer.Id });
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
             }
+
         }
 
         [HttpGet]
         public async Task<IActionResult> Order()
         {
-            return View();
+            try
+            {
+                return View();
+            }
+            catch (Exception)
+            {
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
+            }
         }
 
         
@@ -83,24 +111,34 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> CancelRequest(int orderId)
         {
-            if(orderId != 0)
+            try
             {
-                var order = await unitOfWork.Order.GetFirstOrDefault(x => x.OrderId == orderId && x.OrderStatus == SD.StatusApproved);
-                if (order != null)
+                if (orderId != 0)
                 {
-                    unitOfWork.Order.UpdateStatus(orderId, SD.StatusCancelRequest);
-                    await unitOfWork.Save();
-                    TempData["MsgCancelOrder"] = "Cancel Request Has Been Sent!";
-                    return RedirectToAction("Order", "Customer");
+                    var order = await unitOfWork.Order.GetFirstOrDefault(x => x.OrderId == orderId && x.OrderStatus == SD.StatusApproved);
+                    if (order != null)
+                    {
+                        unitOfWork.Order.UpdateStatus(orderId, SD.StatusCancelRequest);
+                        await unitOfWork.Save();
+                        TempData["MsgCancelOrder"] = "Cancel Request Has Been Sent!";
+                        return RedirectToAction("Order", "Customer");
+                    }
+                    else
+                    {
+                        TempData["MsgCancelOrder"] = "Can't cancel the order because the order has been completed";
+                        return RedirectToAction("Order", "Customer");
+                    }
                 }
-                else
-                {
-                    TempData["MsgCancelOrder"] = "Can't cancel the order because the order has been completed";
-                    return RedirectToAction("Order", "Customer");
-                }
+
+                return RedirectToAction("Order", "Customer");
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
             }
 
-            return RedirectToAction("Order", "Customer");
 
         }
 
@@ -108,19 +146,29 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAllOrder()
         {
-            var claimIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            var orderList = await unitOfWork.Order.GetAll(x => x.CustomerId == claim.Value);
-
-            foreach (var item in orderList)
+            try
             {
-                item.OrderDetail = (List<SuperMarket_Models.Models.OrderDetail>)await unitOfWork.OrderDetail.GetAll(x => x.OrderId == item.OrderId, includeProperties: "Product");
+                var claimIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                var orderList = await unitOfWork.Order.GetAll(x => x.CustomerId == claim.Value);
+
+                foreach (var item in orderList)
+                {
+                    item.OrderDetail = (List<SuperMarket_Models.Models.OrderDetail>)await unitOfWork.OrderDetail.GetAll(x => x.OrderId == item.OrderId, includeProperties: "Product");
+                }
+
+                return Json(new
+                {
+                    data = orderList,
+                });
+            }
+            catch (Exception)
+            {
+
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
+
             }
 
-            return Json(new
-            {
-                data = orderList,
-            });
         }
         #endregion
 
