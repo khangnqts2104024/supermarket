@@ -23,9 +23,6 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             try
             {
                 ProductController productController = new ProductController(unitOfWork);
-
-
-
                 if (id == null)
                 {
                     var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"], out int result);
@@ -61,7 +58,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             catch (Exception)
             {
 
-                return RedirectToAction("Index", "Error"); 
+                return RedirectToAction("Index", "Error" ,new { area = "Customer" }); 
 
             }
 
@@ -88,7 +85,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             catch (Exception)
             {
 
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
 
             }
 
@@ -109,7 +106,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             catch (Exception)
             {
 
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
 
             }
         }
@@ -122,7 +119,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
             catch (Exception)
             {
 
-                return RedirectToAction("Index", "Error");
+                return RedirectToAction("Index", "Error", new { area = "Customer" });
 
             }
         }

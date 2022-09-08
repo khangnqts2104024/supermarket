@@ -25,36 +25,48 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> AddCoupon(string couponCode)
         {
-        //check coupon
-
-            var coupon =await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponCode.Equals(couponCode));
-            if (coupon != null)
+            try
             {
-                if (coupon.ExpiredDate > DateTime.Now)
+                //check coupon
+
+                var coupon = await unitOfWork.Coupon.GetFirstOrDefault(c => c.CouponCode.Equals(couponCode));
+                if (coupon != null)
                 {
-                    if(coupon.Count > 0)
+                    if (coupon.ExpiredDate > DateTime.Now)
                     {
-                        var discountPercent = coupon.DiscountPercent;
-                        var orderTotalBeforeCoupon = await GetOrderTotal();
-                        var orderTotalAfterCoupon = orderTotalBeforeCoupon * (100 - discountPercent) / 100;
-                        var discountAmount = orderTotalBeforeCoupon - orderTotalAfterCoupon;
+                        if (coupon.Count > 0)
+                        {
+                            var discountPercent = coupon.DiscountPercent;
+                            var orderTotalBeforeCoupon = await GetOrderTotal();
+                            var orderTotalAfterCoupon = orderTotalBeforeCoupon * (100 - discountPercent) / 100;
+                            var discountAmount = orderTotalBeforeCoupon - orderTotalAfterCoupon;
                             return Json(new
                             {
-                            statusCode = 200,
-                            cpCode = coupon.CouponCode,
-                            message = "Applied Coupon Successfully",
-                            orderTotalBeforeCoupon = orderTotalBeforeCoupon,
-                            orderTotalAfterCoupon = orderTotalAfterCoupon,
-                            discountAmount = discountAmount,
-                            couponId = coupon.CouponId
+                                statusCode = 200,
+                                cpCode = coupon.CouponCode,
+                                message = "Applied Coupon Successfully",
+                                orderTotalBeforeCoupon = orderTotalBeforeCoupon,
+                                orderTotalAfterCoupon = orderTotalAfterCoupon,
+                                discountAmount = discountAmount,
+                                couponId = coupon.CouponId
                             });
+                        }
+                        else
+                        {
+                            return Json(new
+                            {
+                                statusCode = 200,
+                                cpCode = SD.CouponExpired
+                            });
+                        }
+
                     }
                     else
                     {
                         return Json(new
                         {
                             statusCode = 200,
-                            cpCode = SD.CouponExpired
+                            cpCode = "Expired"
                         });
                     }
 
@@ -64,38 +76,45 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     return Json(new
                     {
                         statusCode = 200,
-                        cpCode = "Expired"
+                        cpCode = SD.CouponNotExists
                     });
                 }
-
             }
-            else 
+            catch (Exception)
             {
                 return Json(new
                 {
-                    statusCode = 200,
-                    cpCode = SD.CouponNotExists
+                    statusCode = 500,
+                    cpCode = "N/A"
                 });
             }
         }
 
         public async Task<decimal> GetOrderTotal()
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            ShoppingCartVM shoppingCartVM = new ShoppingCartVM()
+            try
             {
-                ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product"),
-                Order = new(),
-                //khang
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                ShoppingCartVM shoppingCartVM = new ShoppingCartVM()
+                {
+                    ListCart = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product"),
+                    Order = new(),
+                    //khang
 
-            };
+                };
 
-            foreach (var item in shoppingCartVM.ListCart)
-            {
-                shoppingCartVM.Order.OrderTotal += (item.Product.Price * item.Count);
+                foreach (var item in shoppingCartVM.ListCart)
+                {
+                    shoppingCartVM.Order.OrderTotal += (item.Product.Price * item.Count);
+                }
+                return shoppingCartVM.Order.OrderTotal;
             }
-            return shoppingCartVM.Order.OrderTotal;
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
        

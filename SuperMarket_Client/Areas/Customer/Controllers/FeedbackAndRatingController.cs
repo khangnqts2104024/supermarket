@@ -21,61 +21,70 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitReview(int productId, string content, int ratingPoint)
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            if (claimsIdentity == null || claim == null)
+            try
             {
-                return Json(new
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                if (claimsIdentity == null || claim == null)
                 {
-                    statusCode = 401,
-                    message = "Please Login to Review",
-                });
-            }
-            int? branchId = int.Parse(HttpContext.Request.Cookies["branchId"]);
-            if(branchId != 0)
-            {
-                var product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == productId);
-                if (product != null)
-                {
-                    if(!string.IsNullOrEmpty(content))
-                    {
-                        var feedback = new Feedback_Rating()
-                        {
-                            Content = content,
-                            RatingPoint = ratingPoint,
-                            CustomerId = claim.Value,
-                            ProductId = productId,
-                        };
-                        await unitOfWork.Feedback_Rating.Add(feedback);
-                        await unitOfWork.Save();
-
-                        return Json(new
-                        {
-                            statusCode = 200,
-                            message = "Send Feedback successfully",
-                            content = await unitOfWork.Feedback_Rating.GetFirstOrDefault(x => x.Id == feedback.Id, includeProperties: "Customer")
-                        });
-                    }
                     return Json(new
                     {
-                        statusCode = 400,
-                        message = "Bad Request",
+                        statusCode = 401,
+                        message = "Please Login to Review",
                     });
+                }
+                var branchId = int.TryParse(HttpContext.Request.Cookies["branchId"], out int result);
+                if (result != 0)
+                {
+                    var product = await unitOfWork.Product.GetFirstOrDefault(x => x.ProductId == productId);
+                    if (product != null)
+                    {
+                        if (!string.IsNullOrEmpty(content))
+                        {
+                            var feedback = new Feedback_Rating()
+                            {
+                                Content = content,
+                                RatingPoint = ratingPoint,
+                                CustomerId = claim.Value,
+                                ProductId = productId,
+                            };
+                            await unitOfWork.Feedback_Rating.Add(feedback);
+                            await unitOfWork.Save();
 
-
+                            return Json(new
+                            {
+                                statusCode = 200,
+                                message = "Send Feedback successfully",
+                                content = await unitOfWork.Feedback_Rating.GetFirstOrDefault(x => x.Id == feedback.Id, includeProperties: "Customer")
+                            });
+                        }
+                        return Json(new
+                        {
+                            statusCode = 400,
+                            message = "Bad Request",
+                        });
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index", "Error", new
+                        {
+                            area = "Customer"
+                        });
+                    }
                 }
                 else
                 {
                     return RedirectToAction("Index", "Home");
                 }
             }
-            else
+            catch (Exception)
             {
-                return RedirectToAction("Index", "Home");
-            }
+                return RedirectToAction("Index", "Error", new
+                {
+                    area = "Customer"
+                });
+            }           
 
-            
-            
         }
     }
 }

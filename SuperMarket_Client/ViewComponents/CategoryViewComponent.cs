@@ -16,9 +16,16 @@ namespace SuperMarket_Client.ViewComponents
         }
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var categoryList = await unitOfWork.Category.GetAll();
+            try
+            {
+                var categoryList = await unitOfWork.Category.GetAll();
+                return View("CategoryList", categoryList);
+            }
+            catch (Exception)
+            {
 
-            return View("CategoryList", categoryList);
+                throw;
+            }
         }
     }
 }
