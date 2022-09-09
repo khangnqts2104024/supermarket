@@ -22084,4 +22084,13 @@ TEST THUMBNAIL CAROUSEL*/
 #thumbnail li:first-child img {
     margin-right: 0px;
     margin-left: 0px;
-}	
+}
+
+/*khang*/
+.btn-color { background-color:whitesmoke;
+            
+}
+.boder-chosen {
+    border: solid 1px #86BC42;
+    border-radius:15px;
+}
