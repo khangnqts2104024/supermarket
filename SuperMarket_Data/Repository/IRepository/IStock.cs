@@ -9,5 +9,6 @@ namespace SuperMarket_DataAccess.Repository.IRepository
 
         void IncrementStock(Stock obj,int count);
         void DecrementStock(Stock obj,int count);
+        void UpdateStock(Stock obj, int count);
     }
 }

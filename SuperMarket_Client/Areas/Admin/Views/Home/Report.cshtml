@@ -1,0 +1,329 @@
+﻿@using Newtonsoft.Json
+<div class="report-container">
+	<!-- Button trigger modal -->
+	<button id="chart1" type="button" class="manage-option" data-toggle="modal" data-target="#donutmodel">
+		<!-- click -->
+		<div class="">
+	<i class="fas fa-chart-pie"></i>
+			<p>Ratio of Order in Year!</p>
+		</div>
+	</button>
+	<!-- Modal -->
+	<div class="modal fade" id="donutmodel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Ratio of Order in Year!</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- Body -->
+					<div class="card-body">
+						<div class="chartjs-size-monitor">
+							<div class="chartjs-size-monitor-expand">
+								<div class=""></div>
+							</div>
+							<div class="chartjs-size-monitor-shrink">
+								<div class=""></div>
+							</div>
+						</div>
+						<canvas id="donutChart" style="min-height: 250px; height: 300px; max-height: 300px; max-width: 100%; display: block; width: 425px;" width="600" height="300" class="chartjs-render-monitor"></canvas>
+						<div>
+							<p></p>
+							<p class="report1"></p>
+							<p class="report1"> </p>
+							<p class="report1"> </p>
+						</div>
+						
+					</div>
+					<p class="text-danger">*Other is all Order in process!</p>
+				</div>
+				<div class="modal-footer">
+					
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+	<button id="chart2" type="button" class="manage-option" data-toggle="modal" data-target="#linemodel">
+		<!-- click -->
+		<div class="">
+		<i class="fas fa-fw fa-chart-area"></i>
+			<p>Orders By Year Quarters</p>
+		</div>
+	</button>
+	<!-- Modal -->
+	<div class="modal fade" id="linemodel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Orders By Year Quarters</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- Body -->
+					<div class="card-body">
+						<div class="chartjs-size-monitor">
+							<div class="chartjs-size-monitor-expand">
+								<div class=""></div>
+							</div>
+							<div class="chartjs-size-monitor-shrink">
+								<div class=""></div>
+							</div>
+						</div>
+						<canvas id="lineChart" style="min-height: 250px; height: 300px; max-height: 300px; max-width: 100%; display: block; width: 425px;" width="600" height="300" class="chartjs-render-monitor"></canvas>
+						<div>
+							<p class="report2"></p>
+							<p class="report2"> </p>
+							<p class="report2"> </p>
+							<p class="report2"> </p>
+
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<button id="chart3" type="button" class="manage-option" data-toggle="modal" data-target="#barmodel">
+		<!-- click -->
+		<div class="">
+			<i class="far fa-chart-bar"></i>
+			<p>Gross revenue</p>
+		</div>
+	</button>
+	<!-- Modal -->
+	<div class="modal fade" id="barmodel" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Gross revenue</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<!-- Body -->
+					<div class="card-body">
+						<div class="chartjs-size-monitor">
+							<div class="chartjs-size-monitor-expand">
+								<div class=""></div>
+							</div>
+							<div class="chartjs-size-monitor-shrink">
+								<div class=""></div>
+							</div>
+						</div>
+						<canvas id="barChart" style="min-height: 250px; height: 300px; max-height: 300px; max-width: 100%; display: block; width: 425px;" width="600" height="300" class="chartjs-render-monitor"></canvas>
+						<div class="d-flex justify-content-around">
+							<div>
+								<p class="report3"> </p>
+								<p class="report3"> </p>
+								<p class="report3"></p>
+								<p class="report3"> </p>
+								<p class="report3"> </p>
+								<p class="report3"> </p>
+							</div>
+
+							<div>
+								<p class="report3"> </p>
+								<p class="report3"> </p>
+								<p class="report3"> </p>
+								<p class="report3"> </p>
+								<p class="report3"> </p>
+								<p class="report3"> </p>
+							</div>
+
+
+						</div>
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- /.row -->
+<div>
+</div>
+
+@section Scripts{
+
+	<script type="text/javascript">
+		var ratio = @Html.Raw(JsonConvert.SerializeObject(@ViewBag.ratioReport));
+	
+		var orders = @Html.Raw(JsonConvert.SerializeObject(@ViewBag.orderReport));
+		console.log(orders);
+		var revenues = @Html.Raw(JsonConvert.SerializeObject(@ViewBag.revenueReport));
+		console.log(revenues);
+		var customers = "";
+		//1
+	
+		var report1 = document.getElementsByClassName('report1');
+		var report2 = document.getElementsByClassName('report2');
+		var report3 = document.getElementsByClassName('report3');
+		//2
+		//3
+	
+		// lay so liêu char 1
+		
+		//lay so lieu char3
+
+		//
+		var btn = document.getElementById("chart1");
+		var btn1 = document.getElementById("chart2");
+		var btn2 = document.getElementById("chart3");
+		var donutChart = document.getElementById('donutChart');
+		var lineChart = document.getElementById('lineChart');
+		var barChart = document.getElementById('barChart');
+		var months = ['January', 'February', 'March ', 'April ', 'May ', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+		//chart 1
+		btn.addEventListener("click", function() {
+
+
+			var myChart = new Chart(donutChart, {
+				type: 'doughnut',
+				data: {
+					labels: ['Completed Order','Canceled Order','Others'],
+					datasets: [{
+						data: ratio,
+						// thay so liệu vào đây
+						backgroundColor: ['#f56954', '#3c8dbc','green'],
+					}]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
+					},
+				}
+			});
+
+			report1[0].innerHTML = "Completed Order  :     " + ratio[0];
+			report1[1].innerHTML = "Canceled Order   :     " + ratio[1];
+			report1[2].innerHTML = "Others   :     " + ratio[2];
+
+
+
+		});
+		// chart 2 ok
+		btn1.addEventListener("click", function() {
+			var myChart = new Chart(lineChart, {
+				type: 'line',
+				data: {
+					labels: ['1st Quarter', '2nd Quarter', '3rd Quarter', '4th Quarter'],
+					datasets: [{
+						label: 'Orders in 2022',
+						//array
+						data: orders,
+						//data: [orders[0], orders[1], orders[2], orders[3]],
+						backgroundColor: 'midnightblue',
+						borderColor: 'rgb(240, 132, 31);',
+						borderWidth: 1
+					}]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
+					},
+				}
+			});
+		});
+		report2[0].innerHTML = "Orders in 1st Quarter :" + orders[0];
+		report2[1].innerHTML = "Orders in 2nd Quarter :" + orders[1];
+		report2[2].innerHTML = "Orders in 3rd Quarter :" + orders[2];
+		report2[3].innerHTML = "Orders in 4th Quarter :" + orders[3];
+
+		//   chart 3
+		btn2.addEventListener("click", function() {
+			//        var myChart = new Chart(pieChart, {
+			//            type: 'pie',
+			//            data: {
+			//                labels: ['Thành Viên', 'Khách'],
+			//                datasets: [{
+			//                    data: [member, guest],
+			//                    // thay so liệu vào đây
+			//                    backgroundColor: ['#3c8dbc', '#d63384'],
+			//                }]
+			//            },
+			//            options: {
+			//                scales: {
+			//                    yAxes: [{
+			//                        ticks: {
+			//                            beginAtZero: true
+			//                        }
+			//                    }]
+			//                },
+			//            }
+			//        });
+			//report3[0].innerHTML="Số Thành Viên:       "+member;
+			//report3[1].innerHTML="Số Lượng Khách:      "+guest;
+
+
+			var myChart = new Chart(barChart, {
+				type: 'bar',
+				data: {
+					labels: months,
+					datasets: [{
+						label: 'Gross Revenue of 2022 ($)',
+						data: revenues,
+						backgroundColor:
+							//color
+							//'rgba(255, 99, 132, 0.2)',
+							//'rgba(54, 162, 235, 0.2)',
+							//'rgba(255, 206, 86, 0.2)',
+							//'rgba(75, 192, 192, 0.2)',
+							//'rgba(153, 102, 255, 0.2)',
+							'rgba(54, 162, 235, 1)'
+						,
+						borderColor:
+
+							'rgba(54, 162, 235, 1)'
+
+						,
+						borderWidth: 1
+					}]
+				},
+				options: {
+					scales: {
+						yAxes: [{
+							ticks: {
+								beginAtZero: true
+							}
+						}]
+					}
+				}
+			});
+		});
+
+		for (let i = 0; i < months.length; i++) {
+			report3[i].innerHTML = months[i] + ":  $" + revenues[i];
+		}
+
+					//endcolumn chart
+
+	</script>
+
+
+}

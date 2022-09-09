@@ -1,0 +1,67 @@
+﻿@model SuperMarket_Models.Models.Branch
+@{
+	ViewData["Title"] = "Update Branch";
+}
+
+<h3>@ViewData["Title"]</h3>
+<div class="row">
+	<div class="col-md-8 offset-2" style="border: 2px solid;
+  padding: 10px;
+  box-shadow: 5px 10px #888888;">
+		<p class="text-danger">@ViewBag.msg</p>
+		<form id="profile-form" method="post" asp-action="UpdateBranch" onsubmit="return confirm('Are you sure to Update?')" enctype="multipart/form-data" class="row">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input asp-for="BranchId" type="hidden" />
+			<div class="form-group col-6">
+				<label asp-for="BranchName" class="form-label"></label>
+				<input asp-for="BranchName" class="form-control" />
+			</div>
+			<div class="form-group col-6">
+				<label asp-for="Address" class="form-label"></label>
+				<input asp-for="Address" class="form-control" />
+			</div><div class="form-group col-6">
+				<label asp-for="Phone" class="form-label"></label>
+				<input asp-for="Phone" class="form-control" />
+			</div>
+			<div class="form-group col-6">
+				<label asp-for="Latitude" class="form-label"></label>
+				<input asp-for="Latitude" class="form-control" />
+			</div>
+			<div class="form-group col-6">
+				<label asp-for="Longtitude" class="form-label"></label>
+				<input asp-for="Longtitude" class="form-control" />
+			</div>
+			<div class="form-group col-6">
+				<label asp-for="BranchImg" class="form-label"></label>
+				<input type="file" class="form-control" name="BranchImg" id="fileUpLoad" onchange="return PreviewMainImg()" />
+				<img src="@Model.BranchImg" width="120px" class="py-2" id="previewImg" />
+				<span id="newImg"></span>
+			</div>
+			<button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Update</button>
+		</form>
+		<a href="/Admin/Branch/Index">Back to Branch Manage</a>
+
+	</div>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
+	<script>
+		var newImg = document.getElementById("newImg");
+		var imgdefault = `<h3>To</h2> <img class="rounded py-2"  width="100px"`;
+		var fileUpload = document.getElementById("fileUpLoad");
+		function PreviewMainImg() {
+
+			if (fileUpload.files[0].size > 3000000) {
+				alert("Picture must be lower than 3mb");
+				fileUpload.value = "";
+			}
+			else {
+				newImg.innerHTML = "";
+				var temp = window.URL.createObjectURL(fileUpload.files[0]);
+				newImg.innerHTML += imgdefault + " src='" + temp + "'" + "/>";
+			}
+
+		}
+	</script>

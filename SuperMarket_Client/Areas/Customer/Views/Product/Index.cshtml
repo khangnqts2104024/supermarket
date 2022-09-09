@@ -1,237 +1,11 @@
-﻿@model IEnumerable< Product>
-<script src="~/Asset/js/pricing-slider.js"></script>
-<!-- Main Header Nav For Mobile -->
-<div id="page" class="stylehome1 h0">
-	test
-	<div class="mobile-menu">
-		<div class="header stylehome1">
-			<div class="mobile_menu_bar">
-				<a class="menubar" href="#menu"><span></span></a>
-			</div>
-			<div class="mobile_menu_main_logo"><img class="nav_logo_img img-fluid mt5" src="images/header-middle-logo.svg" alt="header-middle-logo.svg"></div>
-			<div class="mobile_menu_widget_icons">
-				<ul class="cart mt15">
-					<li class="list-inline-item">
-						<a class="cart_btn" href="#"><span class="flaticon-shopping-cart icon"><span class="badge bgc-thm">3</span></span></a>
-						<ul class="dropdown_content">
-							<li class="list_content">
-								<a href="#">
-									<img class="float-start" src="images/shop/s1.png" alt="50x50">
-									<p>Silver Heinz Ketchup 350 ml</p>
-									<small>3 x $7.63</small>
-									<span class="close_icon float-end"><i class="fa fa-plus"></i></span>
-								</a>
-							</li>
-							<li class="list_content">
-								<a href="#">
-									<img class="float-start" src="images/shop/s2.png" alt="50x50">
-									<p>Silver Heinz Ketchup 350 ml</p>
-									<small>3 x $7.63</small>
-									<span class="close_icon float-end"><i class="fa fa-plus"></i></span>
-								</a>
-							</li>
-							<li class="list_content">
-								<a href="#">
-									<img class="float-start" src="images/shop/s3.png" alt="50x50">
-									<p>Silver Heinz Ketchup 350 ml</p>
-									<small>3 x $7.63</small>
-									<span class="close_icon float-end"><i class="fa fa-plus"></i></span>
-								</a>
-							</li>
-							<li class="list_content">
-								<h5>Subtotal: <span class="text-thm fw400 float-end">$907.00</span></h5>
-								<a href="#" class="btn btn-thm cart_btns">VIEW CART</a>
-								<a href="#" class="btn btn-thm2 checkout_btns">CHECKOUT</a>
-							</li>
-						</ul>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</div>
-	<!-- /.mobile-menu -->
-	<nav id="menu" class="stylehome1">
-		<ul>
-			<li>
+﻿@using Newtonsoft.Json;
+@using Org.BouncyCastle.Asn1.Ocsp
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, AuthoringTagHelpers
+@model IEnumerable<Stock>;
 
-				<span>Home</span>
-				<ul>
-					<li><a href="index.html">Home V1</a></li>
-					<li><a href="index2.html">Home V2</a></li>
-					<li><a href="index3.html">Home V3</a></li>
-					<li><a href="index4.html">Home V4</a></li>
-					<li><a href="index5.html">Home V5</a></li>
-					<li><a href="index6.html">Home V6</a></li>
-					<li><a href="index7.html">Home V7</a></li>
-					<li><a href="index8.html">Home V8</a></li>
-					<li><a href="index9.html">Home V9</a></li>
-					<li><a href="index10.html">Home V10</a></li>
-				</ul>
-			</li>
-			<li>
-
-				<span>BAKERY</span>
-				<ul>
-					<li>
-
-						<span>User Detils</span>
-						<ul>
-							<li><a href="page-dashboard.html">Dashboard</a></li>
-							<li><a href="page-dashboard-order.html">Orders</a></li>
-							<li><a href="page-dashboard-wish-list.html">Downloads</a></li>
-							<li><a href="page-dashboard-address.html">Addresses</a></li>
-							<li><a href="page-dashboard-account-details.html">Account Details</a></li>
-							<li><a href="page-dashboard-wish-list.html">Wishlist</a></li>
-							<li><a href="page-login.html">Logout</a></li>
-						</ul>
-					</li>
-				</ul>
-			</li>
-			<li>
-
-				<span>FRESH FOOD</span>
-				<ul>
-					<li>
-
-						<span>Shop Listing</span>
-						<ul>
-							<li><a href="page-shop-list-v1.html">Listing v1</a></li>
-							<li><a href="page-shop-list-v2.html">Listing v2</a></li>
-							<li><a href="page-shop-list-v3.html">Listing v3</a></li>
-							<li><a href="page-shop-list-v4.html">Listing v4</a></li>
-							<li><a href="page-shop-list-v5.html">Listing v5</a></li>
-							<li><a href="page-shop-list-v6.html">Listing v6</a></li>
-						</ul>
-					</li>
-					<li>
-
-						<span>Shop Single</span>
-						<ul>
-							<li><a href="page-shop-single-simple.html">Simple</a></li>
-							<li><a href="page-shop-single-variable.html">Variable</a></li>
-							<li><a href="page-shop-single-group.html">Group</a></li>
-							<li><a href="page-shop-single-affiliate.html">Affiliate</a></li>
-							<li><a href="page-shop-single-countdown.html">Countdown</a></li>
-							<li><a href="page-shop-single-thumbnail-vertical.html">Thumbnail Vertical</a></li>
-							<li><a href="page-shop-single-right-sidebar.html">Right Sidebar</a></li>
-							<li><a href="page-shop-single-three-columns.html">Three Columns</a></li>
-						</ul>
-					</li>
-				</ul>
-			</li>
-			<li>
-
-				<span>Shop</span>
-				<ul>
-					<li>
-
-						<span>Shop Listing</span>
-						<ul>
-							<li><a href="page-shop-list-v1.html">Listing v1</a></li>
-							<li><a href="page-shop-list-v2.html">Listing v2</a></li>
-							<li><a href="page-shop-list-v3.html">Listing v3</a></li>
-							<li><a href="page-shop-list-v4.html">Listing v4</a></li>
-							<li><a href="page-shop-list-v5.html">Listing v5</a></li>
-							<li><a href="page-shop-list-v6.html">Listing v6</a></li>
-						</ul>
-					</li>
-					<li>
-
-						<span>Shop Single</span>
-						<ul>
-							<li><a href="page-shop-single-simple.html">Simple</a></li>
-							<li><a href="page-shop-single-variable.html">Variable</a></li>
-							<li><a href="page-shop-single-group.html">Group</a></li>
-							<li><a href="page-shop-single-affiliate.html">Affiliate</a></li>
-							<li><a href="page-shop-single-countdown.html">Countdown</a></li>
-							<li><a href="page-shop-single-thumbnail-vertical.html">Thumbnail Vertical</a></li>
-							<li><a href="page-shop-single-right-sidebar.html">Right Sidebar</a></li>
-							<li><a href="page-shop-single-three-columns.html">Three Columns</a></li>
-						</ul>
-					</li>
-					<li>
-
-						<span>User Dashboard</span>
-						<ul>
-							<li><a href="page-dashboard.html">Dashboard</a></li>
-							<li><a href="page-dashboard-order.html">Orders</a></li>
-							<li><a href="page-dashboard-wish-list.html">Downloads</a></li>
-							<li><a href="page-dashboard-address.html">Addresses</a></li>
-							<li><a href="page-dashboard-account-details.html">Account Details</a></li>
-							<li><a href="page-dashboard-wish-list.html">Wishlist</a></li>
-							<li><a href="page-login.html">Logout</a></li>
-						</ul>
-					</li>
-					<li>
-
-						<span>Shop Pages</span>
-						<ul>
-							<li><a href="page-shop-cart.html">Cart</a></li>
-							<li><a href="page-shop-checkout.html">Checkout</a></li>
-							<li><a href="page-shop-complete-order.html">Complete Order</a></li>
-							<li><a href="order-tracking.html">Order Tracking</a></li>
-							<li><a href="page-store-location.html">Store Locator</a></li>
-						</ul>
-					</li>
-				</ul>
-			</li>
-			<li>
-
-				<span>Pages</span>
-				<ul>
-					<li>
-
-						<span>Shop</span>
-						<ul>
-							<li><a href="page-shop.html">Shop Pages</a></li>
-							<li><a href="page-shop-single.html">Shop Single</a></li>
-							<li><a href="page-shop-cart.html">Cart</a></li>
-						</ul>
-					</li>
-					<li><a href="page-about.html">About Us</a></li>
-					<li><a href="page-faq.html">Faq</a></li>
-					<li><a href="page-login.html">My Account</a></li>
-					<li><a href="page-error.html">404 Page</a></li>
-					<li><a href="page-terms.html">Terms and Conditions</a></li>
-					<li><a href="page-ui-element.html">UI Elements</a></li>
-				</ul>
-			</li>
-			<li>
-
-				<span>Blog</span>
-				<ul>
-					<li><a href="page-blog-grid.html">Blog Grid</a></li>
-					<li><a href="page-blog-grid-sidebar.html">Blog Grid Sidebar</a></li>
-					<li><a href="page-blog-details.html">Blog Details</a></li>
-					<li><a href="page-blog-list.html">Blog List</a></li>
-					<li><a href="page-blog-single.html">Blog Single</a></li>
-					<li><a href="page-blog-single2.html">Blog Single v2</a></li>
-				</ul>
-			</li>
-			<li><a href="page-contact.html">Contact</a></li>
-			<!-- Only for Mobile View -->
-			<li class="mm-add-listing">
-				<span class="border-none">
-					<span class="contact-info">
-						<span class="phone-num"><i class="fas fa-phone"></i> <a href="#">Call us <span class="text-thm">123 456</span></a></span>
-						<span class="address">Collins Street West, Victoria <br>8007, Australia.</span><br><br>
-						<a href="#" class="shop_btn thm style2">SHOP NOW</a><br><br>
-					</span>
-					<span class="social-links">
-						<a href="#"><span class="fab fa-facebook-f"></span></a>
-						<a href="#"><span class="fab fa-twitter"></span></a>
-						<a href="#"><span class="fab fa-instagram"></span></a>
-						<a href="#"><span class="fab fa-youtube"></span></a>
-						<a href="#"><span class="fab fa-pinterest"></span></a>
-					</span>
-				</span>
-			</li>
-		</ul>
-	</nav>
-</div>
-
-<!-- Inner Page Breadcrumb -->
-<section class="inner_page_breadcrumb">
+@*<!-- Inner Page Breadcrumb -->
+<div class="inner_page_breadcrumb">
 	<div class="container">
 		<div class="row">
 			<div class="col-xl-6">
@@ -245,183 +19,140 @@
 			</div>
 		</div>
 	</div>
-</section>
-
+</div>
+*@
 <!-- Listing Grid View -->
-<section class="our-listing pb30-991">
-	<div class="container">
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="listing_sidebar">
-					<div class="sidebar_content_details style3">
-						<!-- <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a> -->
-						<div class="sidebar_listing_list style2 mobile_sytle_sidebar mb0">
-							<div class="siderbar_widget_header">
-								<h4 class="title mb0">FILTER BY<a class="filter_closed_btn float-end" href="#"><small>x</small><span class="flaticon-close"></span></a></h4>
-							</div>
-							<div class="sidebar_advanced_search_widget">
-								<ul class="mb0">
-									<li>
-										<div class="terms_condition_widget filter_sidebar">
-											<h4 class="title">PRODUCT CATEGORIES</h4>
-											<div class="widget_list">
-												<ul class="list_details">
-														<li><a href="#">All</a></li>
 
-													@foreach (Category item in @ViewBag.categoryList)
-													{
-														<li><a href="#">@item.CategoryName<span class="float-end">34</span></a></li>
-													}
-												</ul>
-											</div>
-											<hr>
-										</div>
-									</li>
+<div class="container">
+
+
+	<
+
+	<div class="row">
+		<div class="col-xl-3 dn-lg">
+			<div class="sidebar_listing_grid1 mb30">
+				<div class="sidebar_listing_list">
+					<div class="terms_condition_widget filter_sidebar pt0">
+						<h4 class="title">PRODUCT CATEGORIES</h4>
+						<div class="widget_list">
+							<ul class="list_details">
+								<li>
+									<a asp-action="Index" asp-controller="Product" asp-area="Customer"> All Category </a>
+								</li>
+								@foreach (var cateitem in @ViewBag.categoryList)
+								{
 									<li>
-										<div class="sidebar_priceing_slider_mobile">
-											<div class="wrapper">
-												<h4 class="title">Filter by price</h4>
-												<div class="mt20 ml10" id="slider"></div>
-												<span id="slider-range-value1"></span>
-												<span id="slider-range-value2"></span>
-											</div>
-										</div>
+										<a asp-action="Index" asp-controller="Product" asp-area="Customer" asp-route-cateId="@cateitem.CategoryId">
+											@if (cateitem.CategoryImg != null)
+											{
+												<img style="width:20px;height:20px" src="@cateitem.CategoryImg"></img>
+											}
+											@cateitem.CategoryName
+										</a>
 									</li>
-									<li>
-										<div class="terms_condition_widget filter_sidebar">
-											<h4 class="title">Filter by color</h4>
-											<div class="widget_list">
-												<ul>
-													<li><a href="#"><span class="filter_colors mr10"></span>Beige <span class="float-end">34</span></a></li>
-													<li><a href="#"><span class="filter_colors style2 mr10"></span>Black <span class="float-end">45</span></a></li>
-													<li><a href="#"><span class="filter_colors style3 mr10"></span>Blue <span class="float-end">56</span></a></li>
-													<li><a href="#"><span class="filter_colors style4 mr10"></span>Brown <span class="float-end">67</span></a></li>
-													<li><a href="#"><span class="filter_colors style5 mr10"></span>Gray <span class="float-end">78</span></a></li>
-													<li><a href="#"><span class="filter_colors style6 mr10"></span>Green <span class="float-end">89</span></a></li>
-												</ul>
-											</div>
-											<hr>
-										</div>
-									</li>
-									<li>
-										<div class="blog_tag_widget filter_sidebar">
-											<h4 class="title">Trending Tags</h4>
-											<ul class="tag_list">
-												<li class="list-inline-item"><a href="#">food shop</a></li>
-												<li class="list-inline-item"><a href="#">food theme</a></li>
-												<li class="list-inline-item"><a href="#">fruits</a></li>
-												<li class="list-inline-item"><a href="#">organic theme</a></li>
-												<li class="list-inline-item"><a href="#">vegetables</a></li>
-												<li class="list-inline-item"><a href="#">natural</a></li>
-												<li class="list-inline-item"><a href="#">orange</a></li>
-											</ul>
-										</div>
-									</li>
-								</ul>
-							</div>
+								}
+
+
+							</ul>
+						</div>
+						<hr>
+					</div>
+
+					<div class="terms_condition_widget filter_sidebar">
+						<h4 class="title">Filter by Price</h4>
+						<div class="widget_list">
+							<ul>
+								<li onclick="changePrice(this)" data-price="0" data-check="ticked"><a class="btn">All Price</a></li>
+								<li onclick="changePrice(this)" data-price="1" data-check=""><a class="btn">Less than :<span style="color:#86BC42;padding:2px;">   $20 </span></a></li>
+								<li onclick="changePrice(this)" data-price="2" data-check=""><a class="btn">From :<span style="color:#86BC42;padding:2px;">   $20 - $49.99 </span></a></li>
+								<li onclick="changePrice(this)" data-price="3" data-check=""><a class="btn">From :<span style="color:#86BC42;padding:2px;">   $50 - $99.99 </span> </a></li>
+								<li onclick="changePrice(this)" data-price="4" data-check=""><a class="btn">Over :<span style="color:#86BC42;padding:2px;">   $100 </span> </a></li>
+							</ul>
+						</div>
+						<hr>
+					</div>
+					<div class="terms_condition_widget filter_sidebar">
+						<h4 class="title">Filter by Brand</h4>
+						<div class="widget_list">
+							<ul>
+								<li onclick="changeBrand(this)" data-brand="0" data-check="ticked"><a class="btn"><span style="color:#86BC42;padding:2px;">All Brand</span></a></li>
+								@foreach (var item in @ViewBag.brandList)
+								{
+									<li onclick="changeBrand(this)" data-brand="@item.BrandId" data-check=""><a class="btn"><span style="color:#86BC42;padding:2px;">Brand: @item.BrandName </span></a></li>
+								}
+
+							</ul>
+						</div>
+						<hr>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+		<div class="col-xl-9">
+			<div class="row">
+				<div class="listing_filter_row dif db-767">
+					<div class="col-md-4">
+					</div>
+					<div class="col-md-8">
+						<div class="listing_list_style tac-767">
 						</div>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="row">
-			<div class="listing_filter_row dif db-767">
-				<div class="col-md-6">
-					<div class="left_area tac-sm mb30-767">
-						<p class="heading-color fz14">Showing <span class="fwb">1–25</span> of <span class="fwb">56</span> results Showing</p>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="listing_list_style tac-767">
-						<ul class="mb0">
-							<li class="list-inline-item">
-								<a id="open2" class="filter_open_btn style2" href="#"><span class="flaticon-setting-lines mr10"></span> Filters</a>
+			<div class="row" id="productContainer">
+			</div>
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="mbp_pagination mt10" id="default">
+						<ul class="page_navigation">
+							<li class="page-item">
+								<a class="page-link previous" tabindex="-1" aria-disabled="true"> <span class="fa fa-arrow-left"></span></a>
 							</li>
-							<li class="list-inline-item">
-								<div class="shop_default_listing htlw_form_select">
-									<select class="custom_select_dd" id="selectbox_default_list">
-										<option>Default sorting</option>
-										<option value="NewestListings">Newest Listings</option>
-										<option value="MostRecent">Most Recent</option>
-										<option value="Recent">Recent</option>
-										<option value="BestSelling">Best Selling</option>
-										<option value="OldReview">Old Review</option>
-									</select>
-								</div>
+							<span id="listPagesContainer">
+
+							</span>
+							<li class="page-item">
+								<a class="page-link next"><span class="fa fa-arrow-right"></span></a>
 							</li>
+
 						</ul>
 					</div>
 				</div>
 			</div>
 		</div>
-
-		@foreach (var item in Model)
-
-		{
-
-			<div class="row">
-				<div class="col-sm-6 col-lg-4 col-xl-3">
-					<div class="shop_item">
-						<div class="thumb">
-							<img src="@item.ImageProduct" alt="fp1.png">
-							<div class="thumb_info">
-								<ul class="mb0">
-									<li><a href="page-dashboard-wish-list.html"><span class="flaticon-heart"></span></a></li>
-									<li><a href="page-dashboard-wish-list.html"><span class="flaticon-search"></span></a></li>
-									<li><a href="page-shop-list-v6.html"><span class="flaticon-shuffle"></span></a></li>
-								</ul>
-							</div>
-						</div>
-						<div class="details text-center">
-							<div class="title">@item.Brand_Category.Category.CategoryName</div>
-							<div class="review">
-								<ul class="mb0">
-									<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-									<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-									<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-									<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-									<li class="list-inline-item"><a href="#"><i class="fa fa-star"></i></a></li>
-								</ul>
-							</div>
-							<div class="sub_title">@item.Title<br> @item.Weight lb</div>
-							<div class="si_footer">
-								<div class="price">$@item.Price</div>
-								<a href="page-shop-cart.html" class="cart_btn btn-thm"><span class="flaticon-shopping-cart mr10"></span>ADD TO CART</a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-
-		}
-
-
-
-
-
-
-		<div class="row">
-			<div class="col-lg-12">
-				<div class="mbp_pagination mt10">
-					<ul class="page_navigation">
-						<li class="page-item">
-							<a class="page-link" href="#" tabindex="-1" aria-disabled="true"> <span class="fa fa-arrow-left"></span></a>
-						</li>
-						<li class="page-item"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item active" aria-current="page">
-							<a class="page-link" href="#">3 <span class="sr-only">(current)</span></a>
-						</li>
-						<li class="page-item"><a class="page-link" href="#">4</a></li>
-						<li class="page-item"><a class="page-link" href="#">5</a></li>
-						<li class="page-item"><a class="page-link" href="#">...</a></li>
-						<li class="page-item"><a class="page-link" href="#">15</a></li>
-						<li class="page-item">
-							<a class="page-link" href="#"><span class="fa fa-arrow-right"></span></a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</div>
 	</div>
-</section>
+</div>
+
+
+@section Scripts{
+	<script src="~/Asset/js/khang/Khangproduct.js"></script>
+	<script>
+		var model=@Html.Raw(JsonConvert.SerializeObject(@Model));
+		 $(document).ready(function () {
+
+        var stockData = model;
+        //console.log(stockData);
+        var productData = [];
+        stockData.forEach(item => productData.push(item.Product))
+
+        //console.log(productData);
+        loaddata(productData);
+
+
+    });
+		//call
+		 function changePrice(picker) {
+            
+          let productdata=Price(picker, model);
+			  loaddata(productdata);
+		}
+		 function changeBrand(picker) {
+			let productdata=Brand(picker, model);
+             loaddata(productdata);
+			}
+  
+
+	</script>
+}

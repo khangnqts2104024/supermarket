@@ -7,15 +7,23 @@ namespace SuperMarket_Client
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {
-            var branchIdSession = context.HttpContext.Session.GetInt32("branchId");
-        
-            if (branchIdSession == null)
+            try
             {
-                context.Result = new RedirectToRouteResult(
-                    new RouteValueDictionary{
+                var request = context.HttpContext.Request;
+                var branchIdSession = request.Cookies["branchId"];
+
+                if (branchIdSession == null)
+                {
+                    context.Result = new RedirectToRouteResult(
+                        new RouteValueDictionary{
                         { "controller", "Home" },{ "action", "Index" } });
+                }
+                base.OnActionExecuting(context);
             }
-            base.OnActionExecuting(context);
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

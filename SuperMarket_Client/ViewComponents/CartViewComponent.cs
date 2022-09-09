@@ -17,25 +17,34 @@ namespace SuperMarket_Client.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            List<ShoppingCart> cartList = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x=>x.CustomerId == claim.Value,includeProperties:"Product");
-            decimal totalCart = 0;
-            if(cartList.Count() == 0)
+            try
             {
-                ViewBag.CartCount = 0;
-                ViewBag.totalCart = 0;
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                List<ShoppingCart> cartList = (List<ShoppingCart>)await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == claim.Value, includeProperties: "Product.ImageProduct");
+                decimal totalCart = 0;
+                if (cartList.Count() == 0)
+                {
+                    ViewBag.CartCount = 0;
+                    ViewBag.totalCart = 0;
+                    return View("CartList", cartList);
+                }
+
+                foreach (var item in cartList)
+                {
+                    totalCart += item.Product.Price * item.Count;
+                }
+
+                ViewBag.CartCount = cartList.Count();
+                ViewBag.cartId = cartList.FirstOrDefault().CartId;
+                ViewBag.totalCart = totalCart;
                 return View("CartList", cartList);
             }
-
-            foreach (var item in cartList)
+            catch (Exception)
             {
-                totalCart += item.Product.Price * item.Count;
-            }
 
-            ViewBag.CartCount = cartList.Count();
-            ViewBag.totalCart = totalCart;
-            return View("CartList", cartList);
+                throw;
+            }
         }
 
         

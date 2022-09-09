@@ -1,16 +1,15 @@
 var domain = "https://" + window.location.host + "/";
 var rating_product = $('[data-rating = "ratingProduct"]');
 var globalRating = 0;
+var isApplied = false;
 
 (function ($) {
-
+  
     /* Formatting function for row details - modify as you need */
     function format(data) {
-        console.log(data)
         // `d` is the original data object for the row
         var trs = '';
-        
-          
+
                 for (var item of data.orderDetail) {
                     trs +=
                         `<tr>
@@ -21,9 +20,6 @@ var globalRating = 0;
                          <td>${item.product.expiryDate}</td>
                          </tr>`;
                 }
-                
-               
-       
        
         return (
             '<table class="table table-border table-hover">' +
@@ -42,6 +38,20 @@ var globalRating = 0;
     }
 
     $(document).ready(function () {
+
+        var selectCoupon = $("#selectCoupon");
+        selectCoupon.on("change", function () {
+            $("#couponField").val(selectCoupon.val());
+        });
+        $('#selectBranch_popup').modal({ backdrop: 'static', keyboard: false })  
+        var checkSessionBranchId = $("#checkSessionBranchId").val();
+        if (checkSessionBranchId == 1) {
+            $('#selectBranch_popup').modal('show');
+        }
+        $("#showModal").on("click", function () {
+            $('#selectBranch_popup').modal('show');
+        })
+
         var table = $('#OrderDataTable').DataTable({
             ajax: '/Customer/Customer/GetAllOrder',
             columns: [
@@ -54,11 +64,27 @@ var globalRating = 0;
                 { data: 'orderId' },
                 { data: 'orderDate' },
                 { data: 'orderStatus' },
+                { data: 'paymentStatus' },
                 { data: 'orderTotal', render: $.fn.dataTable.render.number('.', ',', 2, '$') },
-                { data: "orderId", render: function (dataField) { return '<a href="' + dataField + '">Action</a>'; } },
+                {
+                    data: "orderId", render: function (dataField,type,row)
+                    {
+                        if (row.orderStatus == "Approved") {
+                            return '<a style="color:red;" href="/Customer/Customer/CancelRequest?orderId=' + dataField + '"> Order Cancellation </a>';
+                        } else if (row.orderStatus == "CancelRequest") {
+                            return '<span href="#"> Waiting For Acceptance </span>';
+                        } else {
+                            return '<span href="#"> N/A </span>';
+
+                        }
+                    }
+                },
             ],
+            
             order: [[1, 'asc']],
         });
+
+
 
         // Add event listener for opening and closing details
         $('#OrderDataTable tbody').on('click', 'td.dt-control', function () {
@@ -85,17 +111,13 @@ var globalRating = 0;
             rating_product[i].checked = false;
         }
         $("#" + id).prop("checked", true);
-
-
-
-
     });
 
     $("#submitReview").on("click", function (e) {
         e.preventDefault();
         let isChecked = false;
         var content = $.trim($('#feedbackContent').val());
-        var productId = $("#ShoppingCart_ProductId").val();
+        var productId = $("#ProductId").val();
         for (var i = 0; i < rating_product.length; i++) {
             if (rating_product[i].checked == true) {
                 isChecked = true;
@@ -121,6 +143,7 @@ var globalRating = 0;
                 type: "POST",
                 data: { content: content, ratingPoint: id, productId: productId },
                 success: function (response) {
+                    console.log(response)
                     if (response.statusCode == 401 || response.statusCode == 400) {
                         Swal.fire({
                             icon: 'error',
@@ -132,7 +155,7 @@ var globalRating = 0;
                         let data = `
                                  <div class="mbp_first d-flex align-items-center">
                                 <div class="flex-shrink-0">
-                                  <img src="images/blog/reviewer1.png" class="mr-3" alt="reviewer1.png">
+                                  <img src="${response.content.customer.customerAvatar}" class="mr-3" alt="reviewer1.png">
                                 </div>
                                 <div class="flex-grow-1 ms-4">
                                   <h4 class="sub_title mt20">${response.content.customer.fullName}</h4>
@@ -162,6 +185,13 @@ var globalRating = 0;
                         for (var i = 0; i < rating_product.length; i++) {
                             $("#" + i).prop("checked", false);
                         }
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Your feedback has has been sent',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                     }
                 }
             });
@@ -211,11 +241,13 @@ var globalRating = 0;
             animationSpeed: 'fast', //slow, medium, fast
             accoridonExpAll: false //Expands all the accordion menu on click
         });
+
+        
     });
 
-    function newslatter_popup() {
-        $('#mailchimp_newslatter_popup').modal('show');
-    }
+   
+
+   
 
     function mobileNavToggle() {
         if ($('#main-nav-bar .navbar-nav .sub-menu').length) {
@@ -724,7 +756,6 @@ var globalRating = 0;
                         $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
                         reloadCart();
                     } else {
-                        console.log(response)
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
@@ -740,10 +771,9 @@ var globalRating = 0;
 
         $("#ProceedCheckout").on("click", function (e) {
             $.ajax({
-                url: "/Customer/Cart/CheckCount",
+                url: "/Customer/Cart/CheckCartBeforeCheckout",
                 type: "GET",
                 success: function (response) {
-                    console.log(response.count);
                     if (response.statusCode == 200 && response.count != 0) {
                         window.location.href = domain + "Customer/Cart/Checkout";
                         return true;
@@ -854,8 +884,6 @@ var globalRating = 0;
                         cartCount.val(response.count);
                         subTotalItem.html("$" + response.subTotalItem + ".00");
                         if (response.subTotalOrder != undefined) {
-                            console.log(response)
-                            console.log(response.subTotalOrder)
                             $("#subTotalOrder").html("$" + response.subTotalOrder + ".00");
                         } else {
                             $("#subTotalOrder").html("$0.00");
@@ -868,6 +896,48 @@ var globalRating = 0;
 
             });
         });
+        //Add To Cart Home Page
+        $(".addToCartHome").on("click", function (e) {
+            var checkLoggedIn = $("#LoggedIn").val();
+            if (checkLoggedIn != 1) {
+                window.location.href = domain + "Identity/Account/Login";
+                return false;
+            }
+            e.preventDefault();
+            let id = $(this).data("productid");
+            $.ajax({
+                url: "/Customer/Product/Details?id=" + id,
+                type:"GET",
+                success: function (responseDetailGet) {
+                    console.log(responseDetailGet);
+                    $.ajax({
+                        url: "/Customer/Product/Details",
+                        type: "POST",
+                        data: responseDetailGet,
+                        success: function (response) {
+                            if (response.statusCode == 200 || response.statusCode == 201) {
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: response.message,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                                reloadCart();
+                                $("#Count").val(response.count);
+                            } else {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: response.message,
+                                })
+                            }
+
+                        }
+                    });
+                }
+            });
+        })
+
         //Add To Cart
         $("#formAddCart").on('submit', function (e) {
             let userLogged = $("#manage").val();
@@ -913,6 +983,14 @@ var globalRating = 0;
     //Check out Page
     $(function () {
         $("#applyCouponBtn").on("click", function (e) {
+            if (isApplied == true) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops...',
+                    text: 'Coupon Code Was Applied!',
+                });
+                return false;
+            }
             e.preventDefault();
 
             let couponCode = $("#couponField").val();
@@ -921,8 +999,6 @@ var globalRating = 0;
                 type: "POST",
                 data: { couponCode: couponCode },
                 success: function (response) {
-                    console.log(response);
-
                     if (response.cpCode == "Expired") {
                         Swal.fire({
                             icon: 'warning',
@@ -936,10 +1012,16 @@ var globalRating = 0;
                             text: 'Coupon Code Not Exists!',
                         });
                     } else {
-
                         $("#discountValue").text("$" + response.discountAmount)
                         $("#orderTotalValue").text("$" + response.orderTotalAfterCoupon)
                         $("#cpId").val(response.couponId);
+                        Swal.fire({
+                            icon: 'success',
+                            title: response.message,
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        isApplied = true;
                     }
                 }
 
@@ -959,6 +1041,7 @@ var globalRating = 0;
             $quantityArrowPlus.click(quantityPlus);
 
             function quantityMinus() {
+                
                 let stockCount = parseInt($("#stockCount").text())
                 if ($quantityNum.val() > 1) {
                     $quantityNum.val(+$quantityNum.val() - 1);
@@ -972,13 +1055,23 @@ var globalRating = 0;
             }
             function quantityPlus() {
                 let stockCount = parseInt($("#stockCount").text());
-
-                if ($quantityNum.val() == stockCount) {
-                    $("#messageLimitedQuantity").text("The product you have selected has reached a limited quantity");
-                } else {
-                    $quantityNum.val(+$quantityNum.val() + 1);
-                    $("#messageLimitedQuantity").text("");
-                }
+                let productId = $("#ProductId").val();
+                let countNumber = parseInt($("#Count").val());
+                $.ajax({
+                    url: "/Customer/Cart/Plus",
+                    type: "POST",
+                    data: { productId: productId, itemCount: countNumber },
+                    success: function (response) {
+                        console.log(response)
+                        if (response.statusCode == 400 || $quantityNum.val() == stockCount) {
+                            $("#messageLimitedQuantity").text("The product you have selected has reached a limited quantity");
+                        } else {
+                            $quantityNum.val(+$quantityNum.val() + 1);
+                            $("#messageLimitedQuantity").text("");
+                        }
+                    }
+                });
+               
             }
         })();
 
@@ -2072,7 +2165,7 @@ var globalRating = 0;
         // add your functions
         counterNumber();
         preloaderLoad();
-        newslatter_popup();
+        //selectBranch_popup();
 
     });
     // window on Scroll function
@@ -2082,3 +2175,37 @@ var globalRating = 0;
 
 
 })(window.jQuery);
+
+
+
+$(function () {
+    $('#thumbnail li').click(function () {
+        var thisIndex = $(this).index()
+
+        if (thisIndex < $('#thumbnail li.active').index()) {
+            prevImage(thisIndex, $(this).parents("#thumbnail").prev("#image-slider"));
+        } else if (thisIndex > $('#thumbnail li.active').index()) {
+            nextImage(thisIndex, $(this).parents("#thumbnail").prev("#image-slider"));
+        }
+
+        $('#thumbnail li.active').removeClass('active').css('border', '').css('opacity','');
+        $(this).addClass('active').css('border', '1px solid #86BC42').css('opacity', 1);
+    });
+});
+
+var width = $('#image-slider').width();
+
+function nextImage(newIndex, parent) {
+    parent.find('li').eq(newIndex).addClass('next-img').css('left', width).animate({ left: 0 }, 600);
+    parent.find('li.active-img').removeClass('active-img').css('left', '0').animate({ left: -width }, 600);
+    parent.find('li.next-img').attr('class', 'active-img');
+}
+function prevImage(newIndex, parent) {
+    parent.find('li').eq(newIndex).addClass('next-img').css('left', -width).animate({ left: 0 }, 600);
+    parent.find('li.active-img').removeClass('active-img').css('left', '0').animate({ left: width }, 600);
+    parent.find('li.next-img').attr('class', 'active-img');
+}
+
+/* Thumbails */
+//var ThumbailsWidth = ($('#image-slider').width() - 18.5) / 7;
+//$('#thumbnail li').find('img').css('width', ThumbailsWidth);

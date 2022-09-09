@@ -6,6 +6,7 @@
 
 @if (SignInManager.IsSignedIn(User))
 {
+    <input hidden id="LoggedIn" value="1" />
     <li class="list-inline-item">
         <a id="manage" class="nav-link text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
     </li>
@@ -13,7 +14,7 @@
         <a id="manage" class="nav-link text-light" asp-area="Customer" asp-route-id="@UserManager.GetUserId(User)" asp-controller="Customer" asp-action="Index" >My Account</a>
     </li>
     <li class="list-inline-item">
-        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "Customer" })">
+        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="/Identity/Account/Login">
             <button id="logout" type="submit" class="nav-link btn btn-link text-light">Logout</button>
         </form>
     </li>

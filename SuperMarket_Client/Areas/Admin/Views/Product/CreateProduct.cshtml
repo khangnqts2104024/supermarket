@@ -4,15 +4,15 @@
 }
 <h3>@ViewData["Title"]</h3>
 
-<h2>@ViewBag.msg</h2>
-<div  id="ImgListMain">Main Img: </div>
-<Label  >Side Img: </Label>
+<span class="text-danger">@ViewBag.msg</span>
+<div id="ImgListMain">Main Img: </div>
+<Label>Side Img: </Label>
 
-<div  id="ImgListSide" class="border border-primary"></div>
+<div id="ImgListSide" class="border border-primary"></div>
 
 
 
-<div >
+<div>
 	<div class="col-md-8 offset-2">
 		<form asp-action="CreateProduct" class="row" enctype="multipart/form-data">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -28,7 +28,7 @@
 				<span asp-validation-for="Price" class="text-danger"></span>
 			</div>
 			<div class="form-group py-2 col-3">
-				<label asp-for="Weight" class="control-label"></label>
+				<label asp-for="Weight" class="control-label"></label>(*Unit)
 				<input asp-for="Weight" class="form-control" />
 				<span asp-validation-for="Weight" class="text-danger"></span>
 			</div>
@@ -42,17 +42,7 @@
 				<input asp-for="Description" class="form-control" />
 				<span asp-validation-for="Description" class="text-danger"></span>
 			</div>
-			<div class="form-group py-2 col-6">
-				<label asp-for="ManufactureDate" class="control-label"></label>
-				<input asp-for="ManufactureDate" class="form-control" />
-				<span asp-validation-for="ManufactureDate" class="text-danger"></span>
-			</div>
-			<div class="form-group py-2 col-6">
-				<label asp-for="ExpiryDate" class="control-label"></label>
-				<input asp-for="ExpiryDate" class="form-control" />
-				<span asp-validation-for="ExpiryDate" class="text-danger"></span>
-			</div>
-			
+
 			<div class="form-group py-2 col-6">
 				<label class="form-label">Category</label>
 				<select class="form-control" name="CategoryId" asp-items="@ViewBag.categoryList">
@@ -69,7 +59,7 @@
 
 			</div>
 			<div class="form-group  py-2 col-6">
-				<label class="control-label">Side Image</label>
+				<label class="control-label">Side Image (*multiple image)</label>
 				<input class="form-control" type="file" name="sideImage" onchange="return PreviewSideImg()" id="multipleImg" multiple required />
 
 			</div>
@@ -89,7 +79,7 @@
 	let printOutSide = document.getElementById("ImgListSide");
 	var imgdefault = `<img class="rounded"  width="100px"`;
 	function PreviewSideImg() {
-        printOutSide.innerHTML = "";
+		printOutSide.innerHTML = "";
 		if (fileUpload.files.length > 6) {
 			alert("You can upload maximum 6 files");
 			fileUpload.value = "";
@@ -97,16 +87,26 @@
 		else {
 			let temp = "";
 			for (var i = 0; i < fileUpload.files.length; i++) {
-				let temp = window.URL.createObjectURL(fileUpload.files[i]);
-				printOutSide.innerHTML += imgdefault + " src='" + temp + "'" + "/>";
-
+				if (fileUpload.files[i].size > 3000000) {
+					fileUpload.value = "";
+                    alert("Picture must be lower than 3mb");
+				} else {
+					let temp = window.URL.createObjectURL(fileUpload.files[i]);
+					printOutSide.innerHTML += imgdefault + " src='" + temp + "'" + "/>";
+				}
 			}
 		}
 	}
 	let printOutMain = document.getElementById("ImgListMain");
 	var mainImage = document.getElementById("mainImage");
 	function PreviewMainImg() {
-		var temp = window.URL.createObjectURL(mainImage.files[0]);
-		printOutMain.innerHTML += imgdefault + " src='" + temp + "'" + "/>";
+		if (mainImage.files[0].size > 3000000) {
+			alert("Picture must be lower than 3mb");
+			mainImage.value = "";
+		} else {
+            printOutMain.innerHTML = "Main Image: ";
+			var temp = window.URL.createObjectURL(mainImage.files[0]);
+			printOutMain.innerHTML += imgdefault + " src='" + temp + "'" + "/>";
+		}
 	}
 </script>

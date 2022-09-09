@@ -15,8 +15,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <h3 class="control-label">Add Stock </h3>
-                <h4>Product : <span style="color:midnightblue">@ViewBag.productName</span></h4>
-                <h4>Branch : <span style="color:midnightblue">@ViewBag.branchName</span></h4>
+               <h5>Product : <span style="color:midnightblue">@Model.Product.ProductName</span></h5>
+               <h5>Branch : <span style="color:midnightblue">@Model.Branch.BranchName</span></h5>
+               <h5>Current Stock : <span style="color:midnightblue">@Model.Count</span></h5>
             </div>
                 <input readonly hidden asp-for="StockId" value="@Model.StockId" />
             <div class="form-group">

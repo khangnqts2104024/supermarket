@@ -2,6 +2,22 @@
 @using Microsoft.Extensions.Options
 @inject IOptions<SuperMarket_Utility.StripeSettings> Stripe
 
+    <!-- Inner Page Breadcrumb -->
+  <section class="inner_page_breadcrumb">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-7 justify-content-center">
+          <div class="shopping_cart_tabs">
+            <ul class="nav nav-tabs justify-content-center" id="myTab2" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="checkout-tab" data-bs-toggle="tab" data-bs-target="#checkout" type="button" role="tab" aria-controls="checkout" aria-selected="false">CHECKOUT</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 <!-- Shop Checkouts Content -->
 <section class="shop-checkouts">
@@ -13,9 +29,13 @@
                     <div class="checkout_coupon ui_kit_button">
 
                         <div class="checkout_form mt30">
-                            <div class="checkout_coupon">
+                            <div class="checkout_coupon" >
+
                                 @*khang coupon*@
-                                <form class="df db-520">
+                                <form class="df db-520" style="display:flex">
+                                        <select asp-items="@Model.ListCoupon" class="df db-520 mr10 " id="selectCoupon" style="width:130px;text-align-last: center;">
+                                            <option  value="">---Select Coupon---</option>
+                                        </select>
                                     <input name="couponCode" id="couponField" class="form-control coupon_input" type="search" placeholder="Coupon code" aria-label="Search">
                                     <button id="applyCouponBtn" type="submit" class="btn btn2 btn-thm">Apply Coupon</button>
                                 </form>
@@ -24,7 +44,10 @@
                             </div>
                         </div>
 
+
+
                         <form class="form2" id="checkout_form" name="checkout_form" action="#" method="post">
+
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="form-group">
@@ -51,7 +74,7 @@
                                 <div class="col-sm-12">
                                     <div class="form-group">
                                         <label class="form-label">Town / City *</label>
-                                        <input class="form-control form_control" style="padding-left:10px;" type="text" asp-for="Order.City" required>
+                                         <input asp-for="Order.City" style="padding-left:10px;" class="form-control form_control mb10" type="text" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
@@ -71,7 +94,7 @@
                                 </div>
                             </div>
 
-                            <input type="text" name="cpId" id="cpId" value="" readonly >
+                            <input type="hidden" name="cpId" id="cpId" value="" readonly >
 
                         </form>
                     </div>
@@ -116,7 +139,7 @@
                     <div class="ui_kit_radiobox checkout">
                         <div class="radio">
                             <input id="radio_seven" name="radio" type="radio" checked>
-                            <label for="radio_seven"><span class="radio-label"></span> PayPal What is PayPal? <img src="/Asset/images//resource//payment.png" alt="payment.png"></label>
+                            <label for="radio_seven"><span class="radio-label"></span>  <img src="/Asset/images//resource//payment.png" alt="payment.png"></label>
                         </div>
                     </div>
                     <div class="ui_kit_button payment_widget_btn">

@@ -192,9 +192,9 @@
                     </div>
                     <div class="modal-body">
 
-
                         <form id="getCate" asp-action="CompareProduct" asp-controller="Product" asp-area="Customer">
                             <select name="CategoryId" asp-items="@ViewBag.listCate" class="form-select" aria-label="Default select example"></select>
+                          
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -357,14 +357,7 @@
                                     </td>
                                     <td data-index="2" data-field="Weight"></td>
                                 </tr>
-                                <tr>
-                                    <th>ExpiryDate</th>
-                                    <td data-index="0" data-field="ExpiryDate">
-                                    </td>
-                                    <td data-index="1" data-field="ExpiryDate">
-                                    </td>
-                                    <td data-index="2" data-field="ExpiryDate"></td>
-                                </tr>
+                         
 
                                 <tr>
                                     <th>Description</th>
@@ -390,6 +383,7 @@
 </body>
 
 @section Scripts{
+    <script src="~/Asset/js/khang/KhangCompare.js"></script>
     <script>
         var jsObject = @Html.Raw(JsonConvert.SerializeObject(@Model));
         var defaultProduct = @Html.Raw(JsonConvert.SerializeObject(@ViewBag.dProduct));
@@ -401,7 +395,7 @@
         //set default product if exits
         $(document).ready(function() {
             //var test = $('[data-show="product"]')
-            console.log(jsObject);
+     
 
             product = defaultProduct;
             index = 0;
@@ -429,125 +423,22 @@
 
         });
 
-        function picker(picker) {
-            index = picker.getAttribute("data-picker");
-
-
-        }
-        //choose product
-        function chooseproduct(productId) {
-            var productChoosed = productId.getAttribute("data-product");
-
-            product = jsObject.find(p => p.ProductId == productChoosed)
-
-            comparecolumn = $('[data-index=' + index + ']');
-
-            //check same product!
-            var checkProduct = $('[data-field= ProductId]');
-            var flag = 0;
-            for (var i = 0; i < checkProduct.length; i++) {
-                if (checkProduct[i].innerHTML == productChoosed) { flag += 1; }
-            }
-            if (flag > 0) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'This product was chosen!',
-
-                })
-            }
-            else {
-                //console.log($('[data-field= ProductId]'));
-                column();
-
-                for (var i = 0; i < compareLink.length; i++) {
-
-                    if (compareLink[i].getAttribute("data-index") == index) {
-                        compareLink[i].style.display = "none";
-                        compareProduct[i].style.display = "block";
-
-                        var test = addCompareProduct();
-
-
-
-                        compareProduct[i].innerHTML = test;
-
-                    }
-                }
-
-                //console.log(compareProduct);
-            }
-
-        }
+        picker(picker);
+        //choose product call
+        function chooseproduct(productId) {chooseproductjs(productId, jsObject); };
         //add info to html
-        function column() {
-
-            for (var i = 0; i < comparecolumn.length; i++) {
-                //
-
-                if (comparecolumn[i].getAttribute("data-field") === "ProductName") {
-                    comparecolumn[i].innerHTML = product.ProductName;
-                    // thay lai du lieu
-                } else if (comparecolumn[i].getAttribute("data-field") === "BrandName") {
-                    comparecolumn[i].innerHTML = product.Brand_Category.Brand.BrandName;
-                } else if (comparecolumn[i].getAttribute("data-field") === "Origin") {
-                    comparecolumn[i].innerHTML = product.Brand_Category.Brand.Origin;
-                } else if (comparecolumn[i].getAttribute("data-field") === "Price") {
-                    comparecolumn[i].innerHTML = product.Price;
-                } else if (comparecolumn[i].getAttribute("data-field") === "Weight") {
-                    comparecolumn[i].innerHTML = product.Weight;
-                } else if (comparecolumn[i].getAttribute("data-field") === "ExpiryDate") {
-                    comparecolumn[i].innerHTML = product.ExpiryDate;
-                } else if (comparecolumn[i].getAttribute("data-field") === "Description") {
-                    comparecolumn[i].innerHTML = product.Description;
-                } else if (comparecolumn[i].getAttribute("data-field") === "ProductId") {
-                    comparecolumn[i].innerHTML = product.ProductId;
-                }
-            }
-
-
-        };
+    
         //search product in model(jvs).
-        function searchProduct(e) {
-            var sproduct = [];
-            $("#main").html(sproduct.join(""));
-            if (e.value != "") {
-                var search = jsObject.filter(p => p.ProductName.includes(e.value));
-            }
-            //console.log(search);
-            search.forEach(info => {
-                sproduct.push(
-                    // html code for product
-
-                    ` <a id="myLink" title="" href="" data-product="${info.ProductId}" onclick="chooseproduct(this);return false;" class="list-group-item">
-                                                                                            <div class="card">
-                                                                                                <div>
-                                                                                                    <div>
-                                                                                                        <h3 style="color:blue" >${info.ProductName}</h3>
-                                                                                                    </div>
-
-                                                                                                    <div >
-                                                                                                        <p class="comment">About: ${info.Title} </p>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                            </a>`
-
-                    // end
-                )
-            });
-            $("#main").html(sproduct.join(""));
-            //console.log($("#main"))
-        }
+  
 
         //ham add compare product
         function addCompareProduct() {
             var cProduct = [];
             var PUrl;
             var img = product.ImageProduct.find(i => i != null);
-            if (img != null) { PUrl = img.Url; }
+            if (img != null) {PUrl = img.Url; }
             else { PUrl = "anh.jpg"; }
-            console.log(PUrl);
+    
             cProduct.push(` <a class="text-center close-link" href=""  data-index="${index}" onclick="closeCompareProduct(this);return false;">
                                                                                                     <i class="fa fa-close" style="font-size:24px"></i>
                                                                                                 </a>
@@ -563,30 +454,8 @@
             return cProduct;
 
         }
-        //close
-        function closeCompareProduct(closeElement) {
-            var closeIndex = closeElement.getAttribute("data-index");
-
-            comparecolumn = $('[data-index=' + closeIndex + ']');
-            for (var i = 0; i < comparecolumn.length; i++) {
-                if (comparecolumn[i].getAttribute("data-field") != null) { comparecolumn[i].innerHTML = ""; }
-
-            }
-
-            //console.log(comparecolumn);
-            // console.log(compareLink);
-            for (var i = 0; i < compareLink.length; i++) {
-
-                if (compareLink[i].getAttribute("data-index") == closeIndex) {
-                    compareLink[i].style.display = "block";
-                    compareProduct[i].style.display = "none";
-                    compareProduct[i].innerHTML = "";
-
-                }
-
-            }
-
-        }
+   
+ 
 
     </script>
 }

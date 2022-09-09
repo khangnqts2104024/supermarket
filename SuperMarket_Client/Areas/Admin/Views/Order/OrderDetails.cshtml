@@ -6,101 +6,152 @@
 @addTagHelper *, AuthoringTagHelpers
 <style>
 
-    .blue {
-        background-color: blue;
-    }
+	.blue {
+		background-color: blue;
+	}
 
-    .green {
-        background-color: green;
-    }
+	.green {
+		background-color: green;
+	}
 
 </style>
 
 <div class="container ">
-    <div class="d-flex justify-content-around ">
-        <div class="card red" style="width:40rem;">
-            <div class="card-body">
 
-                <ul class="list-group">
-                    <h5 class="card-title">Customer Detail</h5>
+	<div class="d-flex justify-content-around ">
+		<div class="card red" style="width:40rem;">
+			<div class="card-body">
 
-
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="form-group">
-                            <label class="control-label">Customer Name</label>
-                            <p>@Model.Customer.FullName</p>
-
-                        </div>
-
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <label class="control-label">Phone Number</label>
-                        <p>@Model.Customer.PhoneNumber</p>
-
-                    </li>
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <label class="control-label">Address</label>
-                        <p> @Model.Address / @Model.City /@Model.Country</p>
-
-                    </li>
-                </ul>
-            </div>
-
-        </div>
-        <div class="card red" style="width:40rem;">
-            <div class="card-body">
-
-                <ul class="list-group">
-                    <h5 class="card-title">Customer Order</h5>
-                    @if (@Model.OrderDetail != null)
-                    {
-                        @foreach (var item in @Model.OrderDetail)
-                        {
-                            <li class="list-group-item d-flex justify-content-between align-items-center">
-                                <span>@item.Product.ProductName</span>
-                                <span>@item.Product.Stock</span>
-                                <span>@item.Product.ProductId</span>
-                                <span>@item.Price.ToString("c")</span>
-
-                            </li>
-                        }
-                    }
+				<ul class="list-group">
+					<h5 class="card-title">Customer Detail</h5>
 
 
-                    <li class=" d-flex justify-content-between align-items-center" style="margin:10px;color:midnightblue;">
+					<li class="list-group-item d-flex justify-content-between align-items-center">
 
-                        <label class="control-label">Total Amount</label>
-                        <span>@Model.OrderTotal.ToString("c")</span>
-
-                    </li>
-
-                </ul>
-
-            </div>
-            @if (@Model.OrderStatus == SD.StatusApproved)
-            {
-               <a><button type="button" name="" id="" class="btn btn-primary" btn-lg btn-block" style="margin:10px"> Process Order</button></a>
-            }
-            else if (@Model.OrderStatus == SD.StatusInProcess)
-            {
-               <a> <button type="button" name="" id="" class="btn btn-primary" btn-lg btn-block" style="margin:10px">Complete Order</button></a>
-            }
-            else if (@Model.OrderStatus == SD.StatusCancelled)
-            {
-               <a><button type="button" name="" id="" class="btn btn-danger" btn-lg btn-block" style="margin:10px">Refund Order</button></a>
-            }
-            else
-            {
-                <a><button type="button" name="" id="" class="btn btn-success" btn-lg btn-block" style="margin:10px">Back to List</button></a>
-            }
+						<label class="control-label">Customer Name</label>
+						<p>@Model.Customer.FullName</p>
 
 
-        </div>
 
-    </div>
+					</li>
+					<li class="list-group-item d-flex justify-content-between align-items-center">
+						<label class="control-label">Phone Number</label>
+						<p>@Model.Customer.PhoneNumber</p>
+
+					</li>
+					<li class="list-group-item d-flex justify-content-between align-items-center">
+						<label class="control-label">Address</label>
+						<p> @Model.Address - @Model.City - @Model.Country</p>
+
+					</li>
+				</ul>
+			</div>
+
+
+		</div>
+		<div class="card red" style="width:40rem;">
+			<div class="card-body">
+
+				<ul class="list-group">
+					<h5 class="card-title">Customer's Order</h5>
+					<li class="list-group-item d-flex justify-content-between align-items-center">
+								<span>ProductName-Code </span>
+								<span>Quantity</span>
+								<span>BranchName</span>
+								<span>Price</span>
+
+							</li>
+					@if (@Model.OrderDetail != null)
+					{
+							
+						@foreach (var item in @Model.OrderDetail)
+						{
+							<li class="list-group-item d-flex justify-content-between align-items-center">
+								<span>@item.Product.ProductName -@item.ProductId</span>
+								<span>@item.Count</span>
+								<span>@Model.Branch.BranchName</span>
+								<span>@item.Price.ToString("c")</span>
+
+							</li>
+						}
+					}
+
+
+
+					<li class=" d-flex justify-content-between align-items-center" style="margin:10px;color:midnightblue;">
+
+						<label class="control-label">Total Amount</label>
+						<span>@Model.OrderTotal.ToString("c")</span>
+
+					</li>
+
+				</ul>
+
+			</div>
+			@if (@Model.OrderStatus == SD.StatusApproved)
+			{
+				<a asp-action="UpdateOrderStatus" asp-area="Admin" asp-controller="Order" asp-route-OrderId="@Model.OrderId" asp-route-orderStatus="@Model.OrderStatus" class="btn btn-primary" btn-lg btn-block" style="margin:10px"> Process Order</a>
+				<a asp-action="Index" asp-area="Admin" asp-controller="Order" class="btn btn-success" btn-lg btn-block" style="margin:10px">Back to List</a>
+			}
+			else if (@Model.OrderStatus == SD.StatusInProcess)
+			{
+				<a asp-action="UpdateOrderStatus" asp-area="Admin" asp-controller="Order" asp-route-OrderId="@Model.OrderId" asp-route-orderStatus="@Model.OrderStatus" class="btn btn-primary" btn-lg btn-block" style="margin:10px">Complete Order</a>
+				<a asp-action="Index" asp-area="Admin" asp-controller="Order" class="btn btn-success" btn-lg btn-block" style="margin:10px">Back to List</a>
+			}
+			else if (@Model.OrderStatus == SD.StatusCancelRequest)
+			{
+				<a asp-action="UpdateOrderStatus" asp-area="Admin" asp-controller="Order" asp-route-OrderId="@Model.OrderId" asp-route-orderStatus="@Model.OrderStatus" class="btn btn-danger" btn-lg btn-block" style="margin:10px">Refund Order</a>
+				<a asp-action="Index" asp-area="Admin" asp-controller="Order" class="btn btn-success" btn-lg btn-block" style="margin:10px">Back to List</a>
+			}
+			else
+			{
+				<a asp-action="Index" asp-area="Admin" asp-controller="Order" class="btn btn-success" btn-lg btn-block" style="margin:10px">Back to List</a>
+			}
+
+
+		</div>
+
+	</div>
 
 
 
 </div>
 
 
+@section Scripts{
+	<script>
+
+
+		$(document).ready(function() {
+            var error = "@ViewBag.error";
+			var notice = "@ViewBag.notice";
+			if (notice != "") {
+				swal({
+					title: "Congratulation!",
+					text: notice,
+					icon: "success",
+					button: "OK!",
+				});
+
+			}
+
+			if (error != "") {
+				swal({
+					title: "Error!",
+					text: error,
+					icon: "error",
+					button: "OK!",
+				});
+
+			}
+		});
+
+
+
+
+
+	</script>
+
+
+
+}
