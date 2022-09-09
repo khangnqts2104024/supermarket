@@ -23,6 +23,11 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddSession();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.AddAuthentication().AddFacebook(options =>
+{
+    options.AppId = "510370514233442";
+    options.AppSecret = "ce771729e8f62c00b87195f07186afc4";
+});
 //add newtonsoftJson
 builder.Services.ConfigureApplicationCookie(options =>
 {
