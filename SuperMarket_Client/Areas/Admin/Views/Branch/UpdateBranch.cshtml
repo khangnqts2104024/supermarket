@@ -8,7 +8,7 @@
 	<div class="col-md-8 offset-2" style="border: 2px solid;
   padding: 10px;
   box-shadow: 5px 10px #888888;">
-		<p>@ViewBag.msg</p>
+		<p class="text-danger">@ViewBag.msg</p>
 		<form id="profile-form" method="post" asp-action="UpdateBranch" onsubmit="return confirm('Are you sure to Update?')" enctype="multipart/form-data" class="row">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<input asp-for="BranchId" type="hidden" />

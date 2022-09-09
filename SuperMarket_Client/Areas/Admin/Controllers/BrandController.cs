@@ -214,20 +214,20 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                         obj.UpdateDate = DateTime.Now;
                         unitOfWork.Brand.Update(obj);
                         await unitOfWork.Save();
-                        return RedirectToAction("UpdateBrand", new { msg = "Categories has been Updated." });
+                        return RedirectToAction("UpdateBrand", new { id=obj.BrandId,msg = "Categories has been Updated." });
                     }
                     foreach (var item in data)
                     {
                         if (item.BrandName.ToLower() == obj.BrandName.ToLower())
                         {
-                            return RedirectToAction("UpdateBrand", new { msg = "Brand name has been Used. Try another." });
+                            return RedirectToAction("UpdateBrand", new { id = obj.BrandId, msg = "Brand name has been Used. Try another." });
                         }
                         else
                         {
                             obj.UpdateDate = DateTime.Now;
                             unitOfWork.Brand.Update(obj);
                             await unitOfWork.Save();
-                            return RedirectToAction("UpdateBrand", new { msg = "Categories has been Updated." });
+                            return RedirectToAction("UpdateBrand", new { id = obj.BrandId, msg = "Categories has been Updated." });
 
                         }
                     }
@@ -258,7 +258,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                         {
                             if (item.BrandName.ToLower() == obj.BrandName.ToLower())
                             {
-                                return RedirectToAction("UpdateBrand", new { msg = "Brand name has been Used. Try another." });
+                                return RedirectToAction("UpdateBrand", new { id = obj.BrandId, msg = "Brand name has been Used. Try another." });
                             }
                             else
                             {
