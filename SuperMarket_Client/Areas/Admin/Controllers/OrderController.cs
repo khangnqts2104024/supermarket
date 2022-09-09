@@ -74,24 +74,24 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 if (order.OrderStatus == SD.StatusApproved && orderStatus == SD.StatusApproved)
                 {
                     //minus stock
-                    foreach (var item in order.OrderDetail)
-                    {
-                        var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.BranchId.Equals(order.BranchId) && s.ProductId.Equals(item.ProductId));
-                        if (stock.Count >= item.Count)
-                        {
-                            unitOfWork.Stock.DecrementStock(stock, item.Count);
-                            ViewBag.notice = "Order Processing!";
-                        }
-                        else
-                        {
-                            ViewBag.error = item.Product.ProductName + " :Is Out Of Stock in this Branch!Add more stock or contact with customer!";
+                    //foreach (var item in order.OrderDetail)
+                    //{
+                    //    var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.BranchId.Equals(order.BranchId) && s.ProductId.Equals(item.ProductId));
+                    //    if (stock.Count >= item.Count)
+                    //    {
+                    //        unitOfWork.Stock.DecrementStock(stock, item.Count);
+                          
+                    //    }
+                    //    else
+                    //    {
+                    //        ViewBag.error = item.Product.ProductName + " :Is Out Of Stock in this Branch!Add more stock or contact with customer!";
 
-                            return View("OrderDetails", order);
-                        }
+                    //        return View("OrderDetails", order);
+                    //    }
 
-                    }
+                    //}
                     //test xem co cần save() trong loop ko?
-
+                    ViewBag.notice = "Order Processing!";
 
                     unitOfWork.Order.UpdateStatus(OrderId, SD.StatusInProcess);
 
@@ -111,13 +111,13 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                 {
                     unitOfWork.Order.UpdateStatus(OrderId, SD.StatusRefunded);
                     //stock back
-                    //foreach (var item in order.OrderDetail)
-                    //{
-                    //    var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.BranchId.Equals(order.BranchId) && s.ProductId.Equals(item.ProductId));
+                    foreach (var item in order.OrderDetail)
+                    {
+                        var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.BranchId.Equals(order.BranchId) && s.ProductId.Equals(item.ProductId));
 
-                    //    unitOfWork.Stock.IncrementStock(stock, item.Count);
-                    //}
-                    //await unitOfWork.Save();
+                        unitOfWork.Stock.IncrementStock(stock, item.Count);
+                    }
+                    await unitOfWork.Save();
                     ViewBag.notice = "Confirm Refund Success!";
                     return View("OrderDetails", order);
                 }
