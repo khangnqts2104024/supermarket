@@ -20,10 +20,12 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
 
+
             var model = await unitOfWork.Product.GetAll(includeProperties: "Brand_Category.Brand,Brand_Category.Category,Stock,Stock.Branch");
 
 
             return View(model);
+
         }
 
         //[HttpGet]
@@ -38,22 +40,30 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         [HttpGet()]
         public async Task<IActionResult> AddStock(int id)
         {
-          
-         
-        //get stock
-            var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.StockId.Equals(id),includeProperties:"Product,Branch");
 
-            if (stock != null)
+            try
             {
-               ViewBag.productName= stock.Product.ProductName;
-               ViewBag.branchName =stock.Branch.BranchName;
+                //get stock
+                var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.StockId.Equals(id), includeProperties: "Product,Branch");
 
-                return View(stock);
+                if (stock != null)
+                {
+                    ViewBag.productName = stock.Product.ProductName;
+                    ViewBag.branchName = stock.Branch.BranchName;
+
+                    return View(stock);
+                }
+                else
+                {
+                    return View("404");
+                }
             }
-            else
+            catch (Exception)
             {
-                return View("404");
+
+                return RedirectToAction("ErrorPage", "Home", new { area = "Admin" });
             }
+       
         
            
         }
@@ -61,17 +71,26 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         public async Task<IActionResult> AddStock(Stock stock,int number)
         {
 
-            var model= await unitOfWork.Stock.GetFirstOrDefault(s => s.StockId.Equals(stock.StockId));
-            if (model != null)
+            try
             {
-                 unitOfWork.Stock.IncrementStock(model,number);
-                await unitOfWork.Save();
-                return RedirectToAction("Index");
+                var model = await unitOfWork.Stock.GetFirstOrDefault(s => s.StockId.Equals(stock.StockId));
+                if (model != null)
+                {
+                    unitOfWork.Stock.IncrementStock(model, number);
+                    await unitOfWork.Save();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View("404");
+                }
             }
-            else 
+            catch (Exception)
             {
-                return View("404");
+
+                return RedirectToAction("ErrorPage", "Home", new { area = "Admin" });
             }
+          
 
           
         }
@@ -82,39 +101,56 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
         {
 
 
-            //get stock
-            var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.StockId.Equals(id), includeProperties: "Product,Branch");
 
-            if (stock != null)
+            try
             {
-               
 
-                return View(stock);
+                //get stock
+                var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.StockId.Equals(id), includeProperties: "Product,Branch");
+
+                if (stock != null)
+                {
+
+
+                    return View(stock);
+                }
+                else
+                {
+                    return View("404");
+                }
             }
-            else
+            catch (Exception)
             {
-                return View("404");
-            }
 
+                return RedirectToAction("ErrorPage", "Home", new { area = "Admin" });
+            }
 
         }
         [HttpPost]
         public async Task<IActionResult> UpdateStock(Stock stock, int number)
         {
 
-            var model = await unitOfWork.Stock.GetFirstOrDefault(s => s.StockId.Equals(stock.StockId));
-            if (model != null)
-            {
-                unitOfWork.Stock.UpdateStock(model, number);
-                await unitOfWork.Save();
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                return View("404");
-            }
+         
 
+            try
+            {
+                var model = await unitOfWork.Stock.GetFirstOrDefault(s => s.StockId.Equals(stock.StockId));
+                if (model != null)
+                {
+                    unitOfWork.Stock.UpdateStock(model, number);
+                    await unitOfWork.Save();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    return View("404");
+                }
+            }
+            catch (Exception)
+            {
 
+                return RedirectToAction("ErrorPage", "Home", new { area = "Admin" });
+            }
         }
 
 
