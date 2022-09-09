@@ -4,7 +4,7 @@
 }
 <h3>@ViewData["Title"]</h3>
 
-<h2>@ViewBag.msg</h2>
+<span class="text-danger">@ViewBag.msg</span>
 <div id="ImgListMain">Main Img: </div>
 <Label>Side Img: </Label>
 
@@ -104,6 +104,7 @@
 			alert("Picture must be lower than 3mb");
 			mainImage.value = "";
 		} else {
+            printOutMain.innerHTML = "Main Image: ";
 			var temp = window.URL.createObjectURL(mainImage.files[0]);
 			printOutMain.innerHTML += imgdefault + " src='" + temp + "'" + "/>";
 		}
