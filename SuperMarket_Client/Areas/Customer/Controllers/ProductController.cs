@@ -96,7 +96,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     });
                 }
                 var ratingList = await unitOfWork.Feedback_Rating.GetAll();
-                var relatedProduct = await unitOfWork.Stock.GetAll(x => x.Product.Brand_Category.CategoryId == objVM.Product.Brand_Category.CategoryId && x.BranchId == result && x.Count > 0 && x.ProductId != objVM.ProductId, includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
+                var relatedProduct = await unitOfWork.Stock.GetAll(x => x.Product.Brand_Category.CategoryId == objVM.Product.Brand_Category.CategoryId && x.BranchId == result && x.ProductId != objVM.ProductId, includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
                 if (ratingList != null)
                 {
                     foreach (var item in relatedProduct)
