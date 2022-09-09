@@ -4,7 +4,7 @@
 @addTagHelper *, AuthoringTagHelpers
 @model IEnumerable<Stock>;
 
-@*<!-- Inner Page Breadcrumb -->
+<!-- Inner Page Breadcrumb -->
 <div class="inner_page_breadcrumb">
 	<div class="container">
 		<div class="row">
@@ -12,7 +12,7 @@
 				<div class="breadcrumb_content">
 					<h2 class="breadcrumb_title">Shop</h2>
 					<ol class="breadcrumb">
-						<li class="breadcrumb-item"><a href="#">Home</a></li>
+						<li class="breadcrumb-item"><a href="/">Home</a></li>
 						<li class="breadcrumb-item active" aria-current="page"><a href="#">Shop</a></li>
 					</ol>
 				</div>
@@ -20,13 +20,13 @@
 		</div>
 	</div>
 </div>
-*@
+
 <!-- Listing Grid View -->
 
 <div class="container">
 
 
-	<
+	<br />
 
 	<div class="row">
 		<div class="col-xl-3 dn-lg">
@@ -144,11 +144,12 @@
     });
 		//call
 		 function changePrice(picker) {
-            
+            picker.setAttribute("class", "boder-chosen");
           let productdata=Price(picker, model);
 			  loaddata(productdata);
 		}
 		 function changeBrand(picker) {
+			picker.setAttribute("class", "boder-chosen");
 			let productdata=Brand(picker, model);
              loaddata(productdata);
 			}

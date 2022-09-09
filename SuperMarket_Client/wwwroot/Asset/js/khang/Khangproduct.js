@@ -7,11 +7,11 @@
         //alert(chosenPrice);
         //get brand;
         let priceTicked = $('[data-price]');
-        for (let i = 0; i < priceTicked.length; i++) { priceTicked[i].setAttribute("data-check", ""); }
+        for (let i = 0; i < priceTicked.length; i++) { priceTicked[i].setAttribute("data-check", ""); priceTicked[i].setAttribute("class", ""); }
         //add ticked
 
         picker.setAttribute("data-check", "ticked");
-
+        picker.setAttribute("class", "boder-chosen");
         let brandList = $('[data-brand]');
 
         let brandId;
@@ -66,10 +66,10 @@ function Brand(picker, modelData) {
         let chosenBrand = picker.getAttribute("data-brand");
         //reset ticked
         let tickedBrand = $('[data-brand]');
-        for (let i = 0; i < tickedBrand.length; i++) { tickedBrand[i].setAttribute("data-check", ""); }
+    for (let i = 0; i < tickedBrand.length; i++) { tickedBrand[i].setAttribute("data-check", ""); tickedBrand[i].setAttribute("class", ""); }
 
         picker.setAttribute("data-check", "ticked");
-        //picker.setAttribute("class", "active");
+        picker.setAttribute("class", "boder-chosen");
 
         //get brand;
         let priceList = $('[data-price]');
@@ -233,8 +233,8 @@ function Brand(picker, modelData) {
 																							<div class="thumb_info">
 																								<ul class="mb0">
 
-																									<li><a href="/Customer/Product/CompareProduct?CategoryId=${item.Brand_Category.CategoryId}&productId=${item.ProductId}" ><span class="flaticon-search"></span></a></li>
-                                                                                                    <li><a href="/Customer/Product/Details?id=${item.ProductId}" ><i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
+																									<li class="btn-color"><a href="/Customer/Product/CompareProduct?CategoryId=${item.Brand_Category.CategoryId}&productId=${item.ProductId}" ><span class="flaticon-search"></span></a></li>
+                                                                                                    <li class="btn-color"><a href="/Customer/Product/Details?id=${item.ProductId}" ><i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
 																								</ul>
 																							</div>
 																						</div>
