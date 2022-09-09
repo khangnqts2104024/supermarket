@@ -543,6 +543,21 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
                         //khang
                         if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }
+
+                        foreach (var item in orderVM.OrderDetails)
+                        {
+                            var stock = await unitOfWork.Stock.GetFirstOrDefault(s => s.BranchId.Equals(order.BranchId) && s.ProductId.Equals(item.ProductId));
+                            if (stock.Count >= item.Count)
+                            {
+                                unitOfWork.Stock.DecrementStock(stock, item.Count);
+
+                            }
+                            else
+                            {
+                                return RedirectToAction("Index", "Error");
+                            }
+
+                        }
                         //
                         unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
                         HttpContext.Session.Remove("paymentIntent");
