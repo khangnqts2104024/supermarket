@@ -39,22 +39,22 @@
 				</div>
 			</form>
 			<div>
-					<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-						<div>
-							<p>
-								@foreach (var provider in Model.ExternalLogins)
-								{
-									<button type="submit" class="w-100 btn btn-lg btn-log btn-thm mt10 mb10" style="background-color:blue" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-								}
-							</p>
-						</div>
-					</form>
-				</div>
-				<div style="display:flex;justify-content:space-between;" class="mt15">
-					<label>
-						<a class="btn-fpswd float-end" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
-					</label>
-				</div>
+				<form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+					<div>
+						<p>
+							@foreach (var provider in Model.ExternalLogins)
+							{
+								<button type="submit" class="w-100 btn btn-lg btn-log btn-thm mt10 mb10" style="background-color:blue" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+							}
+						</p>
+					</div>
+				</form>
+			</div>
+			<div style="display:flex;justify-content:space-between;" class="mt15">
+				<label>
+					<a class="btn-fpswd float-end" asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+				</label>
+			</div>
 		</section>
 
 	</div>
