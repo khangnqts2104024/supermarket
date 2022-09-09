@@ -233,7 +233,7 @@ function Brand(picker, modelData) {
 																							<div class="thumb_info">
 																								<ul class="mb0">
 
-																									<li class="btn-color"><a href="/Customer/Product/CompareProduct?CategoryId=${item.Brand_Category.CategoryId}&productId=${item.ProductId}" ><span class="flaticon-search"></span></a></li>
+																									<li class="btn-color"><a href="/Customer/Product/CompareProduct?CategoryId=${item.Brand_Category.CategoryId}&productId=${item.ProductId}" ><i class="fa fa-balance-scale" aria-hidden="true"></i></a></li>
                                                                                                     <li class="btn-color"><a href="/Customer/Product/Details?id=${item.ProductId}" ><i class="fa fa-info-circle" aria-hidden="true"></i></a></li>
 																								</ul>
 																							</div>
