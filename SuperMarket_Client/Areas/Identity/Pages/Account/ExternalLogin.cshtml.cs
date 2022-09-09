@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using SuperMarket_Utility;
 
 namespace SuperMarket_Client.Areas.Identity.Pages.Account
 {
@@ -84,6 +85,20 @@ namespace SuperMarket_Client.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+            [Required]
+            [StringLength(100)]
+            public string FullName { get; set; }
+
+
+            [Required]
+            [StringLength(150)]
+            public string Address { get; set; }
+            [Required]
+            public string PhoneNumber { get; set; }
+            [Required]
+            public string City { get; set; }
+            [Required]
+            public string Country { get; set; }
         }
         
         public IActionResult OnGet() => RedirectToPage("./Login");
@@ -131,7 +146,10 @@ namespace SuperMarket_Client.Areas.Identity.Pages.Account
                 {
                     Input = new InputModel
                     {
-                        Email = info.Principal.FindFirstValue(ClaimTypes.Email)
+                        Email = info.Principal.FindFirstValue(ClaimTypes.Email),
+                        FullName = info.Principal.FindFirstValue(ClaimTypes.Name)
+
+
                     };
                 }
                 return Page();
@@ -155,10 +173,16 @@ namespace SuperMarket_Client.Areas.Identity.Pages.Account
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-
+                user.FullName = Input.FullName;
+                user.Address = Input.Address;
+                user.PhoneNumber = Input.PhoneNumber;
+                user.City = Input.City;
+                user.Country = Input.Country;
                 var result = await _userManager.CreateAsync(user);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, SD.Role_User_Customer);
+
                     result = await _userManager.AddLoginAsync(user, info);
                     if (result.Succeeded)
                     {
@@ -197,11 +221,11 @@ namespace SuperMarket_Client.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private SuperMarket_Models.Models.Customer CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                return Activator.CreateInstance<SuperMarket_Models.Models.Customer>();
             }
             catch
             {
