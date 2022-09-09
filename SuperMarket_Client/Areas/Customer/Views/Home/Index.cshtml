@@ -110,19 +110,19 @@
 												{
 													if (Image.IsMainImage == true)
 													{
-														<img src="@Image.Url" alt="fp1.png">
+														<img src="@Image.Url" loading="lazy" alt="fp1.png">
 													}
 												}
 												<div class="thumb_info">
 													<ul class="mb0">
-														<li  data-toggle="tooltip" data-placement="top" title="View Detail">
+														<li  class="btn-color" data-toggle="tooltip" data-placement="top" title="View Detail">
 															<a href="/Customer/Product/Details?id=@data.ProductId">
 																<i class="fa fa-info-circle" aria-hidden="true"></i>
 															</a>
 														</li>
 
-														<li  data-toggle="tooltip" data-placement="top" title="Compare Product">
-															<a href="/Customer/Product/CompareProduct?CategoryId=@data.Product.Brand_Category.CategoryId&amp;productId=@data.ProductId"><span class="flaticon-search"></span></a>
+														<li  class="btn-color"  data-toggle="tooltip" data-placement="top" title="Compare Product">
+															<a href="/Customer/Product/CompareProduct?CategoryId=@data.Product.Brand_Category.CategoryId&amp;productId=@data.ProductId"><i class="fa fa-balance-scale" aria-hidden="true"></i></a>
 														</li>
 													</ul>
 												</div>
@@ -187,7 +187,7 @@
 																	</a>
 																</li>
 
-																<li  data-toggle="tooltip" data-placement="top" title="Compare Product">
+																<li  class="btn-color" data-toggle="tooltip" data-placement="top" title="Compare Product">
 																	<a href="/Customer/Product/CompareProduct?CategoryId=@data.Product.Brand_Category.CategoryId&amp;productId=@data.ProductId"><span class="flaticon-search"></span></a>
 																</li>
 															</ul>
@@ -294,7 +294,6 @@
 					<div class="icon"> <img src="~/Asset/images/why-chose/1.png" alt="1.png"> </div>
 					<div class="details">
 						<h4 class="title">We drive fast & ship faster</h4>
-						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
 					</div>
 				</div>
 			</div>
@@ -303,7 +302,6 @@
 					<div class="icon"> <img src="~/Asset/images/why-chose/2.png" alt="2.png"> </div>
 					<div class="details">
 						<h4 class="title">We save your more money</h4>
-						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
 					</div>
 				</div>
 			</div>
@@ -312,7 +310,6 @@
 					<div class="icon"> <img src="~/Asset/images/why-chose/3.png" alt="3.png"> </div>
 					<div class="details">
 						<h4 class="title">Daily discount coupons</h4>
-						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
 					</div>
 				</div>
 			</div>
