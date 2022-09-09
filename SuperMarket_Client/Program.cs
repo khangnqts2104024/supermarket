@@ -23,11 +23,12 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 builder.Services.AddSession();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
-builder.Services.AddAuthentication().AddFacebook(options =>
+builder.Services.AddAuthentication().AddGoogle(options =>
 {
-    options.AppId = "510370514233442";
-    options.AppSecret = "ce771729e8f62c00b87195f07186afc4";
+    options.ClientId = "242580396308-ti1if1cm1h9pecc0puvdi4og3knuclcf.apps.googleusercontent.com";
+    options.ClientSecret = "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";
 });
+
 //add newtonsoftJson
 builder.Services.ConfigureApplicationCookie(options =>
 {
