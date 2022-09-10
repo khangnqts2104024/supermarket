@@ -81,6 +81,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
                         {
                             unitOfWork.Stock.DecrementStock(stock, item.Count);
                             ViewBag.notice = "Order Processing!";
+
                         }
                         else
                         {
@@ -91,7 +92,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
 
                     }
                     //test xem co cần save() trong loop ko?
-
+                 
 
                     unitOfWork.Order.UpdateStatus(OrderId, SD.StatusInProcess);
 
@@ -117,7 +118,7 @@ namespace SuperMarket_Client.Areas.Admin.Controllers
 
                     //    unitOfWork.Stock.IncrementStock(stock, item.Count);
                     //}
-                    //await unitOfWork.Save();
+                    await unitOfWork.Save();
                     ViewBag.notice = "Confirm Refund Success!";
                     return View("OrderDetails", order);
                 }

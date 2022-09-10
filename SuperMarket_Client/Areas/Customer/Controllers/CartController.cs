@@ -543,6 +543,8 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         IEnumerable<ShoppingCart> shoppingCarts = await unitOfWork.ShoppingCart.GetAll(x => x.CustomerId == orderVM.Order.CustomerId);
                         //khang
                         if (order.Coupon != null && order.Coupon.Count > 0) { order.Coupon.Count -= 1; }
+
+
                         //
                         unitOfWork.ShoppingCart.RemoveRange(shoppingCarts);
                         HttpContext.Session.Remove("paymentIntent");
