@@ -550,7 +550,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                         HttpContext.Session.Remove("paymentIntent");
                         await unitOfWork.Save();
                     }
-                    else
+                    else  
                     {
                         return RedirectToAction("Index", "Error");
                     }
