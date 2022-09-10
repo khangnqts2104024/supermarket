@@ -27,6 +27,8 @@ builder.Services.AddAuthentication().AddGoogle(options =>
 {
     options.ClientId = "242580396308-ti1if1cm1h9pecc0puvdi4og3knuclcf.apps.googleusercontent.com";
     options.ClientSecret = "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";
+    options.CallbackPath = "/signin-google";
+    options.AuthorizationEndpoint = String.Concat(options.AuthorizationEndpoint, "?prompt=select_account");
 });
 
 //add newtonsoftJson
