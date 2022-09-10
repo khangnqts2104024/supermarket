@@ -8,7 +8,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
 {
     [Area("Customer")]
     [BranchActionFilter]
-    [Authorize(Roles = "Customer")]
+
     public class FeedbackAndRatingController : Controller
     {
         private readonly IUnitOfWork unitOfWork;
@@ -27,6 +27,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
                 if (claimsIdentity == null || claim == null)
                 {
+
                     return Json(new
                     {
                         statusCode = 401,
@@ -55,6 +56,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                             {
                                 statusCode = 200,
                                 message = "Send Feedback successfully",
+                                feedbackId = feedback.Id,
                                 content = await unitOfWork.Feedback_Rating.GetFirstOrDefault(x => x.Id == feedback.Id, includeProperties: "Customer")
                             });
                         }
@@ -85,6 +87,30 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                 });
             }           
 
+        }
+
+        //[HttpGet]
+        public async Task<IActionResult> EditReview(int newRatingPoint, string newFeedback, int ProductId)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+
+          if(claim != null)
+            {
+                if (newRatingPoint != 0 && !string.IsNullOrEmpty(newFeedback))
+                {
+                    var review = await unitOfWork.Feedback_Rating.GetFirstOrDefault(x => x.ProductId == ProductId && x.CustomerId == claim.Value);
+                    if(review != null)
+                    {
+                        review.RatingPoint = newRatingPoint;
+                        review.Content = newFeedback;
+                        unitOfWork.Feedback_Rating.Update(review);
+                        await unitOfWork.Save();
+                        return RedirectToAction("Details", "Product", new { area = "Customer" });
+                    }
+                }
+            }
+            return RedirectToAction("Details", "Product", new { area = "Customer" });
         }
     }
 }

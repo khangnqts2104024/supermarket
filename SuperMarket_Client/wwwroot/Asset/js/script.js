@@ -16,8 +16,6 @@ var isApplied = false;
                          <td>${item.product.title}</td>
                          <td>${item.count}</td> 
                          <td>${item.price}</td>
-                         <td>${item.product.manufactureDate}</td>
-                         <td>${item.product.expiryDate}</td>
                          </tr>`;
                 }
        
@@ -27,8 +25,6 @@ var isApplied = false;
             '<th>Product</th>' +
             '<th>Quantity</th>' +
             '<th>Price</th>' +
-            '<th>ManufactureDate</th>' +
-            '<th>ExpiryDate</th>' +
                 '</thead>'+
                '<tbody>'
                  + trs +
@@ -112,6 +108,20 @@ var isApplied = false;
         }
         $("#" + id).prop("checked", true);
     });
+    $("#submitEditReviewBtn").on("click", function () {
+     
+        let newRatingPoint = $("#newRatingPoint").val();
+        let ProductId = $("#ProductId").val();
+        let newFeedback = $("#newFeedback").val();
+        $.ajax({
+            url: "/Customer/FeedbackAndRating/EditReview",
+            type: "POST",
+            data: { newRatingPoint: newRatingPoint, newFeedback: newFeedback, ProductId: ProductId },
+            success: function (response) {
+                window.location.href = "https://localhost:7166/Customer/Product/Details?id=" + ProductId;
+            }
+        });
+    })
 
     $("#submitReview").on("click", function (e) {
         e.preventDefault();
@@ -182,6 +192,42 @@ var isApplied = false;
 
                         $("#listUserFeedback").prepend(data);
 
+                        $("#comments_formDetail").html(`
+                                <h3>You have already reviewed this product ! Do you want to edit your review ? </h3>
+                                        <div>
+                                            <form>
+                                                <input type="hidden" name="ProductId" id="ProductId" value="${productId}" />
+                                                <div class="mb-3">
+                                                <label for="newRatingPoint" class="form-label">Rating Point</label>
+                                                <input name="newRatingPoint" required  class="form-control" type='text' id="newRatingPoint" value="${response.content.ratingPoint}" placeholder="Rating Point must be between 1-5">
+
+                                                </div>
+                                                <div class="mb-3">
+                                                <label for="newFeedback" class="form-label">Your Feedback</label>
+                                                <input type="text" name="newFeedback" required class="form-control" id="newFeedback" value="${content}">
+                                                </div>
+                                                <button type="button" id="submitEditReviewBtn" class="btn btn-primary">Submit</button>
+                                            </form>
+                                        </div>
+                        `);
+
+                        //$("#submitEditReviewBtn").on("click", function () {
+                        //    let newRatingPoint = $("#newRatingPoint").val();
+                        //    let ProductId = $("#ProductId").val();
+                        //    let newFeedback = $("#newFeedback").val();
+                        //    $.ajax({
+                        //        url: "/Customer/FeedbackAndRating/EditReview",
+                        //        type: "POST",
+                        //        data: { newRatingPoint: newRatingPoint, newFeedback: newFeedback, ProductId: ProductId },
+                        //        success: function (response) {
+                        //            window.location.href = "https://localhost:7166/Customer/Product/Details?id=" + ProductId;
+                        //        }
+                        //    });
+                        //})
+
+                        let numOfReview = $("#numberOfReview").text();
+                        $("#numberOfReview").text(parseInt(numOfReview) + 1);
+
                         for (var i = 0; i < rating_product.length; i++) {
                             $("#" + i).prop("checked", false);
                         }
@@ -199,6 +245,7 @@ var isApplied = false;
         }
     });
 
+
     "use strict";
 
     /* ----- Preloader ----- */
@@ -208,29 +255,6 @@ var isApplied = false;
         }
         $(".preloader_disabler").on('click', function () {
             $("#preloader").hide();
-        });
-    }
-
-    /* ----- Navbar Scroll To Fixed ----- */
-    function navbarScrollfixed() {
-        $('.navbar-scrolltofixed').scrollToFixed();
-        var summaries = $('.summary');
-        summaries.each(function (i) {
-            var summary = $(summaries[i]);
-            var next = summaries[i + 1];
-            summary.scrollToFixed({
-                marginTop: $('.navbar-scrolltofixed').outerHeight(true) + 10,
-                limit: function () {
-                    var limit = 0;
-                    if (next) {
-                        limit = $(next).offset().top - $(this).outerHeight(true) - 10;
-                    } else {
-                        limit = $('.footer').offset().top - $(this).outerHeight(true) - 10;
-                    }
-                    return limit;
-                },
-                zIndex: 999
-            });
         });
     }
 
@@ -373,19 +397,8 @@ var isApplied = false;
     //     });
     // });
 
-    const cd = new Date().getFullYear() + 1
-    $('#countdown').countdown({
-        year: cd
-    });
 
-    /* ----- fact-counter ----- */
-    function counterNumber() {
-        $('div.timer').counterUp({
-            delay: 5,
-            time: 2000
-        });
-    }
-    $('.circlechart').circlechart(); // Initialization
+    //$('.circlechart').circlechart(); // Initialization
 
     /* ----- Mobile Nav ----- */
     $(function () {
@@ -405,19 +418,7 @@ var isApplied = false;
     });
 
     /* ----- Candidate SIngle Page Price Slider ----- */
-    $(function () {
-        $("#slider-range").slider({
-            range: true,
-            min: 50,
-            max: 150,
-            values: [50, 120],
-            slide: function (event, ui) {
-                $("#amount").val("$" + ui.values[0] + " - $" + ui.values[1]);
-            }
-        });
-        $("#amount").val("$" + $("#slider-range").slider("values", 0) +
-            " - $" + $("#slider-range").slider("values", 1));
-    });
+    
 
     /* ----- Employee List v1 page range slider widget ----- */
     $(document).on('ready', function () {
@@ -474,39 +475,39 @@ var isApplied = false;
     }
 
     // Display the progress bar calling progressbar.js
-    $('.progressbar1').progressBar({
-        shadow: false,
-        percentage: false,
-        animation: true,
-        barColor: "#ff5a5f",
-    });
-    $('.progressbar2').progressBar({
-        shadow: false,
-        percentage: false,
-        animation: true,
-        barColor: "#ff5a5f",
-    });
-    $('.progressbar3').progressBar({
-        shadow: false,
-        percentage: false,
-        animation: true,
-        animateTarget: true,
-        barColor: "#ff5a5f",
-    });
-    $('.progressbar4').progressBar({
-        shadow: false,
-        percentage: false,
-        animation: true,
-        animateTarget: true,
-        barColor: "#ff5a5f",
-    });
-    $('.progressbar5').progressBar({
-        shadow: false,
-        percentage: false,
-        animation: true,
-        animateTarget: true,
-        barColor: "#ff5a5f",
-    });
+    //$('.progressbar1').progressBar({
+    //    shadow: false,
+    //    percentage: false,
+    //    animation: true,
+    //    barColor: "#ff5a5f",
+    //});
+    //$('.progressbar2').progressBar({
+    //    shadow: false,
+    //    percentage: false,
+    //    animation: true,
+    //    barColor: "#ff5a5f",
+    //});
+    //$('.progressbar3').progressBar({
+    //    shadow: false,
+    //    percentage: false,
+    //    animation: true,
+    //    animateTarget: true,
+    //    barColor: "#ff5a5f",
+    //});
+    //$('.progressbar4').progressBar({
+    //    shadow: false,
+    //    percentage: false,
+    //    animation: true,
+    //    animateTarget: true,
+    //    barColor: "#ff5a5f",
+    //});
+    //$('.progressbar5').progressBar({
+    //    shadow: false,
+    //    percentage: false,
+    //    animation: true,
+    //    animateTarget: true,
+    //    barColor: "#ff5a5f",
+    //});
 
     /* ----- Background Parallax ----- */
     var isMobile = {
@@ -530,15 +531,7 @@ var isApplied = false;
         }
     };
 
-    jQuery(document).on('ready', function () {
-        jQuery(window).stellar({
-            horizontalScrolling: false,
-            hideDistantElements: true,
-            verticalScrolling: !isMobile.any(),
-            scrollProperty: 'scroll',
-            responsive: true
-        });
-    });
+    
 
     /* ----- MagnificPopup ----- */
     if (($(".popup-img").length > 0) || ($(".popup-iframe").length > 0) || ($(".popup-img-single").length > 0)) {
@@ -2120,9 +2113,9 @@ var isApplied = false;
        ====== */
     $(document).on('ready', function () {
         // add your functions
-        navbarScrollfixed();
+        //navbarScrollfixed();
         scrollToTop();
-        wowAnimation();
+        //wowAnimation();
         mobileNavToggle();
 
 
@@ -2162,17 +2155,10 @@ var isApplied = false;
        ====== */
     // window on Load function
     $(window).on('load', function () {
-        // add your functions
-        counterNumber();
         preloaderLoad();
-        //selectBranch_popup();
 
     });
-    // window on Scroll function
-    $(window).on('scroll', function () {
-        // add your functions
-    });
-
+  
 
 })(window.jQuery);
 
