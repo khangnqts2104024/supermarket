@@ -47,5 +47,16 @@ namespace SuperMarket_Models.ViewModels
         [NotMapped]
         [ValidateNever]
         public List<Stock> RelatedProduct { get; set; }
+
+        [NotMapped]
+        [ValidateNever]
+        public bool usedToReview { get; set; }
+
+        [NotMapped]
+        [ValidateNever]
+        public int UserReview_RatingPoint { get; set; }
+        [NotMapped]
+        [ValidateNever]
+        public string UserReview_Content { get; set; }
     }
 }

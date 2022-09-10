@@ -81,6 +81,7 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     objVM.StockCount = (int)stockByBranchID.Count;
                 }
                 objVM.FeedbackCount = objVM.Feedback_RatingList.Count();
+
                 bool isAjax = HttpContext.Request.Headers["X-Requested-With"] == "XMLHttpRequest";
                 if (isAjax)
                 {
@@ -96,6 +97,23 @@ namespace SuperMarket_Client.Areas.Customer.Controllers
                     });
                 }
                 var ratingList = await unitOfWork.Feedback_Rating.GetAll();
+                if(claim != null)
+                {
+                    var userReviewed = await unitOfWork.Feedback_Rating.GetFirstOrDefault(x => x.CustomerId == claim.Value && x.ProductId == id);
+                    if (userReviewed != null)
+                    {
+                        objVM.usedToReview = true;
+                        objVM.UserReview_RatingPoint = userReviewed.RatingPoint;
+                        objVM.UserReview_Content = userReviewed.Content;
+                    }
+                    else
+                    {
+                        objVM.usedToReview = false;
+                        objVM.UserReview_RatingPoint = 0;
+                        objVM.UserReview_Content = "";
+
+                    }
+                }
                 var relatedProduct = await unitOfWork.Stock.GetAll(x => x.Product.Brand_Category.CategoryId == objVM.Product.Brand_Category.CategoryId && x.BranchId == result && x.ProductId != objVM.ProductId, includeProperties: "Product.Brand_Category.Category,Product.ImageProduct");
                 if (ratingList != null)
                 {

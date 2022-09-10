@@ -1,5 +1,7 @@
 ﻿@model SuperMarket_Models.ViewModels.Cart_Feedback_RatingVM
-
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 
 <!-- Inner Page Breadcrumb -->
   <section class="inner_page_breadcrumb pt50 pb50 mt70-992">
@@ -139,7 +141,7 @@
                 <button class="nav-link" id="aiinfo-tab" data-bs-toggle="tab" data-bs-target="#aiinfo" type="button" role="tab" aria-controls="aiinfo" aria-selected="false">Additional information</button>
               </li>
               <li class="nav-item" role="presentation">
-                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false"> Reviews (@Model.FeedbackCount)</button>
+                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false"> Reviews (<span id="numberOfReview">@Model.FeedbackCount</span>)</button>
               </li>
             </ul>
             <div class="tab-content" id="myTabContent2">
@@ -213,33 +215,76 @@
 
                   <div class="col-lg-6">
                     <div class="bsp_reveiw_wrt pt30">
-                      <form class="comments_form" >
-                        <div class="row">
-                          <div class="col-lg-12">
-                              <input type="hidden" asp-for="ProductId" />
-                              <input type="hidden" asp-for="branchId" />
-                            <h5 class="fz16 mb10">Be the first to review “@Model.Product.Title” </h5>
-                            <div class="sspd_review mb10">
-                               <div class="rating mb10"> 
-                                    <input  type="radio" data-rating="ratingProduct" class="ratingProduct" data-id="5" name="ratingProduct5" value="5" id="5"><label for="5">☆</label> 
-                                    <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="4" name="ratingProduct4" value="4" id="4"><label for="4">☆</label>
-                                    <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="3" name="ratingProduct3" value="3" id="3"><label for="3">☆</label>
-                                    <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="2" name="ratingProduct2" value="2" id="2"><label for="2">☆</label>
-                                    <input type="radio" data-rating="ratingProduct"  class="ratingProduct" data-id="1" name="ratingProduct1" value="1" id="1"><label for="1">☆</label>
+                      <form class="comments_form" id="comments_formDetail">
+                        @if ( !SignInManager.IsSignedIn(User) || Model.usedToReview == false)
+                        {
+                             <div class="row">
+                              <div class="col-lg-12">
+                                  <input type="hidden" asp-for="ProductId" />
+                                  <input type="hidden" asp-for="branchId" />
+                                <h5 class="fz16 mb10">Be the first to review “@Model.Product.Title” </h5>
+                                <div class="sspd_review mb10">
+                                   <div class="rating mb10"> 
+                                        <input  type="radio" data-rating="ratingProduct" class="ratingProduct" data-id="5" name="ratingProduct5" value="5" id="5"><label for="5">☆</label> 
+                                        <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="4" name="ratingProduct4" value="4" id="4"><label for="4">☆</label>
+                                        <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="3" name="ratingProduct3" value="3" id="3"><label for="3">☆</label>
+                                        <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="2" name="ratingProduct2" value="2" id="2"><label for="2">☆</label>
+                                        <input type="radio" data-rating="ratingProduct"  class="ratingProduct" data-id="1" name="ratingProduct1" value="1" id="1"><label for="1">☆</label>
+                                    </div>
                                 </div>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label class="fz14 heading-color mb10">Your review *</label>
-                              <textarea id="feedbackContent" required class="form-control" rows="6"></textarea>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <button type="submit" id="submitReview" class="btn btn-thm">SUBMIT</button>
-                          </div>
-                        </div>
-                      </form>
+                              </div>
+                              <div class="col-md-12">
+                                <div class="form-group">
+                                  <label class="fz14 heading-color mb10">Your review *</label>
+                                  <textarea id="feedbackContent" required class="form-control" rows="6"></textarea>
+                                </div>
+                              </div>
+                              <div class="col-md-12">
+                                    <button type="submit" id="submitReview" class="btn btn-thm">SUBMIT</button>
+                                </div>
+                                                </div>
+                                }
+                                else
+                                {
+                                    if(Model.usedToReview == true)
+                                    {
+                                            <h3>You have already reviewed this product ! Do you want to edit your review ? </h3>
+                                            
+                                        <div>
+                                            <form>
+                                                <input type="hidden" name="ProductId" asp-for="ProductId" />
+                                                <div class="mb-3">
+                                                    <label style="font-size:25px;" for="newRatingPoint" class="form-label">Rating Point</label>
+                                                    <input name="newRatingPoint" required  class="form-control" type='text' id="newRatingPoint" value="@Model.UserReview_RatingPoint" placeholder="Rating Point must be between 1-5">
+                                                </div>
+                                                <div class="mb-3">
+                                                <label style="font-size:25px;" for="newFeedback" class="form-label">Your Feedback</label>
+                                                <input type="text" name="newFeedback" required class="form-control" id="newFeedback" value="@Model.UserReview_Content">
+                                                </div>
+                                                <button type="button" id="submitEditReviewBtn" class="btn btn-primary">Submit</button>
+                                            </form>
+                                        </div>
+
+                                                
+
+                                        @section Scripts{
+                                            <script>
+                                                    document.getElementById('newRatingPoint').addEventListener('keypress', event => {
+                                                    if (!`${event.target.value}${event.key}`.match(/^[1-5]{1}$/)) {
+                                                        // block the input if result does not match
+                                                        event.preventDefault();
+                                                        event.stopPropagation();
+                                                        return false;
+                                                    }
+                                                });
+
+                                                
+                                            </script>
+                                        }
+                                    }
+                                               
+                                }
+                            </form>
                     </div>
                   </div>
                 </div>
@@ -252,6 +297,7 @@
 	</section>
 
 
+    
 
 @if(Model.RelatedProduct.Count() != 0)
 {
