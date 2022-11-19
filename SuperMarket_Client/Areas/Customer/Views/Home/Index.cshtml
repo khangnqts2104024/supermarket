@@ -1,0 +1,302 @@
+﻿@model IEnumerable<Stock>
+@{
+	ViewData["Title"] = "Home Page";
+}
+
+
+<!-- Home Design -->
+<section class="home-one mt0 bg-home1">
+	<div class="container">
+		<div class="row posr">
+			<div class="col-lg-8 col-xl-6">
+				<div class="home_content home1_style">
+					<div class="home-text">
+						<p class="fz14 fwb ttu text-thm2">All natural products.</p>
+						<h2 class="fz60 ttu">
+							<span class="text-thm2 fwb">Healthy Food</span> <br><span class="text-thm fw400">
+								&
+								Organic Market
+							</span>
+						</h2>
+						<p class="fz16 text-thm2 dn-sm">
+							<span class="fw700">Organic food</span> is food produced by methods that
+							comply with the <br class="dn-520"> standards of organic farming.
+						</p>
+						<a class="btn btn-thm2" href="page-shop-list-v1.html">SHOP NOW</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Top Category -->
+<section class="top-category pb60">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 offset-lg-3">
+				<div class="main-title text-center">
+					<h2>Top Categories Of The Month</h2>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="shop_item_8grid_slider nav_none dots_none">
+					@foreach (Category item in @ViewBag.CategoryList)
+					{
+						<div class="item">
+							<a href="page-shop-list-v6.html">
+								<div class="iconbox">
+									<div class="icon"><img src="@item.CategoryImg" alt="food-grocery.png"></div>
+									<div class="details">
+										<h5 class="title">@item.CategoryName</h5>
+									</div>
+								</div>
+							</a>
+						</div>
+					}
+
+
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<!-- Featured Product  -->
+<section class="featured-product pt0">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-8">
+				<div class="main-title text-center">
+					<h2>Featured Products</h2>
+				</div>
+			</div>
+		</div>
+
+
+		@*start cate*@
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="popular_listing_sliders row ">
+					<!-- Nav tabs -->
+					<div class="nav nav-tabs mb30 col-lg-12 justify-content-center" role="tablist">
+						<button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-All"
+								role="tab" aria-controls="nav-home" aria-selected="true">All
+						</button>
+						@foreach (Category item in @ViewBag.categoryList)
+						{
+							<button class="nav-link" id="nav-tab-@item.CategoryName" data-bs-toggle="tab" data-bs-target="#nav-@item.CategoryName"
+								role="tab" aria-controls="nav-@item.CategoryName" aria-selected="true">
+								@item.CategoryName
+							</button>
+						}
+
+					</div>
+					<!-- Tab panes -->
+					<div class="tab-content col-lg-12" id="nav-tabContent">
+						<div class="tab-pane fade show active" id="nav-All" role="tabpanel" aria-labelledby="nav-home-tab">
+							<div class="popular_listing_slider1">
+								@foreach (var data in Model)
+								{
+									<div class="item">
+										<div class="shop_item">
+											<div class="thumb">
+												@foreach (var Image in data.Product.ImageProduct)
+												{
+													if (Image.IsMainImage == true)
+													{
+														<img src="@Image.Url" alt="fp1.png">
+													}
+												}
+												<div class="thumb_info">
+													<ul class="mb0">
+														<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span style="font-size:20px;" class="flaticon-shopping-cart"></span></li>
+													</ul>
+												</div>
+											</div>
+											<div class="details text-center">
+												<div class="title">@data.Product.Brand_Category.Category.CategoryName</div>
+												<div class="review">
+													<div class="small-ratings">
+														@for (var i = 0; i < @data.RatingPointAverage; i++)
+														{
+															<i class="fa fa-star rating-color"></i>
+														}
+														@for (int i = 0; i < 5-@data.RatingPointAverage; i++)
+														{
+															<i class="fa fa-star"></i>
+														}
+													</div>
+												</div>
+												<div class="sub_title">@data.Product.Title </div>
+												<div class="si_footer">
+													<div class="price">$@data.Product.Price</div>
+													<div class="sell_stock mt20">
+														<div class="sell float-start">Weight: <span class="fwb">@data.Product.Weight</span></div>
+														<div class="stock float-end">Available: <span class="fwb">@data.Count</span></div>
+													</div>
+													<a href="/Customer/Product/Details?id=@data.ProductId" class="cart_btn btn-thm">
+														<span class="flaticon-search mr10"></span>VIEW DETAIL
+													</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								}
+							</div>
+						</div>
+
+
+						@*End all*@
+						@foreach (Category item in @ViewBag.CategoryList)
+						{
+							<div class="tab-pane fade" id="nav-@item.CategoryName" role="tabpanel" aria-labelledby="nav-tab-@item.CategoryName">
+								<div class="popular_listing_slider1">
+									@foreach (var data in Model)
+									{
+										@if (data.Product.Brand_Category.Category.CategoryName == item.CategoryName)
+										{
+											<div class="item">
+												<div class="shop_item">
+													<div class="thumb">
+														@foreach (var Image in data.Product.ImageProduct)
+														{
+															if (Image.IsMainImage == true)
+															{
+																<img  src="@Image.Url" alt="fp1.png">
+															}
+														}
+														<div class="thumb_info" >
+															<ul class="mb0">
+																<li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@data.ProductId><span style="font-size:20px;" class="flaticon-shopping-cart"></span></li>
+															</ul>
+														</div>
+													</div>
+													<div class="details text-center">
+														<div class="title">@data.Product.Brand_Category.Category.CategoryName</div>
+														<div class="review">
+															<div class="small-ratings">
+																@for (var i = 0; i < @data.RatingPointAverage; i++)
+																{
+																	<i class="fa fa-star rating-color"></i>
+																}
+																@for (int i = 0; i < 5-@data.RatingPointAverage; i++)
+																{
+																	<i class="fa fa-star"></i>
+																}
+															</div>
+														</div>
+														<div class="sub_title">@data.Product.ProductName </div>
+														<div class="si_footer">
+															<div class="price">$@data.Product.Price</div>
+															<div class="sell_stock mt20">
+																<div class="sell float-start">Weight: <span class="fwb">@data.Product.Weight</span></div>
+																<div class="stock float-end">Available: <span class="fwb">@data.Count</span></div>
+															</div>
+															<a href="/Customer/Product/Details?id=@data.ProductId" class="cart_btn btn-thm">
+																<span class="flaticon-search mr10"></span>VIEW DETAIL
+															</a>
+														</div>
+													</div>
+												</div>
+											</div>
+										}
+									}
+								</div>
+							</div>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+@*end bread*@
+
+<!-- Delivery Divider -->
+<section class="deliver-divider pt0 pb70">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="online_delivery text-center">
+					<div class="delivery_bike"><img src="~/Images/shop-items/shipper.png"></div>
+					<h3 class="title text-thm2">
+						<span class="flaticon-whatsapp text-thm vam mr15"></span>WHATSAPP ORDERING
+						SERVICE – PLACE YOUR ORDERS AT <span class="text-thm">037 340 5298</span>
+					</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<!-- Delivery Divider -->
+<section class="deliver-divider bg-img1">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-8 col-xl-6">
+				<div class="juice_divider_content">
+					<p class="sub_title">Orange Juice</p>
+					<h2 class="title text-thm2">For Human <br class="dn db-lg dn-sm"> Health</h2>
+					<p class="para">
+						Organic food is food produced by methods that comply with the standards of organic
+						farming. Standards vary worldwide, but organic farming in general features.
+					</p>
+					<a href="page-shop-list-v1.html" class="btn btn-thm dc_btn">GO SHOP</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+<br />
+<br />
+<br />
+<br />
+
+
+<!-- How It Works -->
+<section class="whychose_us pt0 pb0">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 offset-lg-3">
+				<div class="main-title text-center">
+					<h2>Why choose us</h2>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6 col-xl-4">
+				<div class="why_chose_us home1_style">
+					<div class="icon"> <img src="~/Asset/images/why-chose/1.png" alt="1.png"> </div>
+					<div class="details">
+						<h4 class="title">We drive fast & ship faster</h4>
+						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xl-4">
+				<div class="why_chose_us home1_style">
+					<div class="icon"> <img src="~/Asset/images/why-chose/2.png" alt="2.png"> </div>
+					<div class="details">
+						<h4 class="title">We save your more money</h4>
+						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 col-xl-4">
+				<div class="why_chose_us home1_style">
+					<div class="icon"> <img src="~/Asset/images/why-chose/3.png" alt="3.png"> </div>
+					<div class="details">
+						<h4 class="title">Daily discount coupons</h4>
+						<p>Sed semper convallis ultricies. Aliqua erat vol esent friday ngilla augue.</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+

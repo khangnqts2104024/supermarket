@@ -1,0 +1,73 @@
+﻿@model SuperMarket_Models.ViewModels.OrderVM
+
+ <!-- Inner Page Breadcrumb -->
+  <section class="inner_page_breadcrumb mb40">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-xl-7 justify-content-center">
+          <div class="shopping_cart_tabs">
+            <ul class="nav nav-tabs justify-content-center" id="myTab2" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="prder-tab" data-bs-toggle="tab" data-bs-target="#prder" type="button" role="tab" aria-controls="prder" aria-selected="false">ORDER COMPLETE</button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+<div class="tab-pane fade show active" id="prder" role="tabpanel" aria-labelledby="prder-tab">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="order_complete_message text-center">
+                <div class="icon bgc-thm"><span class="fa fa-check text-white"></span></div>
+                <h2>Your Order Is Completed !</h2>
+                <p class="fz14">Thank you. Your order has been received.</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xl-8 offset-xl-2">
+            <div class="shop_order_box mt40">
+                <div class="order_list_raw">
+                    <ul>
+                        <li class="list-inline-item">
+                            <p>Order Number</p>
+                            <h5>@Model.Order.OrderId</h5>
+                        </li>
+                        <li class="list-inline-item">
+                            <p>Date</p>
+                            <h5>@Model.Order.OrderDate</h5>
+                        </li>
+                        <li class="list-inline-item">
+                            <p>Total</p>
+                            <h5>@Model.Order.OrderTotal</h5>
+                        </li>
+                        <li class="list-inline-item">
+                            <p>Payment Method</p>
+                            <h5>Stripe</h5>
+                        </li>
+                    </ul>
+                </div>
+                <div class="order_details">
+                    <h4 class="title text-center mb40">ORDER DETAILS</h4>
+                    <div class="od_content">
+                        <ul>
+                            <li class="subtitle bb1 mb20 pb5"><p>Product <span class="float-end">Subtotal</span></p></li>
+                            @foreach (var item in @Model.OrderDetails)
+                            {
+                                 <li><p class="product_name_qnt">@item.Product.Title X @item.Count <span class="float-end">@item.Price.ToString("c")</span></p></li>
+                            }
+                            <li class="subtitle bb1 mb15 mt20"><p>Subtotal <span class="float-end">@Model.Order.OrderTotal.ToString("c")</span></p></li>
+                            <li class="subtitle bb1 mb20"><p>Shipping <span class="float-end fwn_bd_color">Free shipping</span></p></li>
+                            <li class="subtitle bb1 mb20"><p>Payment Method <span class="float-end fwn_bd_color">Stripe</span></p></li>
+                            <li class="subtitle"><p>Total <span class="float-end totals text-thm">@Model.Order.OrderTotal.ToString("c")</span></p></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

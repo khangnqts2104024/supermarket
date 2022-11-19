@@ -1,0 +1,49 @@
+﻿@model SuperMarket_Models.Models.Category
+@{
+	ViewData["Title"] = "Update Category";
+}
+
+<h3>@ViewData["Title"]</h3>
+<div class="row">
+	<div class="col-md-8 offset-2" style="border: 2px solid;
+  padding: 10px;
+  box-shadow: 5px 10px #888888;">
+		<p>@ViewBag.msg</p>
+		<form id="profile-form" method="post" asp-action="UpdateCategory" onsubmit="return confirm('Are you sure to Update?')" enctype="multipart/form-data" class="row">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input asp-for="CategoryId" type="hidden" />
+			<div class="form-group col-6">
+				<label asp-for="CategoryName" class="form-label"></label>
+				<input asp-for="CategoryName" class="form-control" />
+			</div>
+			<div class="form-group col-6">
+				<label asp-for="CategoryImg" class="form-label"></label>
+				<input type="file" class="form-control" name="CategoryImg" id="fileUpLoad" onchange="return PreviewMainImg()" />
+				<img src="@Model.CategoryImg" width="120px" class="py-2" id="previewImg" />
+			</div>
+			<button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Update</button>
+		</form>
+		<a href="/Admin/Brand_Category/Brand_CategoryManage">Back to Brand-Category Manage</a>
+
+	</div>
+</div>
+
+@section Scripts {
+	<partial name="_ValidationScriptsPartial" />
+}
+	<script>
+		var previewArea = document.getElementById("previewImg");
+		var fileUpload = document.getElementById("fileUpLoad");
+		function PreviewMainImg() {
+
+            if (fileUpload.files[0].size > 3000000) {
+                alert("Picture must be lower than 3mb");
+                fileUpload.value = "";
+            }
+            else {
+				var temp = window.URL.createObjectURL(fileUpload.files[0]);
+				previewArea.src = temp;
+			}
+			
+		}
+	</script>

@@ -1,0 +1,328 @@
+﻿@model SuperMarket_Models.ViewModels.Cart_Feedback_RatingVM
+
+
+<!-- Inner Page Breadcrumb -->
+  <section class="inner_page_breadcrumb pt50 pb50 mt70-992">
+    <div class="container">
+      <div class="row">
+        <div class="col-xl-6">
+          <div class="breadcrumb_content">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="/">Home</a></li>
+              <li class="breadcrumb-item"><a href="#">Shop</a></li>
+              <li class="breadcrumb-item"><a href="#">@Model.Product.Brand_Category.Category.CategoryName</a></li>
+              <li class="breadcrumb-item active" aria-current="page"><a href="#">@Model.Product.Title</a></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+	<!-- Shop Single Content -->
+	<section class="shop-single-content pb70 ovh">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-6">
+                <div id="slider-wrapper">
+                    <div id="image-slider">
+                        <ul>
+                            @foreach (var item in Model.Product.ImageProduct)
+                            {
+                                   @if(item.IsMainImage){
+                                    <li class="active-img">
+                                        <img  src="@item.Url" alt="" />
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <img   src="@item.Url" alt="" />
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+
+                    <div id="thumbnail">
+                        <ul>
+                            @foreach (var item in Model.Product.ImageProduct)
+                            {
+                                 @if(item.IsMainImage){
+                                    <li class="active">
+                                        <img src="@item.Url" alt="" />
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li>
+                                        <img src="@item.Url" alt="" />
+                                    </li>
+                                }
+                            }
+                        </ul>
+                    </div>
+
+
+
+        </div>
+			</div>
+				<div class="col-lg-6">
+					<div class="shop_single_product_details">
+                        <div class="shop_item_stock mb30">
+                        @if(@Model.StockCount > 0)
+                        {
+                            <span class="stock"> <span id="stockCount">@Model.StockCount</span> IN STOCK</span>
+                        }
+                        else{
+                            <span class="stock"> <span hidden id="stockCount">@Model.StockCount</span> OUT OF STOCK</span>
+                        }
+            </div>
+
+		        <h3 class="title">@Model.Product.Title</h3>
+
+            <div class="sspd_review mb20 mt10">
+           
+                <div class="small-ratings">
+                    @for (var i = 0; i < @Model.RatingPointAverage; i++)
+                    {
+                        <i class="fa fa-star rating-color"></i>
+                    }
+                    @for (int i = 0; i < 5-@Model.RatingPointAverage; i++)
+                    {
+                        <i class="fa fa-star"></i>
+                    }
+                </div>
+
+            </div>
+
+	        <div class="sspd_price mb35"><small><del>$79.49</del></small> @Model.Product.Price.ToString("c")</div>
+                <p class="mb25">@Model.Product.Description</p>
+                 <form id="formAddCart" asp-action="Details" asp-area="Customer" asp-controller="Product" method="Post">
+                     <input type="hidden" asp-for="ProductId" />
+                     <input type="hidden" asp-for="branchId" />
+                     <ul class="cart_btns ui_kit_button mb30" style="margin-bottom:20px;">
+                        <li class="list-inline-item">
+                            <div class="cart_btn">
+                                <div class="quantity-block">
+                                    <button type="button" class="quantity-arrow-minus inner_page"> - </button>
+                                    <input asp-for="Count" class="quantity-num inner_page" type="number"/>
+                                    <button type="button" class="quantity-arrow-plus inner_page"> + </button>
+                                </div>
+                            </div>
+                        </li>
+                        
+                        <li class="list-inline-item"><button type="submit"  class="btn btn-thm disabledBtn"><span class="flaticon-shopping-cart mr5 fz18 vam"></span> Add to Cart</button></li>
+		            </ul>
+
+                        <p id="messageLimitedQuantity" style="color:red;" class="mb20"></p>
+
+                   
+
+                     
+		            <ul class="sspd_sku mb30">
+                        <li><a href="#">Categories:</a> <span>@Model.Product.Brand_Category.Category.CategoryName</span></li>
+		            </ul>
+
+                 </form>
+		        
+               
+	        </div>
+		</div>
+
+				<div class="col-lg-12">
+          <div class="shop_single_tab_content mt30">
+            <ul class="nav nav-tabs justify-content-center" id="myTab2" role="tablist">
+              <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="description-tab" data-bs-toggle="tab" data-bs-target="#description" type="button" role="tab" aria-controls="description" aria-selected="true">Description</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="aiinfo-tab" data-bs-toggle="tab" data-bs-target="#aiinfo" type="button" role="tab" aria-controls="aiinfo" aria-selected="false">Additional information</button>
+              </li>
+              <li class="nav-item" role="presentation">
+                <button class="nav-link" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab" aria-controls="reviews" aria-selected="false"> Reviews (@Model.FeedbackCount)</button>
+              </li>
+            </ul>
+            <div class="tab-content" id="myTabContent2">
+              <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div class="product_single_content">
+                      <div class="mbp_pagination_comments">
+                        <div class="mbp_first">
+                          @Model.Product.Description
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="aiinfo" role="tabpanel" aria-labelledby="aiinfo-tab">
+                <div class="row justify-content-center">
+                  <div class="col-lg-7">
+                    <div class="shop_item_ai_info">
+                      <ul class="mb0">
+                        <li><a href="#">Weight <span class="float-end">@Model.Product.Weight</span></a></li>
+                        <li><a href="#">Brand <span class="float-end">@Model.Product.Brand_Category.Brand.BrandName</span></a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="reviews" role="tabpanel" aria-labelledby="reviews-tab">
+                <div class="row">
+                  <div class="col-lg-6">
+                    <div class="shop_single_tab_content mb30-991">
+                      <div class="product_single_content">
+                        <div class="mbp_pagination_comments" style="height:350px;overflow:auto;padding:20px;">
+                          <h5 class="fz16 mb30">Reviews</h5>
+                          <div id="listUserFeedback">
+                              @foreach (var item in @Model.Feedback_RatingList)
+                          {
+                             <div class="mbp_first d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                  <img src="@item.Customer.CustomerAvatar" class="mr-3" alt="reviewer1.png">
+                                </div>
+                                <div class="flex-grow-1 ms-4">
+                                  <h4 class="sub_title mt20">@item.Customer.FullName</h4>
+                                <div class="sspd_postdate mb15">@item.PostedDate
+                                    <div class="sspd_review pull-right">
+                                      <div class="small-ratings">
+                                    @for (var i = 0; i < @item.RatingPoint; i++)
+                                    {
+                                        <i class="fa fa-star rating-color"></i>
+                                    }
+                                    @for (int i = 0; i < 5-@item.RatingPoint; i++)
+                                    {
+                                        <i class="fa fa-star"></i>
+                                    }
+                                </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <p class="mt15 mb30">@item.Content</p>
+                              <hr>
+                          }
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  
+
+                  <div class="col-lg-6">
+                    <div class="bsp_reveiw_wrt pt30">
+                      <form class="comments_form" >
+                        <div class="row">
+                          <div class="col-lg-12">
+                              <input type="hidden" asp-for="ProductId" />
+                              <input type="hidden" asp-for="branchId" />
+                            <h5 class="fz16 mb10">Be the first to review “@Model.Product.Title” </h5>
+                            <div class="sspd_review mb10">
+                               <div class="rating mb10"> 
+                                    <input  type="radio" data-rating="ratingProduct" class="ratingProduct" data-id="5" name="ratingProduct5" value="5" id="5"><label for="5">☆</label> 
+                                    <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="4" name="ratingProduct4" value="4" id="4"><label for="4">☆</label>
+                                    <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="3" name="ratingProduct3" value="3" id="3"><label for="3">☆</label>
+                                    <input type="radio"  data-rating="ratingProduct" class="ratingProduct" data-id="2" name="ratingProduct2" value="2" id="2"><label for="2">☆</label>
+                                    <input type="radio" data-rating="ratingProduct"  class="ratingProduct" data-id="1" name="ratingProduct1" value="1" id="1"><label for="1">☆</label>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label class="fz14 heading-color mb10">Your review *</label>
+                              <textarea id="feedbackContent" required class="form-control" rows="6"></textarea>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <button type="submit" id="submitReview" class="btn btn-thm">SUBMIT</button>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+
+@if(Model.RelatedProduct != null)
+{
+    <!-- Our Shopping Product -->
+    <section class="our-shop bt1">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="main-title text-center">
+                        <h2>RELATED PRODUCTS</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="recent_property_slider_home5">
+                        @foreach (var item in Model.RelatedProduct)
+                        {
+                            <div class="item">
+                                <div class="shop_item">
+                                    <div class="thumb">
+                                        @foreach (var image in item.Product.ImageProduct)
+                                        {
+                                            if (image.IsMainImage)
+                                            {
+                                                <img src="@image.Url" alt="fp17.png">
+                                                break;
+                                            }
+                                        }
+                                        <div class="thumb_info">
+                                            <ul class="mb0">
+                                                <li class="addToCartHome" data-toggle="tooltip" data-placement="top" title="Add To Cart" data-productid=@item.ProductId><span style="font-size:20px;" class="flaticon-shopping-cart"></span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="details text-center">
+                                        <div class="title">@item.Product.Brand_Category.Category.CategoryName</div>
+                                        <div class="review">
+                                            <div class="small-ratings">
+                                                @for (var i = 0; i < @item.RatingPointAverage; i++)
+                                                {
+                                                    <i class="fa fa-star rating-color"></i>
+                                                }
+                                                @for (int i = 0; i < 5 - @item.RatingPointAverage; i++)
+                                                {
+                                                    <i class="fa fa-star"></i>
+                                                }
+                                            </div>
+                                            <div class="sub_title">@item.Product.Title <br> @item.Product.Weight</div>
+                                            <div class="si_footer">
+                                                <div class="price">@item.Product.Price.ToString("c")</div>
+                                                <a href="/Customer/Product/Details?id=@item.ProductId" class="cart_btn btn-thm">
+                                                    <span class="flaticon-search mr10"></span>VIEW DETAIL
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+}
+
+
+
+
+
+

@@ -1,0 +1,110 @@
+﻿.manage-option {
+    background-color: rgb(22, 94, 153);
+    width: 150px;
+    height: 150px;
+    margin: 20px;
+    border-radius: 10%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    flex-direction: column;
+    text-align:center;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 5px;
+}
+
+.flex-container-column {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-container-left {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+}
+
+.manage-option:hover {
+    box-shadow: 5px 5px 20px rgb(8, 8, 8);
+}
+
+.vin-title {
+    text-align: center;
+    color: rgb(41, 69, 228);
+    font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+.stock-add {
+    margin-left: 20px;
+}
+
+.stock-confirm {
+    margin: 10px;
+}
+
+
+.option-container {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.option {
+    margin-left: 2px;
+    width: 150px;
+    height: 50px;
+    border: 3px solid rgb(89, 169, 243);
+    border-left: none;
+    border-bottom: none;
+    border-top-right-radius: 10%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-decoration: none;
+}
+
+    .option:hover {
+        box-shadow: 2px 0px 5px rgb(9, 62, 112);
+        text-decoration: none;
+    }
+
+.status {
+    display: flex;
+    justify-content: center;
+    color: rgb(52, 71, 247);
+}
+
+.report-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.card-report {
+    margin: 2% 2%;
+}
+
+.formRound {
+    border-radius: 35px !important;
+    border: 0.2px solid !important;
+    background-color: white !important;
+}
+.flex-card {
+
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}

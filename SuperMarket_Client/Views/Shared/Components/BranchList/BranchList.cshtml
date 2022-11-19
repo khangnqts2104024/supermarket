@@ -1,0 +1,46 @@
+﻿@model IEnumerable<Branch>
+
+
+
+	<!-- Modal -->
+	@*<div class="modal fade" id="selectBranch_popup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">*@
+	<div class="modal" id="selectBranch_popup">
+		<div class="modal-dialog modal-lg modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+				</div>
+				<div class="modal-body">
+					<div class="row">
+						<div class="col-lg-7">
+							<div class="p30">
+								<div class="mailchimp_widget text-center mb30">
+									<div class="icon"><span class="flaticon-email-1"></span></div>
+									<div class="details">
+										<h3 class="title">Choose <span class="text-thm">the</span> Branch</h3>
+										<p class="para">Choose the branch of the store you want to shopping</p>
+									</div>
+								</div>
+								<div class="footer_social_widget">
+									<form class="footer_mailchimp_form mb10" method="post" asp-action="CreateCookieForBrachId" asp-controller="Home" asp-area="Customer">
+										<div class="row align-items-center">
+											<select class="form-select form-select-lg mb-3" id="selectModalPopup" aria-label=".form-select-lg example" name="selectBranch">
+												<option>Select the branch</option>
+												@foreach (var item in Model)
+												{
+													<option value="@item.BranchId">@item.BranchName</option>
+												}
+											</select>
+											<button type="submit">Enter</button>
+										</div>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-5">
+							<img src="~/Asset/images/banner/mailchimp-banner.jpg" alt="mailchimp-banner.jpg" id="imgPreviewModalPopup">
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>

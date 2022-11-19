@@ -1,0 +1,118 @@
+﻿@model SuperMarket_Models.Models.Customer
+@using Microsoft.AspNetCore.Identity
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+<!-- Our Dashbord -->
+<div>
+	<section class="our-dashbord dashbord">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-3 col-xl-3 dn-md">
+					<div class="extra-dashboard-menu">
+						<h3 class="mb25 ttu fwb">My account</h3>
+						<div class="ed_menu_list">
+							<ul>
+								<li><a asp-action="Index" asp-controller="Customer" asp-area="Customer">Dashboard</a></li>
+								<li><a asp-action="Order" asp-controller="Customer" asp-area="Customer">Orders History</a></li>
+								<li>
+									<form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "Customer" })">
+										<button style="padding:0;" id="logout" type="submit" class="nav-link btn btn-link">Logout</button>
+									</form>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-9 col-xl-9">
+					<div class="row">
+						<div class="col-lg-12">
+							<div class="dashboard_navigationbar dn db-md mt50">
+								<div class="dropdown">
+									<button onclick="myFunction()" class="dropbtn"><i class="fa fa-bars pr10"></i> Dashboard Navigation</button>
+									<ul id="myDropdown" class="dropdown-content">
+										
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-xl-9">
+							<div class="row">
+								<form method="post" asp-action="UpdateCustomer" enctype="multipart/form-data">
+									<input type="text" asp-for="Id"  hidden>
+									<input type="text" asp-for="UserName"  hidden>
+									<input type="hidden" asp-for="CustomerAvatar"/>
+									<div class="col-lg-12">
+										<div class="form-group mb25">
+											<label class="mb10 fz14 heading-color">Full Name</label>
+											<input type="text" asp-for="FullName" class="form-control form_control" value="@Model.FullName">
+										</div>
+									</div>
+									@if (@Model.CustomerAvatar == null)
+									{
+										<div class="col-lg-6">
+											<div class="form-group mb25">
+												<input type="file" name="file"  />
+												<img class="pt-2" src="~/Images/CustomerAvatar/default_avatar.jpg" />
+											</div>
+										</div>
+									}
+									else
+									{
+
+										<div class="col-lg-6">
+											<div class="form-group mb25">
+												<input type="file" name="file" />
+												<img class="pt-2" src="@Model.CustomerAvatar" />
+											</div>
+										</div>
+									}
+
+									<div class="col-lg-12">
+										<div class="form-group mb25">
+											<label class="mb10 fz14 heading-color">Address</label>
+											<input type="text" asp-for="Address" class="form-control form_control" value="@Model.Address">
+										</div>
+									</div>
+									<div class="col-lg-12">
+										<div class="form-group mb25">
+											<label class="mb10 fz14 heading-color">City</label>
+											<input type="text" asp-for="City" class="form-control form_control" value="@Model.City">
+										</div>
+									</div>
+									<div class="col-lg-12">
+										<div class="form-group mb25">
+											<label class="mb10 fz14 heading-color">Country</label>
+											<input type="text" asp-for="Country" class="form-control form_control" value="@Model.Country">
+										</div>
+									</div>
+									<div class="col-lg-12">
+										<div class="form-group mb60">
+											<label class="mb10 fz14 heading-color">Email address </label>
+											<input type="text" asp-for="Email" readonly class="form-control form_control" value="@Model.Email">
+										</div>
+									</div>
+									<div class="col-lg-12">
+										<div class="form-group mb60">
+											<label class="mb10 fz14 heading-color">Phone number</label>
+											<input type="text" asp-for="PhoneNumber" class="form-control form_control" value="@Model.PhoneNumber">
+										</div>
+									</div>
+									<div class="col-xl-12 pt-8">
+										<div class="form-group mb0">
+											<button type="submit" id="Submitbtn" class="btn btn-thm update_btn">SAVE CHANGES</button>
+											<a id="manage" class="btn btn-thm update_btn" asp-area="Identity" asp-page="/Account/Manage/ChangePassword" title="Manage">Change Password</a>
+										</div>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+	<a class="scrollToHome" href="#"><i class="fa fa-angle-up"></i></a>
+</div>
+
